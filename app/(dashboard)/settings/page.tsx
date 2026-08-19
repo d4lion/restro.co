@@ -1,42 +1,14 @@
-import { getSession, deleteSession } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
-import { revalidatePath } from "next/cache";
 import type { PlanKey } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
-import { Input, Textarea } from "@/components/ui/Input";
+import { ProfileCard } from "@/components/dashboard/settings/ProfileCard";
+import { LogoutCard } from "@/components/dashboard/settings/LogoutCard";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Configuración del Restaurante" };
-
-async function logoutAction() {
-  "use server";
-  await deleteSession();
-  redirect("/login");
-}
-
-async function updateRestaurantAction(formData: FormData) {
-  "use server";
-  const session = await getSession();
-  if (!session) return;
-
-  const name = formData.get("name") as string;
-  const description = formData.get("description") as string;
-  const phone = formData.get("phone") as string;
-  const address = formData.get("address") as string;
-  const city = formData.get("city") as string;
-
-  await tenantRepository.updateSettings(session.tenantId, {
-    name,
-    description,
-    phone,
-    address,
-    city,
-  });
-
-  revalidatePath("/settings");
-}
 
 export default async function SettingsPage() {
   const session = await getSession();
@@ -49,7 +21,7 @@ export default async function SettingsPage() {
 
   return (
     <div className={styles.page}>
-      {/* Header */}
+      {/* ── Header ─────────────────────────────────────────── */}
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Configuración y Planes</h1>
@@ -59,22 +31,17 @@ export default async function SettingsPage() {
         </div>
       </div>
 
-      {/* Restaurant Profile Card */}
-      <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Perfil Comercial del Restaurante</h2>
-        <form action={updateRestaurantAction} className={styles.form}>
-          <Input name="name" label="Nombre Comercial" defaultValue={tenant.name} required />
-          <Textarea name="description" label="Descripción / Eslogan" defaultValue={tenant.description || ""} />
-          <div className={styles.formRow}>
-            <Input name="phone" label="Teléfono de contacto" defaultValue={tenant.phone || ""} />
-            <Input name="city" label="Ciudad" defaultValue={tenant.city || "Bogotá"} />
-          </div>
-          <Input name="address" label="Dirección física" defaultValue={tenant.address || ""} />
-          <Button type="submit" variant="primary">Guardar Cambios</Button>
-        </form>
-      </div>
+      {/* ── Restaurant Profile — client component with edit mode ── */}
+      <ProfileCard
+        tenantId={tenant.id}
+        name={tenant.name}
+        description={tenant.description ?? null}
+        phone={tenant.phone ?? null}
+        address={tenant.address ?? null}
+        city={tenant.city ?? null}
+      />
 
-      {/* Slug Policy Info Card */}
+      {/* ── Slug Policy Info Card ───────────────────────────── */}
       <div className={styles.card}>
         <h2 className={styles.cardTitle}>Enlace Permanente de tu Carta QR (Slug)</h2>
         <div className={styles.slugBox}>
@@ -87,7 +54,7 @@ export default async function SettingsPage() {
         </div>
       </div>
 
-      {/* Subscription Plans Card */}
+      {/* ── Subscription Plans Card ─────────────────────────── */}
       <div className={styles.card}>
         <h2 className={styles.cardTitle}>Planes de Suscripción SaaS (COP)</h2>
         <p className={styles.cardSub}>Precios en pesos colombianos para todo tipo de establecimiento.</p>
@@ -99,10 +66,10 @@ export default async function SettingsPage() {
             <h3 className={styles.planName}>Starter</h3>
             <p className={styles.planPrice}>Gratis</p>
             <ul className={styles.planFeatures}>
-              <li>✓ Carta digital QR móvil</li>
-              <li>✓ Imágenes de productos incluidas</li>
-              <li>✓ Hasta 5 mesas</li>
-              <li>✓ Hasta 20 productos</li>
+              <li>Carta digital QR móvil</li>
+              <li>Imágenes de productos incluidas</li>
+              <li>Hasta 5 mesas</li>
+              <li>Hasta 20 productos</li>
             </ul>
           </div>
 
@@ -113,11 +80,11 @@ export default async function SettingsPage() {
             <h3 className={styles.planName}>Restro IA</h3>
             <p className={styles.planPrice}>$49.900 <small>/mes</small></p>
             <ul className={styles.planFeatures}>
-              <li>✓ Todo lo de Starter</li>
-              <li>✓ <strong>IA: Recomendaciones y combos</strong></li>
-              <li>✓ <strong>IA: Predicción de horas pico</strong></li>
-              <li>✓ Hasta 30 mesas</li>
-              <li>✓ Productos ilimitados</li>
+              <li>Todo lo de Starter</li>
+              <li><strong>IA: Recomendaciones y combos</strong></li>
+              <li><strong>IA: Predicción de horas pico</strong></li>
+              <li>Hasta 30 mesas</li>
+              <li>Productos ilimitados</li>
             </ul>
             {currentPlan !== "RESTRO_IA" && (
               <Button type="button" variant="primary" size="sm" fullWidth style={{ marginTop: "12px" }}>
@@ -132,10 +99,10 @@ export default async function SettingsPage() {
             <h3 className={styles.planName}>Business</h3>
             <p className={styles.planPrice}>$99.900 <small>/mes</small></p>
             <ul className={styles.planFeatures}>
-              <li>✓ Todo lo de Restro IA</li>
-              <li>✓ Mesas ilimitadas</li>
-              <li>✓ Cuentas staff ilimitadas</li>
-              <li>✓ Exportar reportes Excel & PDF</li>
+              <li>Todo lo de Restro IA</li>
+              <li>Mesas ilimitadas</li>
+              <li>Cuentas staff ilimitadas</li>
+              <li>Exportar reportes Excel &amp; PDF</li>
             </ul>
             {currentPlan !== "BUSINESS" && (
               <Button type="button" variant="outline" size="sm" fullWidth style={{ marginTop: "12px" }}>
@@ -146,15 +113,8 @@ export default async function SettingsPage() {
         </div>
       </div>
 
-      {/* Logout / Danger Zone */}
-      <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Cerrar Sesión</h2>
-        <form action={logoutAction}>
-          <Button type="submit" variant="danger">
-            Cerrar Sesión de Usuario
-          </Button>
-        </form>
-      </div>
+      {/* ── Logout — client component with confirm ──────────── */}
+      <LogoutCard />
     </div>
   );
 }
