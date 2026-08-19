@@ -50,7 +50,6 @@ const nextConfig: NextConfig = {
   },
 
   // Allow HMR and static chunks for Ngrok dev tunnel
-  // @ts-expect-error - undocumented Next.js config used for Turbopack HMR via dev tunnels
   allowedDevOrigins: [
     "b1c7-190-158-28-68.ngrok-free.app",
     "localhost:3000"
