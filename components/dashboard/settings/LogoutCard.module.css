@@ -1,0 +1,155 @@
+/* ── LogoutCard — Confirmation Styles ──────────────────────── */
+
+.card {
+  background: #FFFFFF;
+  border: 1.5px solid #FECACA;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(220,38,38,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* ── Card header ──────────────────────────────────────────── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #DC2626;
+  flex-shrink: 0;
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #DC2626;
+  margin-bottom: 2px;
+}
+
+.cardSub {
+  font-size: 0.8125rem;
+  color: #94A3B8;
+}
+
+/* ── Trigger button ───────────────────────────────────────── */
+.triggerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1.125rem;
+  background: #FEF2F2;
+  border: 1.5px solid #FECACA;
+  border-radius: 9px;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #DC2626;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.triggerBtn:hover {
+  background: #DC2626;
+  color: #FFFFFF;
+  border-color: #DC2626;
+  box-shadow: 0 2px 10px rgba(220,38,38,0.25);
+}
+
+/* ── Confirm box ──────────────────────────────────────────── */
+.confirmBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  background: #FFF1F2;
+  border: 1.5px solid #FECACA;
+  border-radius: 12px;
+  padding: 1rem 1.125rem;
+  animation: popIn 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  width: 100%;
+  max-width: 400px;
+  flex-shrink: 0;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.95) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.confirmHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.warnIcon { color: #DC2626; flex-shrink: 0; }
+
+.confirmText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7F1D1D;
+  font-family: var(--font-display);
+}
+
+.confirmActions {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: flex-end;
+}
+
+.keepBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4375rem 0.875rem;
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.keepBtn:hover { background: #F1F5F9; }
+.keepBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.logoutBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4375rem 0.875rem;
+  background: #DC2626;
+  border: 1.5px solid #B91C1C;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.12s;
+  box-shadow: 0 2px 6px rgba(220,38,38,0.20);
+}
+.logoutBtn:hover:not(:disabled) {
+  background: #B91C1C;
+  box-shadow: 0 4px 12px rgba(220,38,38,0.30);
+}
+.logoutBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.spin { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
