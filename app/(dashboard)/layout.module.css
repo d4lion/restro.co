@@ -1,15 +1,35 @@
+/* ── Dashboard Shell ─────────────────────────────────────────── */
+
+/*
+  Layout pattern: sidebar sticky + content scrolls independently.
+  Sin overflow:hidden en el shell — ese era el culpable de bloquear
+  los eventos táctiles en iOS Safari y Android WebView.
+*/
+
 .shell {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   background: var(--dash-bg);
 }
 
+/* ── Sidebar wrapper (desktop) ──────────────────────────────── */
+/* align-self: flex-start + position:sticky es el patrón correcto
+   para un sidebar que se queda fijo sin necesitar overflow:hidden
+   en el padre. */
+.sidebarSlot {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  align-self: flex-start;
+  flex-shrink: 0;
+  z-index: 40;
+}
+
+/* ── Main content area ──────────────────────────────────────── */
 .main {
   flex: 1;
   min-width: 0;
-  height: 100vh;
-  overflow-y: auto;
+  min-height: 100vh;
   overflow-x: hidden;
   background: var(--dash-bg);
 }
@@ -26,8 +46,104 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Mobile top bar ─────────────────────────────────────────── */
+.mobileHeader {
+  display: none;
+}
+
+/* ── Mobile bottom navigation ───────────────────────────────── */
+.mobileNav {
+  display: none;
+}
+
+/* ── Responsive breakpoints ─────────────────────────────────── */
 @media (max-width: 768px) {
+  /* Ocultar sidebar lateral en mobile */
+  .sidebarSlot {
+    display: none;
+  }
+
+  /* Header superior mobile */
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1rem;
+    background: #1E3A8A;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.25);
+  }
+
+  .mobileHeaderLogo {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .mobileHeaderTitle {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    letter-spacing: -0.02em;
+  }
+
+  /* Navegación inferior fija en mobile */
+  .mobileNav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: #1E3A8A;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 -4px 20px rgba(30,58,138,0.30);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .mobileNavItem {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 0.625rem 0.25rem 0.5rem;
+    color: rgba(191,219,254,0.65);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.5625rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
+    /* Área táctil mínima de 44px */
+    min-height: 56px;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+  }
+
+  .mobileNavItem--active {
+    color: #FFFFFF;
+    background: rgba(255,255,255,0.10);
+  }
+
+  .mobileNavItem:hover {
+    color: #FFFFFF;
+  }
+
+  .mobileNavIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Añadir padding-bottom al content para que no quede tapado por la nav */
   .content {
     padding: var(--space-4);
+    padding-bottom: calc(56px + var(--space-4) + env(safe-area-inset-bottom, 0px));
   }
 }

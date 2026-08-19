@@ -172,7 +172,15 @@ button {
   border: none;
   background: none;
   font-family: inherit;
+  /* Elimina delay de 300ms en iOS/Android */
+  touch-action: manipulation;
 }
+
+a {
+  /* También aplica a links */
+  touch-action: manipulation;
+}
+
 
 input, textarea, select {
   font-family: var(--font-body);
