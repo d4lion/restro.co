@@ -9,8 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  // url is configured in prisma.config.ts (Prisma 7+)
+  provider  = "postgresql"
 }
 
 // ─── ENUMS ────────────────────────────────────────────────────────────────────
