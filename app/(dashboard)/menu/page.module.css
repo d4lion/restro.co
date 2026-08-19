@@ -163,10 +163,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
-  padding: 0 24px;
+  min-height: 80px;
+  padding: 16px 24px;
   border-bottom: 1px solid #E2E8F0;
-  gap: 16px;
+  gap: 20px;
   transition: background 150ms ease;
 }
 
@@ -179,21 +179,21 @@
 }
 
 .itemRow--disabled {
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
 .itemMain {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   flex: 1;
   min-width: 0;
 }
 
 .itemThumb {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
   overflow: hidden;
   background: #F1F5F9;
   border: 1px solid #E2E8F0;
@@ -201,7 +201,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: #64748B;
 }
@@ -210,38 +210,42 @@
 
 .itemName {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   color: #0F172A;
   display: block;
+  margin-bottom: 2px;
 }
 
 .itemDesc {
-  font-size: 12px;
+  font-size: 13px;
   color: #64748B;
-  margin-top: 1px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 320px;
+  line-height: 1.45;
+  margin-bottom: 4px;
+  max-width: 480px;
 }
 
 .itemPrice {
   display: inline-block;
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 15px;
   color: #2563EB;
 }
 
-.itemActions { flex-shrink: 0; }
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
 
 .toggleBtn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 28px;
-  padding: 0 10px;
+  height: 32px;
+  padding: 0 12px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
@@ -273,6 +277,87 @@
 }
 
 .toggleBtn:disabled { opacity: 0.6; cursor: wait; }
+
+/* ── 3-Dots Action Menu (Section 7, 13, 29) ─────────────────── */
+.menuWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.moreBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.moreBtn:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+
+.dropdownMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  padding: 6px;
+  min-width: 180px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: fadeIn 150ms ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.dropdownItem:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+.dropdownItem--danger {
+  color: #DC2626;
+}
+
+.dropdownItem--danger:hover {
+  background: #FEF2F2;
+  color: #B91C1C;
+}
 
 /* ── Add Item Accordion ───────────────────────────────────── */
 .addItemDetails {
@@ -390,3 +475,157 @@
 
 .spin { animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── URL Input Group & View Image Button ───────────────────── */
+.urlRow {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.urlInputGroup {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.urlInputGroup input {
+  flex: 1;
+  background: #F8FAFC;
+  color: #475569;
+  cursor: default;
+}
+
+.btnViewImage {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  background: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1D4ED8;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 150ms ease;
+  flex-shrink: 0;
+}
+
+.btnViewImage:hover {
+  background: #DBEAFE;
+  color: #172554;
+}
+
+.btnViewImageDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+  background: #F1F5F9;
+  border-color: #E2E8F0;
+  color: #94A3B8;
+}
+
+/* ── Image Upload Dropzone (Section 12, 13, 29) ─────────────── */
+.imageUploadRow {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.uploadDropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+  background: #FFFFFF;
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.uploadDropzone:hover {
+  border-color: #2563EB;
+  background: #F8FAFC;
+}
+
+.uploadDropzone span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.uploadDropzone small {
+  font-size: 11px;
+  color: #64748B;
+}
+
+.imagePreviewBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+}
+
+.previewThumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #E2E8F0;
+}
+
+.previewInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.previewTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.previewSubtitle {
+  font-size: 11px;
+  color: #16A34A;
+}
+
+.removeImageBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #DC2626;
+  background: #FEE2E2;
+  border: 1px solid #FEE2E2;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.removeImageBtn:hover {
+  background: #FECACA;
+}
+
+.hiddenFileInput {
+  display: none;
+}
