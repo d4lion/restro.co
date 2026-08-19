@@ -5,28 +5,46 @@ import { tableRepository } from "@/lib/repositories/table.repository";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import { PLAN_LIMITS, ORDER_STATUSES } from "@/lib/types";
 import type { PlanKey } from "@/lib/types";
+import {
+  ClipboardCheck,
+  LayoutGrid,
+  DollarSign,
+  Star,
+  ExternalLink,
+} from "lucide-react";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "Resumen" };
 
+const STAT_COLORS: Record<string, { bg: string; color: string }> = {
+  blue:    { bg: "#EFF6FF", color: "#2563EB" },
+  green:   { bg: "#ECFDF5", color: "#059669" },
+  orange:  { bg: "#FFF7ED", color: "#EA580C" },
+  slate:   { bg: "#F1F5F9", color: "#475569" },
+};
+
 function StatCard({
   label,
   value,
   sub,
-  color,
+  colorKey = "blue",
   icon,
 }: {
   label: string;
   value: string | number;
   sub?: string;
-  color?: string;
+  colorKey?: keyof typeof STAT_COLORS;
   icon: React.ReactNode;
 }) {
+  const { bg, color } = STAT_COLORS[colorKey];
   return (
     <div className={styles.statCard}>
-      <div className={styles.statIcon} style={{ color: color ?? "var(--brand-blue)" }}>
+      <div
+        className={styles.statIconBox}
+        style={{ background: bg, color }}
+      >
         {icon}
       </div>
       <div>
@@ -53,88 +71,72 @@ export default async function OverviewPage() {
   const plan = tenant.plan as PlanKey;
   const limits = PLAN_LIMITS[plan];
 
-  const activeTables = tables.filter((t) => t.activeOrderCount > 0);
-  const totalToday = activeOrders.reduce((sum, o) => sum + o.total, 0);
-  const pendingCount = activeOrders.filter((o) => o.status === "PENDING").length;
+  const activeTables   = tables.filter((t) => t.activeOrderCount > 0);
+  const totalToday     = activeOrders.reduce((sum, o) => sum + o.total, 0);
+  const pendingCount   = activeOrders.filter((o) => o.status === "PENDING").length;
   const preparingCount = activeOrders.filter((o) => o.status === "PREPARING").length;
 
   const formatCOP = (n: number) =>
-    new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+    new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      maximumFractionDigits: 0,
+    }).format(n);
 
   return (
     <div className={styles.page}>
-      {/* Header */}
+      {/* ── Header ─────────────────────────────────────────── */}
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Resumen Operativo</h1>
           <p className={styles.subtitle}>
-            {new Date().toLocaleDateString("es-CO", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+            {new Date().toLocaleDateString("es-CO", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
         </div>
         <a href={`/${tenant.slug}`} target="_blank" className={styles.viewMenuBtn}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
+          <ExternalLink size={14} strokeWidth={2} />
           Ver carta pública
         </a>
       </div>
 
-      {/* Stats Grid */}
+      {/* ── Stats Grid ─────────────────────────────────────── */}
       <div className={styles.statsGrid}>
         <StatCard
           label="Pedidos activos"
           value={activeOrders.length}
           sub={`${pendingCount} nuevos · ${preparingCount} en cocina`}
-          color="var(--brand-blue)"
-          icon={
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 11l3 3L22 4" />
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-            </svg>
-          }
+          colorKey="blue"
+          icon={<ClipboardCheck size={22} strokeWidth={2} />}
         />
         <StatCard
           label="Mesas en servicio"
           value={`${activeTables.length} / ${tables.length}`}
           sub={`${tables.length - activeTables.length} desocupadas`}
-          color="var(--color-success)"
-          icon={
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-            </svg>
-          }
+          colorKey="green"
+          icon={<LayoutGrid size={22} strokeWidth={2} />}
         />
         <StatCard
           label="Ventas acumuladas hoy"
           value={formatCOP(totalToday)}
           sub="Pedidos en curso"
-          color="var(--brand-orange)"
-          icon={
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23" />
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-          }
+          colorKey="orange"
+          icon={<DollarSign size={22} strokeWidth={2} />}
         />
         <StatCard
           label="Suscripción SaaS"
           value={PLAN_LIMITS[plan].label}
           sub={`${limits.maxTables === Infinity ? "Ilimitadas" : limits.maxTables} mesas · ${limits.hasAI ? "Analítica IA activa" : "Sin IA"}`}
-          color={plan === "RESTRO_IA" ? "var(--brand-blue)" : plan === "BUSINESS" ? "var(--brand-adamind)" : "var(--text-muted)"}
-          icon={
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-          }
+          colorKey={plan === "RESTRO_IA" ? "blue" : plan === "BUSINESS" ? "orange" : "slate"}
+          icon={<Star size={22} strokeWidth={2} />}
         />
       </div>
 
-      {/* Active Orders Section */}
+      {/* ── Active Orders ───────────────────────────────────── */}
       {activeOrders.length > 0 && (
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Comandas Recientes</h2>
@@ -147,7 +149,11 @@ export default async function OverviewPage() {
                     <span className={styles.orderNumber}>#{order.orderNumber}</span>
                     <span
                       className={styles.orderStatus}
-                      style={{ color: statusConfig.color, borderColor: `${statusConfig.color}40`, background: `${statusConfig.color}15` }}
+                      style={{
+                        color: statusConfig.color,
+                        borderColor: `${statusConfig.color}40`,
+                        background: `${statusConfig.color}18`,
+                      }}
                     >
                       {statusConfig.label}
                     </span>
@@ -168,7 +174,7 @@ export default async function OverviewPage() {
         </section>
       )}
 
-      {/* Tables Grid Section */}
+      {/* ── Tables Grid ─────────────────────────────────────── */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Estado de Mesas</h2>
@@ -176,8 +182,13 @@ export default async function OverviewPage() {
         </div>
         <div className={styles.tablesGrid}>
           {tables.slice(0, 12).map((table) => {
-            const status = !table.isActive ? "DISABLED" : table.activeOrderCount > 0 ? "ACTIVE" : "FREE";
-            const dotColor = status === "FREE" ? "#10B981" : status === "ACTIVE" ? "#F59E0B" : "#64748B";
+            const status = !table.isActive
+              ? "DISABLED"
+              : table.activeOrderCount > 0
+              ? "ACTIVE"
+              : "FREE";
+            const dotColor =
+              status === "FREE" ? "#10B981" : status === "ACTIVE" ? "#F59E0B" : "#CBD5E1";
             return (
               <Link key={table.id} href="/tables" className={styles.tableCard}>
                 <div className={styles.tableDot} style={{ background: dotColor }} />

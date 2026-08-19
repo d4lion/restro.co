@@ -1,154 +1,197 @@
+/* ── Settings Page — Blue/White Theme ───────────────────────── */
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: 1.75rem;
 }
 
 .header {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .title {
-  font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: 1.75rem;
   font-weight: 800;
-  color: var(--text-primary);
+  font-family: var(--font-display);
+  color: #0F172A;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.25rem;
 }
 
 .subtitle {
-  color: var(--text-muted);
-  font-size: var(--text-sm);
+  color: #64748B;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 540px;
 }
 
+/* ── Card ─────────────────────────────────────────────────── */
 .card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+  background: #FFFFFF;
+  border: 1px solid #DBEAFE;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(30,58,138,0.07);
 }
 
 .cardTitle {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  font-family: var(--font-display);
+  color: #1E3A8A;
+  margin-bottom: 1.125rem;
 }
 
 .cardSub {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
+  font-size: 0.8125rem;
+  color: #64748B;
+  margin-top: -0.75rem;
+  margin-bottom: 1.25rem;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
+/* ── Form ──────────────────────────────────────────────────── */
+.form { display: flex; flex-direction: column; gap: 1rem; }
 
 .formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
+  gap: 0.875rem;
 }
+@media (max-width: 640px) { .formRow { grid-template-columns: 1fr; } }
 
+/* ── Slug Box ─────────────────────────────────────────────── */
 .slugBox {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  background: var(--bg-surface-2);
-  border-radius: var(--radius-lg);
+  gap: 0.75rem;
 }
 
 .slugUrl {
-  font-size: var(--text-base);
-  font-family: monospace;
-  color: var(--brand-primary);
+  padding: 0.875rem 1rem;
+  background: #F0F9FF;
+  border: 1px solid #BAE6FD;
+  border-radius: 10px;
+  font-size: 0.9375rem;
 }
+.slugUrl code { color: #0369A1; }
+.slugUrl strong { color: #0C4A6E; }
 
 .slugHint {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  line-height: 1.5;
+  font-size: 0.8125rem;
+  color: #64748B;
+  line-height: 1.6;
+  padding: 0.75rem;
+  background: #FFF9EB;
+  border: 1px solid #FDE68A;
+  border-radius: 10px;
 }
+.slugHint strong { color: #92400E; }
 
+/* ── Plans Grid ────────────────────────────────────────────── */
 .plansGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--space-4);
-  margin-top: var(--space-2);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
+@media (max-width: 800px) { .plansGrid { grid-template-columns: 1fr; } }
 
 .planCard {
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
+  background: #F8FAFF;
+  border: 1.5px solid #DBEAFE;
+  border-radius: 14px;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: 0.625rem;
   position: relative;
+  transition: all 0.15s;
+}
+
+.planCard:hover {
+  box-shadow: 0 4px 14px rgba(37,99,235,0.10);
 }
 
 .planCard--featured {
-  border-color: rgba(255, 107, 53, 0.4);
-  background: linear-gradient(180deg, rgba(255, 107, 53, 0.08) 0%, var(--bg-surface-2) 100%);
+  border-color: #2563EB;
+  background: linear-gradient(to bottom, #EFF6FF, #F8FAFF);
+  box-shadow: 0 2px 12px rgba(37,99,235,0.14);
 }
 
 .planCard--active {
-  border-color: var(--color-success);
+  border-color: #2563EB;
+  background: #EFF6FF;
 }
 
 .activeBadge {
   position: absolute;
   top: -10px;
   right: 12px;
-  background: var(--color-success);
-  color: #fff;
-  font-size: 10px;
+  font-size: 0.625rem;
+  font-weight: 800;
   font-family: var(--font-display);
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
+  letter-spacing: 0.08em;
+  padding: 2px 9px;
+  border-radius: 9999px;
+  background: #2563EB;
+  color: #FFFFFF;
+  text-transform: uppercase;
 }
 
 .popularTag {
-  font-size: 11px;
-  color: var(--brand-primary);
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 800;
   font-family: var(--font-display);
-  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 9px;
+  border-radius: 9999px;
+  background: #DBEAFE;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+  text-transform: uppercase;
+  width: fit-content;
 }
 
 .planName {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: 1.125rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #1E3A8A;
 }
 
 .planPrice {
   font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: 800;
-  color: var(--brand-primary);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: -0.02em;
 }
-
 .planPrice small {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748B;
 }
 
 .planFeatures {
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-  list-style: none;
-  padding: 0;
+  gap: 0.375rem;
+  flex: 1;
+}
+.planFeatures li {
+  font-size: 0.8125rem;
+  color: #334155;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+}
+.planFeatures li::before {
+  content: '✓';
+  color: #2563EB;
+  font-weight: 700;
+  flex-shrink: 0;
 }

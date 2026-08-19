@@ -120,7 +120,7 @@ export default async function SettingsPage() {
               <li>✓ Productos ilimitados</li>
             </ul>
             {currentPlan !== "RESTRO_IA" && (
-              <Button variant="orange" size="sm" fullWidth style={{ marginTop: "12px" }}>
+              <Button type="button" variant="primary" size="sm" fullWidth style={{ marginTop: "12px" }}>
                 Seleccionar Plan
               </Button>
             )}
@@ -138,7 +138,7 @@ export default async function SettingsPage() {
               <li>✓ Exportar reportes Excel & PDF</li>
             </ul>
             {currentPlan !== "BUSINESS" && (
-              <Button variant="secondary" size="sm" fullWidth style={{ marginTop: "12px" }}>
+              <Button type="button" variant="outline" size="sm" fullWidth style={{ marginTop: "12px" }}>
                 Contactar Ventas
               </Button>
             )}

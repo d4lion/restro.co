@@ -1,61 +1,89 @@
-/* ─── RESTRO — GOOGLE & ADAMIND MATERIAL DESIGN SYSTEM ─────────────────────
-   Paleta: Azul Profundo #0F172A / #1E293B · Blanco Puro #FFFFFF · 
-   Acentuaciones: Rojo Adamind #E11D48 & Naranja Acción #F97316 · Azul Google #2563EB
-   Estilo: Material 3 / Google Clean UI — Bordes nítidos, botones definidos, cero emojis.
+/* ─── RESTRO — DESIGN SYSTEM ─────────────────────────────────────────────────
+   Paleta Dashboard: Azul Profundo sidebar + Fondo Blanco/Azul claro contenido
+   shadcn/ui compatible CSS variables
 ────────────────────────────────────────────────────────────────────────────── */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
 
+/* ── shadcn/ui CSS Variables (requeridas por los componentes) ─────────────── */
 :root {
-  /* Google & Adamind Palette */
-  --brand-blue: #2563EB;
-  --brand-blue-hover: #1D4ED8;
-  --brand-blue-light: rgba(37, 99, 235, 0.12);
-  
-  --brand-adamind: #E11D48;
-  --brand-adamind-hover: #BE123C;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
+}
 
-  --brand-orange: #F97316;
-  --brand-orange-hover: #EA580C;
+/* ── Brand & Dashboard Palette ───────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand-blue:        #2563EB;
+  --brand-blue-hover:  #1D4ED8;
+  --brand-blue-light:  rgba(37, 99, 235, 0.10);
+  --brand-adamind:     #E11D48;
+  --brand-orange:      #F97316;
 
-  /* Surfaces (Deep Navy/Slate + Pure Light) */
-  --bg-base: #0F172A;
-  --bg-surface: #1E293B;
-  --bg-surface-2: #334155;
-  --bg-surface-3: #475569;
-  --bg-elevated: #334155;
-  --bg-white: #FFFFFF;
+  /* Dashboard surfaces — Light Blue/White theme */
+  --dash-bg:           #EFF6FF;       /* fondo principal del content area */
+  --dash-surface:      #FFFFFF;       /* tarjetas / paneles */
+  --dash-surface-2:    #F1F5F9;       /* filas alternas, inputs */
+  --dash-border:       #DBEAFE;       /* borde azul muy claro */
+  --dash-border-mid:   #BFDBFE;       /* borde azul medio */
 
-  /* Text Colors */
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
-  --text-dark: #0F172A;
-  --text-inverse: #0F172A;
+  /* Sidebar palette — Deep Blue */
+  --sidebar-bg:        #1E3A8A;
+  --sidebar-bg-2:      #1E40AF;
+  --sidebar-active:    #2563EB;
+  --sidebar-hover:     rgba(255, 255, 255, 0.10);
+  --sidebar-text:      #BFDBFE;
+  --sidebar-text-dim:  rgba(191, 219, 254, 0.60);
+  --sidebar-border:    rgba(255, 255, 255, 0.10);
 
-  /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-default: rgba(255, 255, 255, 0.14);
-  --border-strong: rgba(255, 255, 255, 0.25);
-  --border-blue: rgba(37, 99, 235, 0.4);
-  --border-orange: rgba(249, 115, 22, 0.4);
+  /* Legacy dark surfaces (auth, public pages) */
+  --bg-base:           #0F172A;
+  --bg-surface:        #1E293B;
+  --bg-surface-2:      #334155;
+  --bg-surface-3:      #475569;
+  --bg-elevated:       #334155;
+  --bg-white:          #FFFFFF;
 
-  /* Semantic Status Colors */
-  --color-success: #10B981;
-  --color-success-bg: rgba(16, 185, 129, 0.12);
-  --color-warning: #F59E0B;
-  --color-warning-bg: rgba(245, 158, 11, 0.12);
-  --color-error: #EF4444;
-  --color-error-bg: rgba(239, 68, 68, 0.12);
-  --color-info: #3B82F6;
-  --color-info-bg: rgba(59, 130, 246, 0.12);
+  /* Text */
+  --text-primary:      #0F172A;
+  --text-secondary:    #334155;
+  --text-muted:        #64748B;
+  --text-inverse:      #FFFFFF;
 
-  /* Status Scale */
-  --status-pending: #F97316;
-  --status-preparing: #F59E0B;
-  --status-ready: #10B981;
-  --status-delivered: #64748B;
-  --status-cancelled: #EF4444;
+  /* Semantic Status */
+  --color-success:     #10B981;
+  --color-success-bg:  rgba(16, 185, 129, 0.10);
+  --color-warning:     #F59E0B;
+  --color-warning-bg:  rgba(245, 158, 11, 0.10);
+  --color-error:       #EF4444;
+  --color-error-bg:    rgba(239, 68, 68, 0.10);
+  --color-info:        #3B82F6;
+  --color-info-bg:     rgba(59, 130, 246, 0.10);
+
+  /* Order Statuses */
+  --status-pending:    #F97316;
+  --status-preparing:  #F59E0B;
+  --status-ready:      #10B981;
+  --status-delivered:  #64748B;
+  --status-cancelled:  #EF4444;
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -69,44 +97,44 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
-  /* Google Material Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  /* Radius */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
   --radius-full: 9999px;
 
-  /* Google Material Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-blue: 0 4px 14px rgba(37, 99, 235, 0.35);
-  --shadow-orange: 0 4px 14px rgba(249, 115, 22, 0.35);
+  /* Shadows (light mode) */
+  --shadow-sm:  0 1px 3px rgba(30, 58, 138, 0.08), 0 1px 2px rgba(30, 58, 138, 0.06);
+  --shadow-md:  0 4px 12px rgba(30, 58, 138, 0.10), 0 2px 6px rgba(30, 58, 138, 0.06);
+  --shadow-lg:  0 10px 30px rgba(30, 58, 138, 0.12), 0 4px 12px rgba(30, 58, 138, 0.08);
+  --shadow-blue: 0 4px 14px rgba(37, 99, 235, 0.30);
+  --shadow-card: 0 1px 4px rgba(30, 58, 138, 0.08), 0 0 0 1px rgba(219, 234, 254, 0.80);
 
   /* Typography */
   --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
   --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Layout */
-  --sidebar-width: 260px;
+  --sidebar-width:     260px;
   --sidebar-collapsed: 72px;
-  --content-max: 1280px;
+  --content-max:       1280px;
 }
 
-/* RESET & BASE */
+/* ── RESET & BASE ─────────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -122,7 +150,7 @@ html {
 body {
   font-family: var(--font-body);
   font-size: var(--text-base);
-  color: var(--text-primary);
+  color: var(--bg-base);
   background-color: var(--bg-base);
   line-height: 1.5;
   min-height: 100vh;
@@ -132,7 +160,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--text-primary);
 }
 
 a {
@@ -151,22 +178,15 @@ input, textarea, select {
   font-family: var(--font-body);
 }
 
-/* SCROLLBAR */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-base);
-}
-
+/* ── SCROLLBAR ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-surface-2);
+  background: var(--dash-border-mid);
   border-radius: var(--radius-full);
 }
 
-/* BADGES */
+/* ── BADGES (legacy global badges) ───────────────────────────────────────── */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -180,16 +200,16 @@ input, textarea, select {
   white-space: nowrap;
 }
 
-.badge--blue { background: var(--brand-blue-light); color: #60A5FA; border-color: rgba(37, 99, 235, 0.3); }
-.badge--orange { background: rgba(249, 115, 22, 0.15); color: #FB923C; border-color: rgba(249, 115, 22, 0.3); }
-.badge--red { background: rgba(225, 29, 72, 0.15); color: #F43F5E; border-color: rgba(225, 29, 72, 0.3); }
-.badge--success { background: var(--color-success-bg); color: var(--color-success); border-color: rgba(16, 185, 129, 0.3); }
-.badge--warning { background: var(--color-warning-bg); color: var(--color-warning); border-color: rgba(245, 158, 11, 0.3); }
-.badge--muted { background: var(--bg-surface-2); color: var(--text-muted); border-color: var(--border-default); }
+.badge--blue    { background: rgba(37,99,235,0.10); color: #2563EB; border-color: rgba(37,99,235,0.20); }
+.badge--orange  { background: rgba(249,115,22,0.10); color: #EA580C; border-color: rgba(249,115,22,0.20); }
+.badge--red     { background: rgba(225,29,72,0.10); color: #E11D48; border-color: rgba(225,29,72,0.20); }
+.badge--success { background: rgba(16,185,129,0.10); color: #059669; border-color: rgba(16,185,129,0.20); }
+.badge--warning { background: rgba(245,158,11,0.10); color: #D97706; border-color: rgba(245,158,11,0.20); }
+.badge--muted   { background: #F1F5F9; color: #64748B; border-color: #E2E8F0; }
 .badge--building {
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--color-warning);
-  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245,158,11,0.10);
+  color: #D97706;
+  border-color: rgba(245,158,11,0.20);
 }
 
 .sr-only {
@@ -199,6 +219,6 @@ input, textarea, select {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0,0,0,0);
   border: 0;
 }

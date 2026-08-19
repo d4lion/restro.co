@@ -1,148 +1,157 @@
+/* ── Analytics Page — Blue/White Theme ──────────────────────── */
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: 1.75rem;
 }
 
 .header {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .titleRow {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0.75rem;
   flex-wrap: wrap;
+  margin-bottom: 0.375rem;
 }
 
 .title {
-  font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: 1.75rem;
   font-weight: 800;
-  color: var(--text-primary);
+  font-family: var(--font-display);
+  color: #0F172A;
+  letter-spacing: -0.025em;
 }
 
 .subtitle {
-  color: var(--text-muted);
-  font-size: var(--text-sm);
+  color: #64748B;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 560px;
 }
 
+/* ── AI Upgrade Banner ─────────────────────────────────────── */
 .aiBanner {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-5);
-  padding: var(--space-6);
-  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 179, 71, 0.08));
-  border: 1px solid rgba(255, 107, 53, 0.4);
-  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 50%, #EEF2FF 100%);
+  border: 1px solid #BFDBFE;
+  border-radius: 16px;
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
 }
-
-.aiBannerIcon {
-  font-size: 3rem;
+.aiBanner::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 70%);
+  border-radius: 50%;
 }
 
 .aiBannerContent h2 {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: 1.125rem;
   font-weight: 800;
-  color: var(--brand-primary);
-  margin-bottom: var(--space-1);
+  color: #1E3A8A;
+  margin-bottom: 0.5rem;
 }
-
 .aiBannerContent p {
-  color: var(--text-secondary);
-  font-size: var(--text-sm);
-  line-height: 1.5;
+  color: #475569;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 520px;
 }
 
+/* ── Grid ──────────────────────────────────────────────────── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: var(--space-6);
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
 }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
 
+/* ── Card ──────────────────────────────────────────────────── */
 .card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
+  background: #FFFFFF;
+  border: 1px solid #DBEAFE;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(30,58,138,0.07);
 }
 
 .card--locked {
-  opacity: 0.75;
+  opacity: 0.65;
+  filter: grayscale(0.2);
 }
 
 .cardHeaderRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .cardTitle {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  font-family: var(--font-display);
+  color: #1E3A8A;
 }
 
-.statsList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
+/* ── Stats list ────────────────────────────────────────────── */
+.statsList { display: flex; flex-direction: column; gap: 0; }
 
 .statRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
-  background: var(--bg-surface-2);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
+  padding: 0.875rem 0;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 0.875rem;
 }
-
+.statRow:last-child { border-bottom: none; }
+.statRow span { color: #64748B; }
 .statRow strong {
   font-family: var(--font-display);
-  color: var(--brand-primary);
-  font-size: var(--text-base);
+  font-weight: 700;
+  color: #1E3A8A;
 }
 
-.aiInsights {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
+/* ── AI Insights ───────────────────────────────────────────── */
+.aiInsights { display: flex; flex-direction: column; gap: 0.875rem; }
 
 .insightItem {
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  background: var(--bg-surface-2);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-subtle);
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: #F8FAFF;
+  border: 1px solid #DBEAFE;
+  border-radius: 12px;
+  transition: background 0.15s;
 }
-
-.insightIcon {
-  font-size: 1.5rem;
-}
+.insightItem:hover { background: #EFF6FF; }
 
 .insightItem strong {
-  font-family: var(--font-display);
-  font-size: var(--text-sm);
-  color: var(--text-primary);
   display: block;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1E3A8A;
+  margin-bottom: 0.25rem;
 }
 
 .insightItem p {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: #475569;
   line-height: 1.5;
 }
+
+.insightItem em { color: #2563EB; font-style: normal; font-weight: 600; }

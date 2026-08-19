@@ -54,7 +54,7 @@ export default async function AnalyticsPage() {
             </p>
 
             <Link href="/settings" style={{ marginTop: "12px", display: "inline-block" }}>
-              <Button variant="primary" size="md">
+              <Button type="button" variant="primary" size="md">
                 Actualizar a Plan Restro IA
               </Button>
             </Link>
