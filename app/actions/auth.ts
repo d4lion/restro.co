@@ -64,6 +64,9 @@ export async function registerAction(
 
   const supabase = await createClient();
   
+  // Ensure any previous session from another tenant is signed out
+  await supabase.auth.signOut();
+  
   // Create user in Supabase Auth
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
@@ -88,11 +91,25 @@ export async function registerAction(
       name: restaurantName.trim(),
       slug: slug.toLowerCase().trim(),
     });
+
+    // Try signing in immediately (works if email confirmation is disabled or auto-confirmed)
+    const { data: signInData } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInData?.session) {
+      return { success: true, redirectUrl: "/onboarding" };
+    }
+
+    // If session is null (email confirmation required by Supabase Auth)
+    return {
+      success: true,
+      message: `Te hemos enviado un correo de confirmación a ${email}. Por favor revisa tu bandeja de entrada para verificar tu cuenta y comenzar el onboarding.`,
+    };
   } catch (dbError) {
     console.error("Failed to create tenant in DB after Supabase signup:", dbError);
     return { message: "Error creando el restaurante en la base de datos." };
   }
-
-  return { success: true, redirectUrl: "/onboarding" };
 }
 

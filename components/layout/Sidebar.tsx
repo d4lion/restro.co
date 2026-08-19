@@ -39,18 +39,18 @@ const BuildingBadge = () => (
 );
 
 const navItems: NavItem[] = [
-  { href: "/overview",  label: "Resumen",      icon: <LayoutDashboard size={18} strokeWidth={2} /> },
-  { href: "/menu",      label: "Carta Digital", icon: <BookOpen        size={18} strokeWidth={2} /> },
-  { href: "/orders",    label: "Pedidos (KDS)", icon: <ClipboardList   size={18} strokeWidth={2} /> },
-  { href: "/tables",    label: "Mesas & QRs",  icon: <LayoutGrid      size={18} strokeWidth={2} /> },
-  { href: "/analytics", label: "Analítica IA", icon: <BarChart3       size={18} strokeWidth={2} /> },
+  { href: "/overview",  label: "Resumen",      icon: <LayoutDashboard size={18} strokeWidth={1.8} /> },
+  { href: "/menu",      label: "Carta Digital", icon: <BookOpen        size={18} strokeWidth={1.8} /> },
+  { href: "/orders",    label: "Pedidos",      icon: <ClipboardList   size={18} strokeWidth={1.8} /> },
+  { href: "/tables",    label: "Mesas & QRs",  icon: <LayoutGrid      size={18} strokeWidth={1.8} /> },
+  { href: "/analytics", label: "Analítica IA", icon: <BarChart3       size={18} strokeWidth={1.8} /> },
   {
     href: "/whatsapp",
     label: "WhatsApp",
-    icon: <MessageCircle size={18} strokeWidth={2} />,
+    icon: <MessageCircle size={18} strokeWidth={1.8} />,
     badge: <BuildingBadge />,
   },
-  { href: "/settings",  label: "Configuración", icon: <Settings       size={18} strokeWidth={2} /> },
+  { href: "/settings",  label: "Configuración", icon: <Settings       size={18} strokeWidth={1.8} /> },
 ];
 
 interface SidebarProps {
@@ -83,9 +83,8 @@ export function Sidebar({
         {/* ── Logo ─────────────────────────────────────────── */}
         <div className={styles.logo}>
           <div className={styles.logoIcon}>
-            <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-              <rect width="40" height="40" rx="10" fill="#FFFFFF" fillOpacity="0.15" />
-              <rect width="40" height="40" rx="10" stroke="#FFFFFF" strokeOpacity="0.25" strokeWidth="1" />
+            <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+              <rect width="40" height="40" rx="8" fill="#2563EB" />
               <path d="M10 28L20 12L30 28" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M15 22H25" stroke="white" strokeWidth="3" strokeLinecap="round" />
             </svg>
@@ -102,7 +101,7 @@ export function Sidebar({
             <div className={styles.restaurantInfo}>
               <div className={styles.restaurantName}>{restaurantName}</div>
               <span className={`${styles.planBadge} ${planClass}`}>
-                {plan === "RESTRO_IA" && <Zap size={9} strokeWidth={3} />}
+                {plan === "RESTRO_IA" && <Zap size={10} strokeWidth={2.5} />}
                 {planLabel}
               </span>
             </div>
@@ -153,11 +152,11 @@ export function Sidebar({
         <div className={styles.footer}>
           {!collapsed && (
             <Link
-              href={`/${restaurantSlug}`}
+              href={`/restaurant/${restaurantSlug}`}
               target="_blank"
               className={styles.viewMenu}
             >
-              <ExternalLink size={13} strokeWidth={2} />
+              <ExternalLink size={14} strokeWidth={1.8} />
               Ver carta pública
             </Link>
           )}
@@ -167,7 +166,7 @@ export function Sidebar({
             aria-label={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
           >
             <span className={collapsed ? styles.rotated : ""}>
-              <ChevronLeft size={16} strokeWidth={2.5} />
+              <ChevronLeft size={16} strokeWidth={2} />
             </span>
           </button>
         </div>

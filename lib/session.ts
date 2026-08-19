@@ -23,8 +23,8 @@ export async function getSession(): Promise<SessionPayload | null> {
     return {
       userId: prismaUser.id,
       tenantId: prismaUser.tenantId,
-      role: prismaUser.role,
-      plan: prismaUser.tenant.plan,
+      role: prismaUser.role as SessionPayload["role"],
+      plan: prismaUser.tenant.plan as SessionPayload["plan"],
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Mocked for compatibility
     };
   } catch (error) {

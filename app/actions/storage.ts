@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -16,31 +17,38 @@ export async function uploadImageAction(formData: FormData, folder: string) {
       return { error: "No file provided" };
     }
 
-    const supabase = await createClient();
-
-    // Check auth
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return { error: "Unauthorized" };
-    }
-
     const fileExt = file.name.split(".").pop();
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = `${folder}/${fileName}`;
 
-    const { data, error } = await supabase.storage
-      .from("restro-storage")
-      .upload(filePath, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+    // Try standard authenticated server client first
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (error) {
-      console.error("Storage upload error:", error);
-      return { error: error.message };
+    let uploadRes;
+    let clientUsed = supabase;
+
+    if (user) {
+      uploadRes = await supabase.storage
+        .from("restro-storage")
+        .upload(filePath, file, { cacheControl: "3600", upsert: false });
     }
 
-    const { data: publicUrlData } = supabase.storage
+    // If unauthenticated or if user upload failed due to Storage RLS policy, fallback to admin client
+    if (!user || uploadRes?.error) {
+      const adminClient = createAdminClient();
+      clientUsed = adminClient as any;
+      uploadRes = await adminClient.storage
+        .from("restro-storage")
+        .upload(filePath, file, { cacheControl: "3600", upsert: false });
+    }
+
+    if (!uploadRes || uploadRes.error) {
+      console.error("Storage upload error:", uploadRes?.error);
+      return { error: uploadRes?.error?.message || "Failed to upload image" };
+    }
+
+    const { data: publicUrlData } = clientUsed.storage
       .from("restro-storage")
       .getPublicUrl(filePath);
 

@@ -21,21 +21,25 @@ export async function updateRestaurantAction(
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
   const city = formData.get("city") as string;
+  const logoUrl = formData.get("logoUrl") as string;
 
   if (!name?.trim()) {
     return { success: false, message: "El nombre del restaurante es requerido" };
   }
 
   await tenantRepository.updateSettings(session.tenantId, {
-    name,
-    description,
-    phone,
-    address,
-    city,
+    name: name.trim(),
+    description: description ? description.trim() : undefined,
+    phone: phone ? phone.trim() : undefined,
+    address: address ? address.trim() : undefined,
+    city: city ? city.trim() : undefined,
+    logoUrl: logoUrl ? logoUrl.trim() : undefined,
   });
 
   revalidatePath("/settings");
-  return { success: true, message: "¡Perfil actualizado correctamente!" };
+  revalidatePath("/overview");
+
+  return { success: true, message: "¡Perfil y logo actualizados correctamente!" };
 }
 
 export async function logoutAction(): Promise<void> {

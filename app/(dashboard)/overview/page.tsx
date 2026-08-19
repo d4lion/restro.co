@@ -19,10 +19,10 @@ import Link from "next/link";
 export const metadata: Metadata = { title: "Resumen" };
 
 const STAT_COLORS: Record<string, { bg: string; color: string }> = {
-  blue:    { bg: "#EFF6FF", color: "#2563EB" },
-  green:   { bg: "#ECFDF5", color: "#059669" },
-  orange:  { bg: "#FFF7ED", color: "#EA580C" },
-  slate:   { bg: "#F1F5F9", color: "#475569" },
+  blue:   { bg: "#EFF6FF", color: "#2563EB" },
+  teal:   { bg: "#F0FDFA", color: "#0F766E" },
+  orange: { bg: "#FFFBEB", color: "#D97706" },
+  slate:  { bg: "#F1F5F9", color: "#475569" },
 };
 
 function StatCard({
@@ -41,10 +41,7 @@ function StatCard({
   const { bg, color } = STAT_COLORS[colorKey];
   return (
     <div className={styles.statCard}>
-      <div
-        className={styles.statIconBox}
-        style={{ background: bg, color }}
-      >
+      <div className={styles.statIconBox} style={{ background: bg, color }}>
         {icon}
       </div>
       <div>
@@ -85,7 +82,7 @@ export default async function OverviewPage() {
 
   return (
     <div className={styles.page}>
-      {/* ── Header ─────────────────────────────────────────── */}
+      {/* ── 18. Page Header ─────────────────────────────────── */}
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Resumen Operativo</h1>
@@ -98,41 +95,41 @@ export default async function OverviewPage() {
             })}
           </p>
         </div>
-        <a href={`/${tenant.slug}`} target="_blank" className={styles.viewMenuBtn}>
-          <ExternalLink size={14} strokeWidth={2} />
+        <a href={`/restaurant/${tenant.slug}`} target="_blank" className={styles.viewMenuBtn}>
+          <ExternalLink size={16} strokeWidth={1.8} />
           Ver carta pública
         </a>
       </div>
 
-      {/* ── Stats Grid ─────────────────────────────────────── */}
+      {/* ── 24. Stats Grid ─────────────────────────────────── */}
       <div className={styles.statsGrid}>
         <StatCard
           label="Pedidos activos"
           value={activeOrders.length}
           sub={`${pendingCount} nuevos · ${preparingCount} en cocina`}
           colorKey="blue"
-          icon={<ClipboardCheck size={22} strokeWidth={2} />}
+          icon={<ClipboardCheck size={20} strokeWidth={1.8} />}
         />
         <StatCard
           label="Mesas en servicio"
           value={`${activeTables.length} / ${tables.length}`}
           sub={`${tables.length - activeTables.length} desocupadas`}
-          colorKey="green"
-          icon={<LayoutGrid size={22} strokeWidth={2} />}
+          colorKey="teal"
+          icon={<LayoutGrid size={20} strokeWidth={1.8} />}
         />
         <StatCard
           label="Ventas acumuladas hoy"
           value={formatCOP(totalToday)}
           sub="Pedidos en curso"
           colorKey="orange"
-          icon={<DollarSign size={22} strokeWidth={2} />}
+          icon={<DollarSign size={20} strokeWidth={1.8} />}
         />
         <StatCard
           label="Suscripción SaaS"
           value={PLAN_LIMITS[plan].label}
           sub={`${limits.maxTables === Infinity ? "Ilimitadas" : limits.maxTables} mesas · ${limits.hasAI ? "Analítica IA activa" : "Sin IA"}`}
-          colorKey={plan === "RESTRO_IA" ? "blue" : plan === "BUSINESS" ? "orange" : "slate"}
-          icon={<Star size={22} strokeWidth={2} />}
+          colorKey={plan === "RESTRO_IA" ? "teal" : plan === "BUSINESS" ? "blue" : "slate"}
+          icon={<Star size={20} strokeWidth={1.8} />}
         />
       </div>
 
@@ -151,8 +148,7 @@ export default async function OverviewPage() {
                       className={styles.orderStatus}
                       style={{
                         color: statusConfig.color,
-                        borderColor: `${statusConfig.color}40`,
-                        background: `${statusConfig.color}18`,
+                        background: `${statusConfig.color}15`,
                       }}
                     >
                       {statusConfig.label}
@@ -188,7 +184,7 @@ export default async function OverviewPage() {
               ? "ACTIVE"
               : "FREE";
             const dotColor =
-              status === "FREE" ? "#10B981" : status === "ACTIVE" ? "#F59E0B" : "#CBD5E1";
+              status === "FREE" ? "#16A34A" : status === "ACTIVE" ? "#D97706" : "#94A3B8";
             return (
               <Link key={table.id} href="/tables" className={styles.tableCard}>
                 <div className={styles.tableDot} style={{ background: dotColor }} />

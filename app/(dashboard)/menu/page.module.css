@@ -1,149 +1,159 @@
-/* ── Menu Page — Blue/White Theme ───────────────────────────── */
+/* ─── MENU PAGE — Restro Design System (Sections 18, 19, 12, 8-10) ────────── */
+
 .page {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 32px;
 }
 
+/* ── Page Header ────────────────────────────────────────────── */
 .header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  font-family: var(--font-display);
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
   color: #0F172A;
-  letter-spacing: -0.025em;
-  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
 }
 
 .subtitle {
   color: #64748B;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  max-width: 540px;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 560px;
 }
 
 /* ── Card ─────────────────────────────────────────────────── */
 .card {
   background: #FFFFFF;
-  border: 1px solid #DBEAFE;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 4px rgba(30,58,138,0.07);
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 24px;
 }
 
 .cardTitle {
-  font-size: 1rem;
-  font-weight: 700;
-  font-family: var(--font-display);
-  color: #1E3A8A;
-  margin-bottom: 1rem;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  color: #0F172A;
+  margin-bottom: 16px;
 }
 
 /* ── Inline Form ──────────────────────────────────────────── */
 .inlineForm {
   display: flex;
-  gap: 0.75rem;
+  gap: 12px;
   align-items: center;
   flex-wrap: wrap;
 }
 
-/* ── Inputs (reemplaza al componente Input para forms inline) ── */
+/* ── Inputs ───────────────────────────────────────────────── */
 .inputField {
   flex: 1;
-  min-width: 180px;
-  height: 42px;
-  padding: 0 1rem;
+  min-width: 200px;
+  height: 40px;
+  padding: 0 12px;
   background: #FFFFFF;
-  border: 1.5px solid #DBEAFE;
-  border-radius: 10px;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
   color: #0F172A;
-  font-size: 0.9375rem;
-  font-family: var(--font-body);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
   outline: none;
 }
+
 .inputField::placeholder { color: #94A3B8; }
+
 .inputField:focus {
   border-color: #2563EB;
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.13);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
-.inputField:hover:not(:focus):not(:disabled) { border-color: #93C5FD; }
-.inputField:disabled { opacity: 0.5; background: #F8FAFC; }
+
+.inputField:hover:not(:focus):not(:disabled) {
+  border-color: #94A3B8;
+}
+
+.inputField:disabled {
+  opacity: 0.5;
+  background: #F8FAFC;
+}
 
 .textarea {
   height: auto;
   min-height: 80px;
-  padding: 0.625rem 1rem;
+  padding: 8px 12px;
   resize: vertical;
   line-height: 1.5;
 }
 
-
 /* ── Empty state ──────────────────────────────────────────── */
 .empty {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 64px 32px;
   background: #FFFFFF;
-  border: 2px dashed #BFDBFE;
-  border-radius: 16px;
+  border: 1px dashed #CBD5E1;
+  border-radius: 10px;
 }
+
 .emptyTitle {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1rem;
-  color: #1E3A8A;
-  margin-bottom: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #0F172A;
+  margin-bottom: 4px;
 }
-.emptySub { color: #64748B; font-size: 0.875rem; }
+
+.emptySub { color: #64748B; font-size: 14px; }
 
 /* ── Categories List ──────────────────────────────────────── */
 .categoriesList {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 24px;
 }
 
 .categoryCard {
   background: #FFFFFF;
-  border: 1px solid #DBEAFE;
-  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(30,58,138,0.06);
 }
 
 .categoryHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(to right, #EFF6FF, #F0F9FF);
-  border-bottom: 1px solid #DBEAFE;
+  padding: 16px 24px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
 }
 
 .categoryName {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.9375rem;
-  color: #1E3A8A;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #0F172A;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .itemCount {
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 500;
   color: #64748B;
 }
 
-/* ── Items Grid ───────────────────────────────────────────── */
+/* ── Table / Items Grid (Section 19) ─────────────────────── */
 .itemsGrid {
   display: flex;
   flex-direction: column;
@@ -153,65 +163,74 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.875rem 1.25rem;
-  border-bottom: 1px solid #F1F5F9;
-  gap: 1rem;
-  transition: background 0.1s;
+  height: 56px;
+  padding: 0 24px;
+  border-bottom: 1px solid #E2E8F0;
+  gap: 16px;
+  transition: background 150ms ease;
 }
-.itemRow:hover { background: #F8FAFF; }
-.itemRow:last-child { border-bottom: none; }
 
-.itemRow--disabled { opacity: 0.5; }
+.itemRow:hover {
+  background: #F8FAFC;
+}
+
+.itemRow:last-child {
+  border-bottom: none;
+}
+
+.itemRow--disabled {
+  opacity: 0.5;
+}
 
 .itemMain {
   display: flex;
   align-items: center;
-  gap: 0.875rem;
+  gap: 12px;
   flex: 1;
   min-width: 0;
 }
 
 .itemThumb {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
   overflow: hidden;
-  background: #EFF6FF;
-  border: 1px solid #DBEAFE;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: #93C5FD;
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
 }
+
 .itemThumb img { width: 100%; height: 100%; object-fit: cover; }
 
 .itemName {
-  font-family: var(--font-display);
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
   color: #0F172A;
   display: block;
 }
 
 .itemDesc {
-  font-size: 0.75rem;
-  color: #94A3B8;
+  font-size: 12px;
+  color: #64748B;
   margin-top: 1px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 280px;
+  max-width: 320px;
 }
 
 .itemPrice {
   display: inline-block;
-  margin-top: 3px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
   color: #2563EB;
 }
 
@@ -220,143 +239,154 @@
 .toggleBtn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  font-family: var(--font-display);
-  letter-spacing: 0.04em;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
-  border: 1px solid;
-  transition: all 0.15s;
+  border: 1px solid transparent;
+  transition: background 150ms ease, color 150ms ease;
   white-space: nowrap;
-  touch-action: manipulation;
 }
+
 .toggleBtn--on {
   background: #DCFCE7;
   color: #15803D;
-  border-color: #BBF7D0;
+  border-color: #DCFCE7;
 }
-.toggleBtn--on:hover:not(:disabled) { background: #BBF7D0; }
+
+.toggleBtn--on:hover:not(:disabled) {
+  background: #BBF7D0;
+}
+
 .toggleBtn--off {
-  background: #FEF2F2;
-  color: #DC2626;
-  border-color: #FECACA;
+  background: #FEE2E2;
+  color: #B91C1C;
+  border-color: #FEE2E2;
 }
-.toggleBtn--off:hover:not(:disabled) { background: #FECACA; }
+
+.toggleBtn--off:hover:not(:disabled) {
+  background: #FECACA;
+}
+
 .toggleBtn:disabled { opacity: 0.6; cursor: wait; }
 
-
-/* ── Add Item accordion (button instead of summary) ──────── */
+/* ── Add Item Accordion ───────────────────────────────────── */
 .addItemDetails {
-  border-top: 1px solid #EFF6FF;
+  border-top: 1px solid #E2E8F0;
 }
 
 .addItemSummary {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 8px;
   width: 100%;
-  padding: 0.875rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  font-family: var(--font-display);
+  height: 44px;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
   color: #2563EB;
   cursor: pointer;
   background: none;
   border: none;
   text-align: left;
-  transition: background 0.15s;
-  touch-action: manipulation;
+  transition: background 150ms ease;
 }
-.addItemSummary:hover { background: #EFF6FF; }
+
+.addItemSummary:hover { background: #F8FAFC; }
 
 .addItemForm {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem 1.25rem;
-  background: #F8FAFF;
-  border-top: 1px solid #DBEAFE;
+  gap: 12px;
+  padding: 16px 24px 20px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
 }
 
 .formActions {
   grid-column: 1 / -1;
   display: flex;
   justify-content: flex-end;
-  gap: 0.625rem;
-  padding-top: 0.25rem;
+  gap: 12px;
+  padding-top: 4px;
 }
 
-/* ── Buttons ──────────────────────────────────────────────── */
+/* ── Buttons (Section 8-10) ───────────────────────────────── */
 .btnPrimary {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0 1.125rem;
-  height: 42px;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
   background: #2563EB;
-  border: 1.5px solid #1D4ED8;
-  border-radius: 10px;
-  font-family: var(--font-display);
-  font-size: 0.875rem;
-  font-weight: 700;
+  border: 1px solid #2563EB;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
   color: #FFFFFF;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.15s;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.22);
+  transition: background 150ms ease;
   flex-shrink: 0;
-  touch-action: manipulation;
 }
+
 .btnPrimary:hover:not(:disabled) {
   background: #1D4ED8;
-  box-shadow: 0 4px 14px rgba(37,99,235,0.32);
+  border-color: #1D4ED8;
 }
-.btnPrimary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btnPrimary:disabled { opacity: 0.5; cursor: not-allowed; background: #BFDBFE; border-color: #BFDBFE; }
 
 .btnSecondary {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 1rem;
-  background: #EFF6FF;
-  border: 1.5px solid #BFDBFE;
-  border-radius: 9px;
-  font-family: var(--font-display);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #2563EB;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.15s;
-  touch-action: manipulation;
+  transition: background 150ms ease, color 150ms ease;
 }
-.btnSecondary:hover:not(:disabled) { background: #DBEAFE; border-color: #93C5FD; }
-.btnSecondary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btnSecondary:hover:not(:disabled) { background: #F8FAFC; color: #0F172A; }
+.btnSecondary:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btnCancel {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 0.875rem;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
   background: transparent;
-  border: 1.5px solid #E2E8F0;
-  border-radius: 9px;
-  font-family: var(--font-display);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #64748B;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.15s;
-  touch-action: manipulation;
+  transition: background 150ms ease, color 150ms ease;
 }
-.btnCancel:hover:not(:disabled) { background: #F1F5F9; color: #374151; }
-.btnCancel:disabled { opacity: 0.55; cursor: not-allowed; }
 
-/* ── Spinner ──────────────────────────────────────────────── */
+.btnCancel:hover:not(:disabled) { background: #F1F5F9; color: #0F172A; }
+.btnCancel:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .spin { animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-

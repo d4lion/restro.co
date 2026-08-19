@@ -26,7 +26,7 @@ export default async function SettingsPage() {
         <div>
           <h1 className={styles.title}>Configuración y Planes</h1>
           <p className={styles.subtitle}>
-            Administra los datos de tu restaurante, el enlace permanente de tu carta y tu plan de suscripción SaaS.
+            Administra los datos de tu restaurante, carga tu logo comercial, gestiona el enlace permanente de tu carta y tu plan de suscripción SaaS.
           </p>
         </div>
       </div>
@@ -39,6 +39,7 @@ export default async function SettingsPage() {
         phone={tenant.phone ?? null}
         address={tenant.address ?? null}
         city={tenant.city ?? null}
+        logoUrl={tenant.logoUrl ?? null}
       />
 
       {/* ── Slug Policy Info Card ───────────────────────────── */}

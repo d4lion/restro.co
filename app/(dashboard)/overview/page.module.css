@@ -1,115 +1,116 @@
-/* ── Overview Page — Blue/White Theme ─────────────────────── */
+/* ─── OVERVIEW PAGE — Restro Design System (Sections 18, 24) ───────────────── */
+
 .page {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 32px;
 }
 
+/* ── 18. Page Header ────────────────────────────────────────── */
 .header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  font-family: var(--font-display);
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
   color: #0F172A;
-  letter-spacing: -0.025em;
-  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
 }
 
 .subtitle {
   color: #64748B;
-  font-size: 0.875rem;
+  font-size: 14px;
   text-transform: capitalize;
 }
 
 .viewMenuBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
   background: #FFFFFF;
-  border: 1px solid #BFDBFE;
-  border-radius: 10px;
-  color: #2563EB;
-  font-size: 0.875rem;
-  font-family: var(--font-display);
-  font-weight: 600;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 500;
   text-decoration: none;
-  transition: all 0.15s ease;
-  box-shadow: 0 1px 3px rgba(37,99,235,0.08);
-}
-.viewMenuBtn:hover {
-  background: #EFF6FF;
-  border-color: #93C5FD;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.14);
+  transition: background 150ms ease, color 150ms ease;
 }
 
-/* ── Stats Grid ─────────────────────────────────────────────── */
+.viewMenuBtn:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+/* ── 24. Dashboard KPIs ─────────────────────────────────────── */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
 }
 
 .statCard {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  padding: 1.25rem;
+  gap: 16px;
+  padding: 24px;
   background: #FFFFFF;
-  border: 1px solid #DBEAFE;
-  border-radius: 16px;
-  box-shadow: 0 1px 4px rgba(30,58,138,0.07);
-  transition: all 0.15s ease;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  transition: border-color 150ms ease;
 }
+
 .statCard:hover {
-  box-shadow: 0 4px 16px rgba(30,58,138,0.11);
-  transform: translateY(-1px);
+  border-color: #CBD5E1;
 }
 
 .statIconBox {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   flex-shrink: 0;
 }
 
 .statLabel {
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 600;
   color: #64748B;
-  font-family: var(--font-display);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
 }
 
 .statValue {
-  font-size: 1.5rem;
-  font-weight: 800;
-  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
   color: #0F172A;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .statSub {
-  font-size: 0.75rem;
-  color: #94A3B8;
-  margin-top: 0.25rem;
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 4px;
 }
 
 /* ── Sections ───────────────────────────────────────────────── */
-.section { display: flex; flex-direction: column; gap: 1rem; }
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .sectionHeader {
   display: flex;
@@ -118,40 +119,43 @@
 }
 
 .sectionTitle {
-  font-size: 1.125rem;
-  font-weight: 700;
-  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
   color: #0F172A;
 }
 
 .sectionLink {
-  font-size: 0.875rem;
+  font-size: 14px;
   color: #2563EB;
-  font-weight: 600;
-  font-family: var(--font-display);
-  transition: color 0.15s;
+  font-weight: 500;
+  transition: color 150ms ease;
 }
-.sectionLink:hover { color: #1D4ED8; }
 
-/* ── Orders ─────────────────────────────────────────────────── */
+.sectionLink:hover {
+  color: #1D4ED8;
+}
+
+/* ── Orders Grid ────────────────────────────────────────────── */
 .ordersList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
 
 .orderCard {
-  padding: 1rem;
+  padding: 20px;
   background: #FFFFFF;
-  border: 1px solid #DBEAFE;
-  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  box-shadow: 0 1px 4px rgba(30,58,138,0.06);
-  transition: box-shadow 0.15s;
+  gap: 8px;
+  transition: border-color 150ms ease;
 }
-.orderCard:hover { box-shadow: 0 4px 14px rgba(30,58,138,0.10); }
+
+.orderCard:hover {
+  border-color: #CBD5E1;
+}
 
 .orderHeader {
   display: flex;
@@ -160,86 +164,77 @@
 }
 
 .orderNumber {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1rem;
-  color: #1E3A8A;
+  font-weight: 700;
+  font-size: 16px;
+  color: #0F172A;
 }
 
 .orderStatus {
   display: inline-flex;
   align-items: center;
-  padding: 2px 9px;
-  border-radius: 9999px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  border: 1px solid;
-  font-family: var(--font-display);
-  letter-spacing: 0.02em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .orderType {
-  font-size: 0.75rem;
-  color: #94A3B8;
-  font-family: var(--font-display);
+  font-size: 12px;
+  color: #64748B;
 }
 
 .orderItems {
-  font-size: 0.8125rem;
-  color: #475569;
+  font-size: 14px;
+  color: #334155;
 }
 
 .orderTotal {
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   color: #2563EB;
-  font-size: 0.9375rem;
+  font-size: 16px;
 }
 
 /* ── Tables Grid ────────────────────────────────────────────── */
 .tablesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
 }
 
 .tableCard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 0.75rem;
+  gap: 8px;
+  padding: 16px 12px;
   background: #FFFFFF;
-  border: 1px solid #DBEAFE;
-  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
   text-decoration: none;
   text-align: center;
-  transition: all 0.15s;
+  transition: border-color 150ms ease;
   cursor: pointer;
 }
+
 .tableCard:hover {
-  border-color: #93C5FD;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(37,99,235,0.10);
+  border-color: #2563EB;
 }
 
 .tableDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
   flex-shrink: 0;
 }
 
 .tableName {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.8125rem;
-  color: #1E3A8A;
+  font-weight: 600;
+  font-size: 14px;
+  color: #0F172A;
 }
 
 .tableOrders {
-  font-size: 0.6875rem;
+  font-size: 12px;
   color: #D97706;
-  font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 500;
 }
