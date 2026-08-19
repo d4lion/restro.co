@@ -2,6 +2,15 @@ import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+import {
+  QrCode,
+  MonitorCheck,
+  BrainCircuit,
+  MessageSquare,
+  Check,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import styles from "./page.module.css";
 
 /* ─── SEO METADATA ──────────────────────────────────────────────────────────
@@ -381,32 +390,32 @@ export default async function HomePage() {
           </div>
 
           <div className={styles.featuresGrid} role="list">
-            {[
+            {([
               {
-                icon: "📱",
+                icon: <QrCode size={22} strokeWidth={1.8} color="#2563EB" />,
                 color: "blue",
                 title: "Carta Digital QR",
                 desc: "Mobile-first, sin apps, personalizada con tu logo y colores. Tus clientes escanean y navegan tu carta en segundos desde cualquier teléfono.",
               },
               {
-                icon: "🍳",
+                icon: <MonitorCheck size={22} strokeWidth={1.8} color="#0D9488" />,
                 color: "teal",
                 title: "KDS — Pantalla de Cocina",
                 desc: "Comandas en tiempo real directamente a la pantalla de tu cocina. Cero errores de transcripción, cero papel, cero demoras por comunicación.",
               },
               {
-                icon: "🤖",
+                icon: <BrainCircuit size={22} strokeWidth={1.8} color="#7C3AED" />,
                 color: "violet",
                 title: "Analítica con IA",
                 desc: "Identifica tus platos estrella, predice horas pico, detecta tendencias de consumo y toma decisiones basadas en datos reales de tu restaurante.",
               },
               {
-                icon: "💬",
+                icon: <MessageSquare size={22} strokeWidth={1.8} color="#D97706" />,
                 color: "amber",
                 title: "Canal WhatsApp",
                 desc: "Recibe pedidos directamente por WhatsApp sin necesidad de terceros. Conexión rápida con código QR, sin trámites complicados con Meta API.",
               },
-            ].map((f) => (
+            ] as { icon: React.ReactNode; color: string; title: string; desc: string }[]).map((f) => (
               <article key={f.title} className={styles.featureCard} role="listitem">
                 <div className={`${styles.featureIconWrap} ${styles[`featureIconWrap--${f.color}`]}`} aria-hidden="true">
                   {f.icon}
@@ -441,7 +450,7 @@ export default async function HomePage() {
                   "Sin apps — funciona con cualquier teléfono que tenga cámara",
                 ].map((item) => (
                   <li key={item} className={styles.productFeatureItem} role="listitem">
-                    <span className={styles.productFeatureCheck} aria-hidden="true">✓</span>
+                    <span className={styles.productFeatureCheck} aria-hidden="true"><Check size={11} strokeWidth={3} /></span>
                     {item}
                   </li>
                 ))}
@@ -489,7 +498,7 @@ export default async function HomePage() {
                   "Sin papel, sin errores de transcripción, sin delays",
                 ].map((item) => (
                   <li key={item} className={styles.productFeatureItem} role="listitem">
-                    <span className={styles.productFeatureCheck} aria-hidden="true">✓</span>
+                    <span className={styles.productFeatureCheck} aria-hidden="true"><Check size={11} strokeWidth={3} /></span>
                     {item}
                   </li>
                 ))}
@@ -536,7 +545,7 @@ export default async function HomePage() {
                   "Reportes semanales automáticos con resumen de negocio",
                 ].map((item) => (
                   <li key={item} className={styles.productFeatureItem} role="listitem">
-                    <span className={styles.productFeatureCheck} aria-hidden="true">✓</span>
+                    <span className={styles.productFeatureCheck} aria-hidden="true"><Check size={11} strokeWidth={3} /></span>
                     {item}
                   </li>
                 ))}
@@ -617,7 +626,7 @@ export default async function HomePage() {
                   "Panel de administración",
                 ].map((f) => (
                   <li key={f} className={styles.planFeatureItem} role="listitem">
-                    <span className={styles.planCheck} aria-hidden="true">✓</span>
+                    <span className={styles.planCheck} aria-hidden="true"><Check size={10} strokeWidth={3} /></span>
                     {f}
                   </li>
                 ))}
@@ -656,7 +665,7 @@ export default async function HomePage() {
                   "Soporte prioritario",
                 ].map((f) => (
                   <li key={f} className={styles.planFeatureItem} role="listitem">
-                    <span className={styles.planCheck} aria-hidden="true">✓</span>
+                    <span className={styles.planCheck} aria-hidden="true"><Check size={10} strokeWidth={3} /></span>
                     {f}
                   </li>
                 ))}
@@ -669,7 +678,10 @@ export default async function HomePage() {
             {/* Restro IA */}
             <article className={styles.planCard} role="listitem" aria-label="Plan Restro IA - $99.900 COP por mes">
               <div>
-                <h3 className={styles.planName}>Restro IA ✦</h3>
+                <h3 className={styles.planName} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  Restro IA
+                  <Sparkles size={16} strokeWidth={2} color="#7C3AED" aria-hidden="true" />
+                </h3>
                 <p className={styles.planDesc}>Para restaurantes que quieren decisiones basadas en inteligencia artificial</p>
               </div>
               <div className={styles.planPriceWrap}>
@@ -689,7 +701,7 @@ export default async function HomePage() {
                   "Cuentas de staff ilimitadas",
                 ].map((f) => (
                   <li key={f} className={styles.planFeatureItem} role="listitem">
-                    <span className={styles.planCheck} aria-hidden="true">✓</span>
+                    <span className={styles.planCheck} aria-hidden="true"><Check size={10} strokeWidth={3} /></span>
                     {f}
                   </li>
                 ))}
