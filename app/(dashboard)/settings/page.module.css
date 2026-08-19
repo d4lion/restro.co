@@ -1,64 +1,65 @@
-/* ── Settings Page — Blue/White Theme ───────────────────────── */
+/* ─── SETTINGS PAGE — Restro Design System (Sections 18, 12, 13) ──────────── */
+
 .page {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 32px;
 }
 
+/* ── Page Header ────────────────────────────────────────────── */
 .header {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  font-family: var(--font-display);
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
   color: #0F172A;
-  letter-spacing: -0.025em;
-  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
 }
 
 .subtitle {
   color: #64748B;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  max-width: 540px;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 560px;
 }
 
 /* ── Card ─────────────────────────────────────────────────── */
 .card {
   background: #FFFFFF;
-  border: 1px solid #DBEAFE;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 4px rgba(30,58,138,0.07);
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 24px;
 }
 
 .cardTitle {
-  font-size: 1rem;
-  font-weight: 700;
-  font-family: var(--font-display);
-  color: #1E3A8A;
-  margin-bottom: 1.125rem;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  color: #0F172A;
+  margin-bottom: 16px;
 }
 
 .cardSub {
-  font-size: 0.8125rem;
+  font-size: 14px;
   color: #64748B;
-  margin-top: -0.75rem;
-  margin-bottom: 1.25rem;
+  margin-top: -12px;
+  margin-bottom: 20px;
 }
 
 /* ── Form ──────────────────────────────────────────────────── */
-.form { display: flex; flex-direction: column; gap: 1rem; }
+.form { display: flex; flex-direction: column; gap: 16px; }
 
 .formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.875rem;
+  gap: 12px;
 }
 @media (max-width: 640px) { .formRow { grid-template-columns: 1fr; } }
 
@@ -66,58 +67,56 @@
 .slugBox {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .slugUrl {
-  padding: 0.875rem 1rem;
-  background: #F0F9FF;
-  border: 1px solid #BAE6FD;
-  border-radius: 10px;
-  font-size: 0.9375rem;
+  padding: 12px 16px;
+  background: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 6px;
+  font-size: 14px;
 }
-.slugUrl code { color: #0369A1; }
-.slugUrl strong { color: #0C4A6E; }
+.slugUrl code { color: #1D4ED8; }
+.slugUrl strong { color: #172554; }
 
 .slugHint {
-  font-size: 0.8125rem;
+  font-size: 13px;
   color: #64748B;
-  line-height: 1.6;
-  padding: 0.75rem;
-  background: #FFF9EB;
-  border: 1px solid #FDE68A;
-  border-radius: 10px;
+  line-height: 1.5;
+  padding: 12px;
+  background: #FFFBEB;
+  border: 1px solid #FEF3C7;
+  border-radius: 6px;
 }
-.slugHint strong { color: #92400E; }
+.slugHint strong { color: #B45309; }
 
 /* ── Plans Grid ────────────────────────────────────────────── */
 .plansGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 16px;
 }
 @media (max-width: 800px) { .plansGrid { grid-template-columns: 1fr; } }
 
 .planCard {
-  background: #F8FAFF;
-  border: 1.5px solid #DBEAFE;
-  border-radius: 14px;
-  padding: 1.25rem;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 12px;
   position: relative;
-  transition: all 0.15s;
+  transition: border-color 150ms ease;
 }
 
 .planCard:hover {
-  box-shadow: 0 4px 14px rgba(37,99,235,0.10);
+  border-color: #CBD5E1;
 }
 
 .planCard--featured {
   border-color: #2563EB;
-  background: linear-gradient(to bottom, #EFF6FF, #F8FAFF);
-  box-shadow: 0 2px 12px rgba(37,99,235,0.14);
 }
 
 .planCard--active {
@@ -128,13 +127,13 @@
 .activeBadge {
   position: absolute;
   top: -10px;
-  right: 12px;
-  font-size: 0.625rem;
-  font-weight: 800;
-  font-family: var(--font-display);
-  letter-spacing: 0.08em;
-  padding: 2px 9px;
-  border-radius: 9999px;
+  right: 16px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 4px;
   background: #2563EB;
   color: #FFFFFF;
   text-transform: uppercase;
@@ -142,36 +141,35 @@
 
 .popularTag {
   display: inline-block;
-  font-size: 0.625rem;
-  font-weight: 800;
-  font-family: var(--font-display);
-  letter-spacing: 0.08em;
-  padding: 2px 9px;
-  border-radius: 9999px;
-  background: #DBEAFE;
-  color: #1D4ED8;
-  border: 1px solid #BFDBFE;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #0F766E;
+  color: #FFFFFF;
   text-transform: uppercase;
   width: fit-content;
 }
 
 .planName {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 800;
-  color: #1E3A8A;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0F172A;
 }
 
 .planPrice {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
   color: #0F172A;
   letter-spacing: -0.02em;
 }
 .planPrice small {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   color: #64748B;
 }
 
@@ -179,19 +177,19 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 6px;
   flex: 1;
 }
 .planFeatures li {
-  font-size: 0.8125rem;
+  font-size: 13px;
   color: #334155;
   display: flex;
   align-items: flex-start;
-  gap: 0.375rem;
+  gap: 6px;
 }
 .planFeatures li::before {
   content: '✓';
   color: #2563EB;
-  font-weight: 700;
+  font-weight: 600;
   flex-shrink: 0;
 }
