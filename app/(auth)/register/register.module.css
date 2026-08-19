@@ -1,0 +1,256 @@
+/* ─── REGISTER PAGE — Split Card Layout (Capgo Style) ────────────────────── */
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background-color: #0F172A;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(15, 118, 110, 0.12) 0%, transparent 45%),
+    linear-gradient(135deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255,255,255,0.02) 25%, transparent 25%);
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* ── Dual Column Split Card ─────────────────────────────────────────────── */
+.card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #FFFFFF;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 860px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Left Column: Form Area ─────────────────────────────────────────────── */
+.leftCol {
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+@media (max-width: 540px) {
+  .leftCol {
+    padding: 32px 24px;
+  }
+}
+
+.cardHeader {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.03em;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #64748B;
+}
+
+.link {
+  color: #2563EB;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.link:hover {
+  color: #1D4ED8;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gridRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .gridRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.errorAlert {
+  padding: 10px 14px;
+  background: #FEE2E2;
+  border: 1px solid #FCA5A5;
+  border-radius: 6px;
+  color: #DC2626;
+  font-size: 13px;
+}
+
+.submitBtn {
+  margin-top: 8px;
+  height: 48px;
+  background: #0F172A !important;
+  color: #FFFFFF !important;
+  border-color: #0F172A !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  transition: background 150ms ease !important;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #1E293B !important;
+}
+
+.termsText {
+  font-size: 12px;
+  color: #94A3B8;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0 16px;
+  color: #94A3B8;
+  font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.divider span {
+  padding: 0 12px;
+}
+
+.supportBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  border-radius: 8px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+
+.supportBtn:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+/* ── Right Column: Dark Testimonial Panel ────────────────────────────────── */
+.rightCol {
+  background: #1E293B;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  color: #FFFFFF;
+}
+
+@media (max-width: 860px) {
+  .rightCol {
+    display: none;
+  }
+}
+
+.quoteContent {
+  margin-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.quoteText {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #F8FAFC;
+  letter-spacing: -0.02em;
+}
+
+.quoteHighlight {
+  background: rgba(37, 99, 235, 0.35);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.authorAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #2563EB, #0F766E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: #FFFFFF;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.authorName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.authorTitle {
+  font-size: 13px;
+  color: #94A3B8;
+}
