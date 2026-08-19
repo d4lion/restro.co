@@ -1,4 +1,4 @@
-/* ── ProfileCard — Edit Mode Styles ─────────────────────────── */
+/* ── ProfileCard — Edit Mode & Logo Upload Styles ─────────────── */
 
 .card {
   background: #FFFFFF;
@@ -14,13 +14,41 @@
   box-shadow: 0 0 0 3px rgba(37,99,235,0.12), 0 4px 20px rgba(37,99,235,0.10);
 }
 
-/* ── Card header ──────────────────────────────────────────── */
+/* ── Card header & Logo Avatar ────────────────────────────────────────── */
 .cardHeader {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.25rem;
+}
+
+.logoAvatarBox {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  border: 1.5px solid #E2E8F0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.logoAvatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logoAvatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: #EFF6FF;
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .cardTitle {
@@ -82,7 +110,7 @@
 .cancelBtn:hover { background: #FEE2E2; border-color: #FCA5A5; }
 .cancelBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── Form ─────────────────────────────────────────────────── */
+/* ── Form & Logo Dropzone ─────────────────────────────────── */
 .form {
   display: flex;
   flex-direction: column;
@@ -94,6 +122,106 @@
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+.logoUploadRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldLabel {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hiddenFileInput { display: none; }
+
+.logoEditPreview {
+  width: 100%;
+}
+
+.logoUploadDropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 1.25rem;
+  border: 2px dashed #BFDBFE;
+  border-radius: 10px;
+  background: #F8FAFC;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.logoUploadDropzone:hover {
+  border-color: #2563EB;
+  background: #EFF6FF;
+}
+.logoUploadDropzone span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1E3A8A;
+}
+.logoUploadDropzone small {
+  font-size: 0.75rem;
+  color: #94A3B8;
+}
+
+.uploadSpinText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #2563EB;
+}
+
+.logoPreviewContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1.5px solid #DBEAFE;
+  border-radius: 10px;
+  background: #EFF6FF;
+}
+
+.logoPreviewThumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #BFDBFE;
+}
+
+.logoPreviewText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.logoPreviewText strong {
+  font-size: 0.875rem;
+  color: #1E3A8A;
+}
+.logoPreviewText span {
+  font-size: 0.75rem;
+  color: #16A34A;
+}
+
+.changeLogoBtn {
+  padding: 0.375rem 0.75rem;
+  background: #FFFFFF;
+  border: 1px solid #BFDBFE;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2563EB;
+  cursor: pointer;
+}
+.changeLogoBtn:hover { background: #DBEAFE; }
 
 .formRow {
   display: grid;
@@ -179,7 +307,6 @@
   cursor: pointer;
   transition: background 0.12s;
   position: relative;
-  group: true;
 }
 .readField:hover {
   background: #EFF6FF;
