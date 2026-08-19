@@ -36,23 +36,10 @@ export default function RootLayout({
     <html lang="es">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-        {process.env.NODE_ENV === "development" && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                if (typeof window !== 'undefined') {
-                  window.addEventListener('error', function(e) {
-                    if (e.message && (e.message.includes('WebSocket') || e.message.includes('HMR') || e.message.includes('webpack'))) {
-                      e.stopImmediatePropagation();
-                    }
-                  }, true);
-                }
-              `,
-            }}
-          />
-        )}
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+      </body>
     </html>
   );
 }

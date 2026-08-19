@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import styles from "@/app/(public)/[slug]/page.module.css";
+import styles from "@/app/(public)/restaurant/[slug]/page.module.css";
 
 interface MenuItem {
   id: string;
