@@ -32,10 +32,15 @@ interface NavItem {
 }
 
 const BuildingBadge = () => (
-  <span className={styles.buildingBadge} title="En construcción">
-    <Wrench size={10} strokeWidth={2.5} />
-    DEV
-  </span>
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span className={styles.buildingBadge}>
+        <Wrench size={10} strokeWidth={2.5} />
+        DEV
+      </span>
+    </TooltipTrigger>
+    <TooltipContent side="top">Módulo en desarrollo</TooltipContent>
+  </Tooltip>
 );
 
 const navItems: NavItem[] = [
@@ -82,7 +87,7 @@ export function Sidebar({
       : styles["plan--starter"];
 
   return (
-    <TooltipProvider delayDuration={200}>
+    <TooltipProvider delayDuration={100}>
       <aside className={`${styles.sidebar} ${collapsed ? styles["sidebar--collapsed"] : ""}`}>
 
         {/* ── Logo ─────────────────────────────────────────── */}
@@ -132,7 +137,6 @@ export function Sidebar({
 
             const link = (
               <Link
-                key={item.href}
                 href={item.href}
                 onClick={() => {
                   if (pathname !== item.href) {
@@ -146,7 +150,6 @@ export function Sidebar({
                     ? styles["navItem--active"]
                     : ""
                 }`}
-                title={collapsed ? item.label : undefined}
               >
                 <span className={styles.navIcon}>{item.icon}</span>
                 {!collapsed && (
@@ -169,17 +172,20 @@ export function Sidebar({
               return (
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{link}</TooltipTrigger>
-                  <TooltipContent side="right">{item.label}</TooltipContent>
+                  <TooltipContent side="right" sideOffset={12}>
+                    {item.label}
+                  </TooltipContent>
                 </Tooltip>
               );
             }
-            return link;
+
+            return <React.Fragment key={item.href}>{link}</React.Fragment>;
           })}
         </nav>
 
         {/* ── Footer ──────────────────────────────────────── */}
         <div className={styles.footer}>
-          {!collapsed && (
+          {!collapsed ? (
             <Link
               href={`/restaurant/${restaurantSlug}`}
               target="_blank"
@@ -188,16 +194,40 @@ export function Sidebar({
               <ExternalLink size={14} strokeWidth={1.8} />
               Ver carta pública
             </Link>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={`/restaurant/${restaurantSlug}`}
+                  target="_blank"
+                  className={styles.viewMenu}
+                  style={{ justifyContent: "center" }}
+                >
+                  <ExternalLink size={14} strokeWidth={1.8} />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" sideOffset={12}>
+                Ver carta pública
+              </TooltipContent>
+            </Tooltip>
           )}
-          <button
-            className={styles.collapseBtn}
-            onClick={() => setCollapsed(!collapsed)}
-            aria-label={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
-          >
-            <span className={collapsed ? styles.rotated : ""}>
-              <ChevronLeft size={16} strokeWidth={2} />
-            </span>
-          </button>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={styles.collapseBtn}
+                onClick={() => setCollapsed(!collapsed)}
+                aria-label={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
+              >
+                <span className={collapsed ? styles.rotated : ""}>
+                  <ChevronLeft size={16} strokeWidth={2} />
+                </span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" sideOffset={12}>
+              {collapsed ? "Expandir menú" : "Colapsar menú"}
+            </TooltipContent>
+          </Tooltip>
         </div>
       </aside>
     </TooltipProvider>
