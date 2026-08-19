@@ -236,11 +236,13 @@ export default async function HomePage() {
         <nav className={styles.nav} role="navigation" aria-label="Navegación principal">
           <div className={styles.navInner}>
             <Link href="/" className={styles.navLogo} aria-label="Restro — Inicio">
-              <svg className={styles.navLogoIcon} viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                <rect width="40" height="40" rx="8" fill="#2563EB" />
-                <path d="M10 28L20 12L30 28" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M15 22H25" stroke="white" strokeWidth="3" strokeLinecap="round" />
-              </svg>
+              <img
+                src="/images/logo/logo.png"
+                alt="Restro logo"
+                className={styles.navLogoIcon}
+                width={32}
+                height={32}
+              />
               <span className={styles.navLogoText}>Restro</span>
             </Link>
 
@@ -756,11 +758,13 @@ export default async function HomePage() {
           <div className={styles.footerInner}>
             <div className={styles.footerBrand}>
               <div className={styles.footerLogo} aria-label="Restro">
-                <svg width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                  <rect width="40" height="40" rx="8" fill="#2563EB" />
-                  <path d="M10 28L20 12L30 28" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M15 22H25" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                </svg>
+                <img
+                  src="/images/logo/logo.png"
+                  alt="Restro logo"
+                  width={28}
+                  height={28}
+                  style={{ borderRadius: 6, display: 'block' }}
+                />
                 <span className={styles.footerLogoText}>Restro</span>
               </div>
               <p className={styles.footerTagline}>
