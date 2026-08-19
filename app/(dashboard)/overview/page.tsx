@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 import { orderRepository } from "@/lib/repositories/order.repository";
 import { tableRepository } from "@/lib/repositories/table.repository";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
@@ -11,10 +12,13 @@ import {
   DollarSign,
   Star,
   ExternalLink,
+  ArrowRight,
 } from "lucide-react";
+
 import styles from "./page.module.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = { title: "Resumen" };
 
@@ -57,10 +61,14 @@ export default async function OverviewPage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const [tenant, activeOrders, tables] = await Promise.all([
+  const [tenant, activeOrders, tables, prismaUser] = await Promise.all([
     tenantRepository.findById(session.tenantId),
     orderRepository.findActiveByTenant(session.tenantId),
     tableRepository.getTablesWithStatus(session.tenantId),
+    prisma.user.findUnique({
+      where: { id: session.userId },
+      select: { name: true, email: true },
+    }),
   ]);
 
   if (!tenant) redirect("/login");
@@ -80,25 +88,68 @@ export default async function OverviewPage() {
       maximumFractionDigits: 0,
     }).format(n);
 
+  // Dynamic time-based greeting for closeness
+  const rawName = prismaUser?.name?.trim() || tenant.name;
+  const clientFirstName = rawName.split(" ")[0];
+
+  const hour = new Date().getHours();
+  let greetingSalutation = "¡Buenos días";
+  let greetingEmoji = "☀️";
+
+  if (hour >= 5 && hour < 12) {
+    greetingSalutation = "¡Buenos días";
+    greetingEmoji = "☀️";
+  } else if (hour >= 12 && hour < 19) {
+    greetingSalutation = "¡Buenas tardes";
+    greetingEmoji = "🌤️";
+  } else {
+    greetingSalutation = "¡Buenas noches";
+    greetingEmoji = "🌙";
+  }
+
+  const greetingTitle = `${greetingSalutation}, ${clientFirstName}`;
+
   return (
     <div className={styles.page}>
-      {/* ── 18. Page Header ─────────────────────────────────── */}
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Resumen Operativo</h1>
-          <p className={styles.subtitle}>
-            {new Date().toLocaleDateString("es-CO", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </div>
+      {/* ── Header Top Bar ──────────────────────────────────── */}
+      <div className={styles.headerTopBar}>
+        <span className={styles.dateBadge}>
+          {new Date().toLocaleDateString("es-CO", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </span>
         <a href={`/restaurant/${tenant.slug}`} target="_blank" className={styles.viewMenuBtn}>
-          <ExternalLink size={16} strokeWidth={1.8} />
+          <ExternalLink size={15} strokeWidth={1.8} />
           Ver carta pública
         </a>
+      </div>
+
+      {/* ── Greeting Hero Banner Card ────────────────────────── */}
+      <div className={styles.heroBanner}>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>
+            {greetingTitle} <span className={styles.heroEmoji}>{greetingEmoji}</span>
+          </h1>
+          <p className={styles.heroSubtitle}>
+            Mantente al día con las analíticas y métricas de hoy. Obtén un resumen rápido de las estadísticas clave de tu restaurante.
+          </p>
+          <Link href="/analytics" className={styles.heroBtn}>
+            Ver reporte completo <ArrowRight size={16} />
+          </Link>
+        </div>
+        <div className={styles.heroIllustrationBox}>
+          <Image
+            src="/images/analytic-user.svg"
+            alt="Resumen operativo"
+            className={styles.heroIllustrationImg}
+            width={120}
+            height={120}
+            loading="eager"
+          />
+        </div>
       </div>
 
       {/* ── 24. Stats Grid ─────────────────────────────────── */}
