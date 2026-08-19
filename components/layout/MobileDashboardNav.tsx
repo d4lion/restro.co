@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -21,20 +22,36 @@ const navItems = [
 
 export function MobileDashboardNav() {
   const pathname = usePathname();
+  const [pendingPath, setPendingPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPendingPath(null);
+  }, [pathname]);
 
   return (
     <>
       {navItems.map(({ href, label, icon: Icon }) => {
-        const isActive =
+        const isCurrentRoute =
           pathname === href ||
           (href !== "/overview" && pathname.startsWith(href));
+
+        const isPending =
+          pendingPath !== null &&
+          (pendingPath === href ||
+            (href !== "/overview" && pendingPath.startsWith(href)));
+
+        const isActive = isPending || (pendingPath === null && isCurrentRoute);
 
         return (
           <Link
             key={href}
             href={href}
+            onClick={() => {
+              if (pathname !== href) {
+                setPendingPath(href);
+              }
+            }}
             className={`${styles.mobileNavItem} ${isActive ? styles["mobileNavItem--active"] : ""}`}
-            // Asegurar área táctil mínima y evitar el delay de 300ms en iOS
             style={{ touchAction: "manipulation" }}
           >
             <span className={styles.mobileNavIcon}>

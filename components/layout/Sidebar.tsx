@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -66,6 +66,11 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [pendingPath, setPendingPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPendingPath(null);
+  }, [pathname]);
 
   const planLabel =
     plan === "RESTRO_IA" ? "Restro IA" : plan === "BUSINESS" ? "Business" : "Starter";
@@ -114,25 +119,49 @@ export function Sidebar({
         {/* ── Navigation ──────────────────────────────────── */}
         <nav className={styles.nav}>
           {navItems.map((item) => {
-            const isActive =
+            const isCurrentRoute =
               pathname === item.href ||
               (item.href !== "/overview" && pathname.startsWith(item.href));
+
+            const isPending =
+              pendingPath !== null &&
+              (pendingPath === item.href ||
+                (item.href !== "/overview" && pendingPath.startsWith(item.href)));
+
+            const isActive = isPending || (pendingPath === null && isCurrentRoute);
 
             const link = (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`${styles.navItem} ${isActive ? styles["navItem--active"] : ""}`}
+                onClick={() => {
+                  if (pathname !== item.href) {
+                    setPendingPath(item.href);
+                  }
+                }}
+                className={`${styles.navItem} ${
+                  isPending
+                    ? styles["navItem--pending"]
+                    : isActive
+                    ? styles["navItem--active"]
+                    : ""
+                }`}
                 title={collapsed ? item.label : undefined}
               >
                 <span className={styles.navIcon}>{item.icon}</span>
                 {!collapsed && (
                   <>
                     <span className={styles.navLabel}>{item.label}</span>
-                    {item.badge && <span className={styles.navBadge}>{item.badge}</span>}
+                    {isPending ? (
+                      <span className={styles.pendingSpinner} />
+                    ) : (
+                      item.badge && <span className={styles.navBadge}>{item.badge}</span>
+                    )}
                   </>
                 )}
-                {isActive && !collapsed && <span className={styles.activeIndicator} />}
+                {isActive && !isPending && !collapsed && (
+                  <span className={styles.activeIndicator} />
+                )}
               </Link>
             );
 
