@@ -54,6 +54,17 @@ export const menuRepository = {
     });
   },
 
+  async updateCategory(categoryId: string, data: Partial<{
+    name: string;
+    description: string;
+    emoji: string;
+  }>) {
+    return prisma.category.update({
+      where: { id: categoryId },
+      data,
+    });
+  },
+
   async createMenuItem(categoryId: string, data: {
     name: string;
     description?: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -32,10 +32,15 @@ interface NavItem {
 }
 
 const BuildingBadge = () => (
-  <span className={styles.buildingBadge} title="En construcción">
-    <Wrench size={10} strokeWidth={2.5} />
-    DEV
-  </span>
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span className={styles.buildingBadge}>
+        <Wrench size={10} strokeWidth={2.5} />
+        DEV
+      </span>
+    </TooltipTrigger>
+    <TooltipContent side="top">Módulo en desarrollo</TooltipContent>
+  </Tooltip>
 );
 
 const navItems: NavItem[] = [
@@ -66,6 +71,11 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [pendingPath, setPendingPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPendingPath(null);
+  }, [pathname]);
 
   const planLabel =
     plan === "RESTRO_IA" ? "Restro IA" : plan === "BUSINESS" ? "Business" : "Starter";
@@ -77,7 +87,7 @@ export function Sidebar({
       : styles["plan--starter"];
 
   return (
-    <TooltipProvider delayDuration={200}>
+    <TooltipProvider delayDuration={100}>
       <aside className={`${styles.sidebar} ${collapsed ? styles["sidebar--collapsed"] : ""}`}>
 
         {/* ── Logo ─────────────────────────────────────────── */}
@@ -114,25 +124,47 @@ export function Sidebar({
         {/* ── Navigation ──────────────────────────────────── */}
         <nav className={styles.nav}>
           {navItems.map((item) => {
-            const isActive =
+            const isCurrentRoute =
               pathname === item.href ||
               (item.href !== "/overview" && pathname.startsWith(item.href));
 
+            const isPending =
+              pendingPath !== null &&
+              (pendingPath === item.href ||
+                (item.href !== "/overview" && pendingPath.startsWith(item.href)));
+
+            const isActive = isPending || (pendingPath === null && isCurrentRoute);
+
             const link = (
               <Link
-                key={item.href}
                 href={item.href}
-                className={`${styles.navItem} ${isActive ? styles["navItem--active"] : ""}`}
-                title={collapsed ? item.label : undefined}
+                onClick={() => {
+                  if (pathname !== item.href) {
+                    setPendingPath(item.href);
+                  }
+                }}
+                className={`${styles.navItem} ${
+                  isPending
+                    ? styles["navItem--pending"]
+                    : isActive
+                    ? styles["navItem--active"]
+                    : ""
+                }`}
               >
                 <span className={styles.navIcon}>{item.icon}</span>
                 {!collapsed && (
                   <>
                     <span className={styles.navLabel}>{item.label}</span>
-                    {item.badge && <span className={styles.navBadge}>{item.badge}</span>}
+                    {isPending ? (
+                      <span className={styles.pendingSpinner} />
+                    ) : (
+                      item.badge && <span className={styles.navBadge}>{item.badge}</span>
+                    )}
                   </>
                 )}
-                {isActive && !collapsed && <span className={styles.activeIndicator} />}
+                {isActive && !isPending && !collapsed && (
+                  <span className={styles.activeIndicator} />
+                )}
               </Link>
             );
 
@@ -140,17 +172,20 @@ export function Sidebar({
               return (
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{link}</TooltipTrigger>
-                  <TooltipContent side="right">{item.label}</TooltipContent>
+                  <TooltipContent side="right" sideOffset={12}>
+                    {item.label}
+                  </TooltipContent>
                 </Tooltip>
               );
             }
-            return link;
+
+            return <React.Fragment key={item.href}>{link}</React.Fragment>;
           })}
         </nav>
 
         {/* ── Footer ──────────────────────────────────────── */}
         <div className={styles.footer}>
-          {!collapsed && (
+          {!collapsed ? (
             <Link
               href={`/restaurant/${restaurantSlug}`}
               target="_blank"
@@ -159,16 +194,40 @@ export function Sidebar({
               <ExternalLink size={14} strokeWidth={1.8} />
               Ver carta pública
             </Link>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={`/restaurant/${restaurantSlug}`}
+                  target="_blank"
+                  className={styles.viewMenu}
+                  style={{ justifyContent: "center" }}
+                >
+                  <ExternalLink size={14} strokeWidth={1.8} />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" sideOffset={12}>
+                Ver carta pública
+              </TooltipContent>
+            </Tooltip>
           )}
-          <button
-            className={styles.collapseBtn}
-            onClick={() => setCollapsed(!collapsed)}
-            aria-label={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
-          >
-            <span className={collapsed ? styles.rotated : ""}>
-              <ChevronLeft size={16} strokeWidth={2} />
-            </span>
-          </button>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={styles.collapseBtn}
+                onClick={() => setCollapsed(!collapsed)}
+                aria-label={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
+              >
+                <span className={collapsed ? styles.rotated : ""}>
+                  <ChevronLeft size={16} strokeWidth={2} />
+                </span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" sideOffset={12}>
+              {collapsed ? "Expandir menú" : "Colapsar menú"}
+            </TooltipContent>
+          </Tooltip>
         </div>
       </aside>
     </TooltipProvider>
