@@ -37,21 +37,17 @@ const nextConfig: NextConfig = {
   // Experimental features & Server Actions origin configuration for Ngrok / external hosts
   experimental: {
     serverActions: {
-      bodySizeLimit: "4mb",
+      bodySizeLimit: "6mb",
       allowedOrigins: [
-        "b1c7-190-158-28-68.ngrok-free.app",
-        "*.ngrok-free.app",
-        "*.ngrok.io",
-        "*.ngrok-free.dev",
-        "localhost:3000",
-        "127.0.0.1:3000",
+        "b1c7-190-158-28-68.ngrok-free.app"
       ],
     },
   },
 
   // Allow HMR and static chunks for Ngrok dev tunnel
   allowedDevOrigins: [
-    "b1c7-190-158-28-68.ngrok-free.app",
+    "*.adamind.cloud",
+    "*.vercel.app",
     "localhost:3000"
   ],
 };
