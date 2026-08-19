@@ -428,6 +428,7 @@ export type AnalyticsEventCreateOrConnectWithoutTenantInput = {
 
 export type AnalyticsEventCreateManyTenantInputEnvelope = {
   data: Prisma.AnalyticsEventCreateManyTenantInput | Prisma.AnalyticsEventCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type AnalyticsEventUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1229,6 +1230,7 @@ export type AnalyticsEventCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many AnalyticsEvents.
    */
   data: Prisma.AnalyticsEventCreateManyInput | Prisma.AnalyticsEventCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1247,6 +1249,7 @@ export type AnalyticsEventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many AnalyticsEvents.
    */
   data: Prisma.AnalyticsEventCreateManyInput | Prisma.AnalyticsEventCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

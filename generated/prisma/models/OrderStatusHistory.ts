@@ -428,6 +428,7 @@ export type OrderStatusHistoryCreateOrConnectWithoutOrderInput = {
 
 export type OrderStatusHistoryCreateManyOrderInputEnvelope = {
   data: Prisma.OrderStatusHistoryCreateManyOrderInput | Prisma.OrderStatusHistoryCreateManyOrderInput[]
+  skipDuplicates?: boolean
 }
 
 export type OrderStatusHistoryUpsertWithWhereUniqueWithoutOrderInput = {
@@ -1229,6 +1230,7 @@ export type OrderStatusHistoryCreateManyArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many OrderStatusHistories.
    */
   data: Prisma.OrderStatusHistoryCreateManyInput | Prisma.OrderStatusHistoryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1247,6 +1249,7 @@ export type OrderStatusHistoryCreateManyAndReturnArgs<ExtArgs extends runtime.Ty
    * The data used to create many OrderStatusHistories.
    */
   data: Prisma.OrderStatusHistoryCreateManyInput | Prisma.OrderStatusHistoryCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

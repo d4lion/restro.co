@@ -508,6 +508,7 @@ export type MenuCreateOrConnectWithoutTenantInput = {
 
 export type MenuCreateManyTenantInputEnvelope = {
   data: Prisma.MenuCreateManyTenantInput | Prisma.MenuCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type MenuUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1402,6 +1403,7 @@ export type MenuCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * The data used to create many Menus.
    */
   data: Prisma.MenuCreateManyInput | Prisma.MenuCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1420,6 +1422,7 @@ export type MenuCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many Menus.
    */
   data: Prisma.MenuCreateManyInput | Prisma.MenuCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

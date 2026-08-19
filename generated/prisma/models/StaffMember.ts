@@ -458,6 +458,7 @@ export type StaffMemberCreateOrConnectWithoutTenantInput = {
 
 export type StaffMemberCreateManyTenantInputEnvelope = {
   data: Prisma.StaffMemberCreateManyTenantInput | Prisma.StaffMemberCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type StaffMemberUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1270,6 +1271,7 @@ export type StaffMemberCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many StaffMembers.
    */
   data: Prisma.StaffMemberCreateManyInput | Prisma.StaffMemberCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1288,6 +1290,7 @@ export type StaffMemberCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many StaffMembers.
    */
   data: Prisma.StaffMemberCreateManyInput | Prisma.StaffMemberCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
