@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { uploadImageAction } from "@/app/actions/storage";
 import { saveOnboardingAction } from "@/app/actions/onboarding";
-import { Check, Upload, Loader2, QrCode } from "lucide-react";
+import { Check, QrCode, Palette, Store, Utensils } from "lucide-react";
 import { toast } from "sonner";
 import styles from "./page.module.css";
 
@@ -18,45 +17,16 @@ export default function OnboardingPage() {
   const [slogan, setSlogan] = useState("");
   const [phone, setPhone] = useState("");
 
-  // Step 2: Branding & Logo
+  // Step 2: Brand Color
   const [brandColor, setBrandColor] = useState("#2563EB");
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
-  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Step 3: First Menu Item
   const [categoryName, setCategoryName] = useState("Entradas");
   const [itemName, setItemName] = useState("Empanada Criolla");
   const [itemPrice, setItemPrice] = useState("4500");
 
-  // Step 4: Final save state
+  // Final save state
   const [isSaving, setIsSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
-
-  /* ── Logo Upload Handler ─────────────────────────────────── */
-  async function handleLogoFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("El logo no debe superar los 5MB");
-      return;
-    }
-
-    setIsUploadingLogo(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await uploadImageAction(formData, "logos");
-    setIsUploadingLogo(false);
-
-    if (res.publicUrl) {
-      setLogoUrl(res.publicUrl);
-      toast.success("Logo subido correctamente");
-    } else {
-      toast.error(res.error || "Error al subir el logo");
-    }
-  }
 
   /* ── Final Step Saver ────────────────────────────────────── */
   async function handleFinalizeOnboarding() {
@@ -67,7 +37,6 @@ export default function OnboardingPage() {
       restaurantName,
       slogan,
       phone,
-      logoUrl: logoUrl || undefined,
       brandColor,
       categoryName,
       itemName,
@@ -77,7 +46,6 @@ export default function OnboardingPage() {
     setIsSaving(false);
 
     if (res.success) {
-      setIsSaved(true);
       setStep(4);
       toast.success(res.message);
     } else {
@@ -102,6 +70,9 @@ export default function OnboardingPage() {
         {/* ── STEP 1: Datos del Local y Representante ───────────── */}
         {step === 1 && (
           <div className={styles.card}>
+            <div className={styles.stepIconBox}>
+              <Store size={28} />
+            </div>
             <h1 className={styles.title}>Datos del Restaurante</h1>
             <p className={styles.subtitle}>
               Ingresa la información principal del establecimiento y teléfono del representante.
@@ -140,84 +111,47 @@ export default function OnboardingPage() {
               disabled={!restaurantName.trim() || !phone.trim()}
               onClick={() => setStep(2)}
             >
-              Continuar a Marca & Logo
+              Continuar a Color de Marca
             </Button>
           </div>
         )}
 
-        {/* ── STEP 2: Marca y Carga de Logo ──────────────────────── */}
+        {/* ── STEP 2: Color de Marca (Sin carga de archivos) ─────── */}
         {step === 2 && (
           <div className={styles.card}>
-            <h2 className={styles.title}>Identidad & Logo del Local</h2>
+            <div className={styles.stepIconBox}>
+              <Palette size={28} />
+            </div>
+            <h2 className={styles.title}>Color de Marca</h2>
             <p className={styles.subtitle}>
-              Carga el logo del restaurante (máx 5MB) y elige el color principal para tu carta digital.
+              Elige el color distintivo para la interfaz de tu carta digital.
             </p>
 
-            {/* Logo Upload Section */}
-            <div className={styles.logoUploadSection}>
-              <label className={styles.uploadLabel}>Logo del Restaurante (Opcional, máx 5MB)</label>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className={styles.hiddenInput}
-                onChange={handleLogoFileChange}
-              />
-
-              {logoUrl ? (
-                <div className={styles.logoPreviewWrapper}>
-                  <img src={logoUrl} alt="Logo restaurante" className={styles.logoPreview} />
-                  <div className={styles.logoInfo}>
-                    <strong>Logo Cargado</strong>
-                    <span>✓ Almacenado en Supabase</span>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    Cambiar
-                  </Button>
-                </div>
-              ) : (
-                <div
-                  className={styles.logoDropzone}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  {isUploadingLogo ? (
-                    <span className={styles.uploadingSpin}>
-                      <Loader2 size={24} className="spin" /> Subiendo logo...
-                    </span>
-                  ) : (
-                    <>
-                      <Upload size={24} color="#64748B" />
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#334155" }}>
-                        Haz clic para seleccionar tu logo
-                      </span>
-                      <span style={{ fontSize: "12px", color: "#94A3B8" }}>
-                        Formatos recomendados: PNG, JPG, WEBP (Máx. 5MB)
-                      </span>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Color Swatches */}
             <div className={styles.colorPickerSection}>
-              <label className={styles.uploadLabel}>Color Principal de Marca</label>
+              <label className={styles.uploadLabel}>Selecciona tu Color Principal</label>
               <div className={styles.colorOptions}>
-                {["#2563EB", "#0F766E", "#16A34A", "#F97316", "#9333EA", "#DC2626"].map((color) => (
+                {[
+                  { name: "Azul Restro", hex: "#2563EB" },
+                  { name: "Verde Teal", hex: "#0F766E" },
+                  { name: "Verde Esmeralda", hex: "#16A34A" },
+                  { name: "Naranja Cálido", hex: "#F97316" },
+                  { name: "Púrpura", hex: "#9333EA" },
+                  { name: "Rojo Carmín", hex: "#DC2626" },
+                ].map((item) => (
                   <button
-                    key={color}
+                    key={item.hex}
                     type="button"
-                    className={`${styles.colorSwatch} ${brandColor === color ? styles.colorSwatchActive : ""}`}
-                    style={{ background: color }}
-                    onClick={() => setBrandColor(color)}
+                    title={item.name}
+                    className={`${styles.colorSwatch} ${brandColor === item.hex ? styles.colorSwatchActive : ""}`}
+                    style={{ background: item.hex }}
+                    onClick={() => setBrandColor(item.hex)}
                   />
                 ))}
               </div>
+            </div>
+
+            <div className={styles.securityNote}>
+              💡 <strong>Nota sobre el Logo:</strong> Podrás subir y personalizar el logo oficial de tu restaurante en cualquier momento de forma segura desde la sección <em>Configuración</em> de tu Dashboard.
             </div>
 
             <div className={styles.actions}>
@@ -230,6 +164,9 @@ export default function OnboardingPage() {
         {/* ── STEP 3: Primer Plato & Categoría ───────────────────── */}
         {step === 3 && (
           <div className={styles.card}>
+            <div className={styles.stepIconBox}>
+              <Utensils size={28} />
+            </div>
             <h2 className={styles.title}>Crea tu Primer Plato</h2>
             <p className={styles.subtitle}>
               Agrega una categoría y tu primer producto para estructurar tu menú interactivo.
@@ -282,7 +219,7 @@ export default function OnboardingPage() {
             <div className={styles.iconCircle}>
               <Check size={28} strokeWidth={2.5} />
             </div>
-            <h1 className={styles.title}>¡Tu Restaurante está Configurado!</h1>
+            <h1 className={styles.title}>¡Tu Restaurante está Listo!</h1>
             <p className={styles.subtitle}>
               {restaurantName} ya tiene su carta digital activa e integrada con tu panel de control.
             </p>
