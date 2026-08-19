@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "@/app/(public)/[slug]/page.module.css";
 
 interface MenuItem {
@@ -81,6 +81,30 @@ const IconStore = () => (
   </svg>
 );
 
+/**
+ * Universal WhatsApp deep link generator with Colombian country code auto-format.
+ */
+function getWhatsAppUrl(phoneStr: string | null, tenantNameStr: string) {
+  let clean = phoneStr ? phoneStr.replace(/[^0-9]/g, "") : "";
+  if (!clean) clean = "573105550000";
+  if (clean.length === 10 && clean.startsWith("3")) {
+    clean = "57" + clean;
+  }
+  const text = encodeURIComponent(
+    `Hola ${tenantNameStr}, quisiera hacer una consulta sobre la carta digital.`
+  );
+  return `https://api.whatsapp.com/send?phone=${clean}&text=${text}`;
+}
+
+/**
+ * Deterministic COP currency formatter (safe across SSR and client hydration)
+ */
+function formatCOP(amount: number): string {
+  const rounded = Math.round(amount);
+  const formatted = rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `$ ${formatted}`;
+}
+
 export function PublicMenuClient({
   tenantName,
   tenantDescription,
@@ -93,14 +117,26 @@ export function PublicMenuClient({
 }: PublicMenuClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string>(categories[0]?.id || "");
+  const [activeCategory, setActiveCategory] = useState<string>(
+    categories[0]?.id || ""
+  );
   const [cart, setCart] = useState<{ [id: string]: number }>({});
   const [showInfoModal, setShowInfoModal] = useState(false);
 
   const isFreeTier = plan === "STARTER";
+  const waUrl = getWhatsAppUrl(phone, tenantName);
 
-  const formatCOP = (n: number) =>
-    new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+  // Prevent scroll when modal is open
+  useEffect(() => {
+    if (showInfoModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showInfoModal]);
 
   const filteredCategories = categories
     .map((cat) => ({
@@ -108,7 +144,8 @@ export function PublicMenuClient({
       items: cat.items.filter(
         (item) =>
           item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()))
+          (item.description &&
+            item.description.toLowerCase().includes(searchQuery.toLowerCase()))
       ),
     }))
     .filter((cat) => cat.items.length > 0);
@@ -119,8 +156,31 @@ export function PublicMenuClient({
     setCart((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
   };
 
-  const whatsappPhone = phone ? phone.replace(/[^0-9]/g, "") : "573105550000";
-  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(`Hola ${tenantName}, quisiera hacer una consulta sobre la carta digital.`)}`;
+  const handleCategoryTabClick = (
+    catId: string,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setActiveCategory(catId);
+
+    // Scroll category tab button into view inside horizontal navbar
+    e.currentTarget.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+
+    // Scroll category section into view below sticky navbar
+    const sectionEl = document.getElementById(`cat-sec-${catId}`);
+    if (sectionEl) {
+      const headerOffset = 80;
+      const elementPosition = sectionEl.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <div className={styles.lightWrapper}>
@@ -128,8 +188,11 @@ export function PublicMenuClient({
       <div className={styles.topAnnounceBar}>
         <span className={styles.announceText}>¡Gana puntos y recompensas!</span>
         <div className={styles.topActionsGroup}>
-
-          <button className={styles.topCartBtn} onClick={() => {}}>
+          <button
+            type="button"
+            className={styles.topCartBtn}
+            onClick={() => {}}
+          >
             Ver mi pedido {totalCartCount > 0 ? `(${totalCartCount})` : ""} ›
           </button>
         </div>
@@ -158,16 +221,15 @@ export function PublicMenuClient({
 
             <div className={styles.storeButtonsRow}>
               <button
+                type="button"
                 className={styles.infoBtn}
-                onClick={() => setShowInfoModal(!showInfoModal)}
+                onClick={() => setShowInfoModal(true)}
               >
                 <IconInfo /> Información y Horarios
               </button>
 
               <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={waUrl}
                 className={styles.whatsappCtaBtn}
               >
                 <IconWhatsApp /> Escribir a WhatsApp
@@ -177,43 +239,69 @@ export function PublicMenuClient({
         </div>
       </div>
 
-      {/* Store Information & Horarios Modal Box */}
+      {/* Store Information & Horarios — Floating Modal Sheet Backdrop */}
       {showInfoModal && (
-        <div className={styles.infoModalCard}>
-          <div className={styles.infoModalHeader}>
-            <h3>Información del Establecimiento</h3>
-            <button className={styles.closeInfoBtn} onClick={() => setShowInfoModal(false)}>✕</button>
-          </div>
-
-          {tenantDescription && <p className={styles.infoModalDesc}>{tenantDescription}</p>}
-
-          <div className={styles.infoDetailsGrid}>
-            <div className={styles.infoDetailItem}>
-              <span className={styles.infoIcon}><IconClock /></span>
-              <div>
-                <strong>Horarios de Atención</strong>
-                <p>Lunes a Domingo: 12:00 PM – 10:00 PM</p>
-                <p className={styles.subText}>Jornada continua</p>
-              </div>
+        <div
+          className={styles.modalBackdrop}
+          onClick={() => setShowInfoModal(false)}
+        >
+          <div
+            className={styles.infoModalCard}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.infoModalHeader}>
+              <h3>Información del Establecimiento</h3>
+              <button
+                type="button"
+                className={styles.closeInfoBtn}
+                onClick={() => setShowInfoModal(false)}
+                aria-label="Cerrar ventana"
+              >
+                ✕
+              </button>
             </div>
 
-            <div className={styles.infoDetailItem}>
-              <span className={styles.infoIcon}><IconMapPin /></span>
-              <div>
-                <strong>Ubicación Física</strong>
-                <p>{address || "Calle 93 # 15-40, Chapinero"}</p>
-                <p className={styles.subText}>{city || "Bogotá, Colombia"}</p>
-              </div>
-            </div>
+            {tenantDescription && (
+              <p className={styles.infoModalDesc}>{tenantDescription}</p>
+            )}
 
-            <div className={styles.infoDetailItem}>
-              <span className={styles.infoIcon}><IconWhatsApp /></span>
-              <div>
-                <strong>Atención por WhatsApp</strong>
-                <p>{phone || "+57 310 555 0000"}</p>
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className={styles.infoWaLink}>
-                  Abrir chat en WhatsApp →
-                </a>
+            <div className={styles.infoDetailsGrid}>
+              <div className={styles.infoDetailItem}>
+                <span className={styles.infoIcon}>
+                  <IconClock />
+                </span>
+                <div>
+                  <strong>Horarios de Atención</strong>
+                  <p>Lunes a Domingo: 12:00 PM – 10:00 PM</p>
+                  <p className={styles.subText}>Jornada continua</p>
+                </div>
+              </div>
+
+              <div className={styles.infoDetailItem}>
+                <span className={styles.infoIcon}>
+                  <IconMapPin />
+                </span>
+                <div>
+                  <strong>Ubicación Física</strong>
+                  <p>{address || "Calle 93 # 15-40, Chapinero"}</p>
+                  <p className={styles.subText}>{city || "Bogotá, Colombia"}</p>
+                </div>
+              </div>
+
+              <div className={styles.infoDetailItem}>
+                <span className={styles.infoIcon}>
+                  <IconWhatsApp />
+                </span>
+                <div>
+                  <strong>Atención por WhatsApp</strong>
+                  <p>{phone || "+57 310 555 0000"}</p>
+                  <a
+                    href={waUrl}
+                    className={styles.infoWaLink}
+                  >
+                    Abrir chat en WhatsApp →
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -223,7 +311,10 @@ export function PublicMenuClient({
       {/* Nav Controls & Category Tabs */}
       <div className={styles.controlsRow}>
         <button
-          className={`${styles.iconControlBtn} ${showSearch ? styles["iconControlBtn--active"] : ""}`}
+          type="button"
+          className={`${styles.iconControlBtn} ${
+            showSearch ? styles["iconControlBtn--active"] : ""
+          }`}
           onClick={() => setShowSearch(!showSearch)}
           aria-label="Buscar plato"
         >
@@ -235,13 +326,12 @@ export function PublicMenuClient({
             const isActive = activeCategory === cat.id;
             return (
               <button
+                type="button"
                 key={cat.id}
-                className={`${styles.categoryTabBtn} ${isActive ? styles["categoryTabBtn--active"] : ""}`}
-                onClick={() => {
-                  setActiveCategory(cat.id);
-                  const el = document.getElementById(`cat-sec-${cat.id}`);
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
+                className={`${styles.categoryTabBtn} ${
+                  isActive ? styles["categoryTabBtn--active"] : ""
+                }`}
+                onClick={(e) => handleCategoryTabClick(cat.id, e)}
               >
                 {cat.name}
               </button>
@@ -262,7 +352,11 @@ export function PublicMenuClient({
             autoFocus
           />
           {searchQuery && (
-            <button className={styles.clearSearchBtn} onClick={() => setSearchQuery("")}>
+            <button
+              type="button"
+              className={styles.clearSearchBtn}
+              onClick={() => setSearchQuery("")}
+            >
               ✕
             </button>
           )}
@@ -278,9 +372,15 @@ export function PublicMenuClient({
           </div>
         ) : (
           filteredCategories.map((category) => (
-            <section key={category.id} id={`cat-sec-${category.id}`} className={styles.categorySection}>
+            <section
+              key={category.id}
+              id={`cat-sec-${category.id}`}
+              className={styles.categorySection}
+            >
               <h2 className={styles.categorySectionTitle}>{category.name}</h2>
-              {category.description && <p className={styles.categorySectionDesc}>{category.description}</p>}
+              {category.description && (
+                <p className={styles.categorySectionDesc}>{category.description}</p>
+              )}
 
               {/* Responsive PC & Mobile Grid */}
               <div className={styles.productsGrid}>
@@ -292,16 +392,22 @@ export function PublicMenuClient({
                       {item.description && (
                         <p className={styles.productDesc}>{item.description}</p>
                       )}
-                      
+
                       <div className={styles.productPriceRow}>
-                        <span className={styles.productPrice}>{formatCOP(item.price)}</span>
+                        <span className={styles.productPrice}>
+                          {formatCOP(item.price)}
+                        </span>
                       </div>
                     </div>
 
                     {/* Right: Image with Blue Overlay Plus Button */}
                     <div className={styles.productRightImage}>
                       {item.imageUrl ? (
-                        <img src={item.imageUrl} alt={item.name} className={styles.productImg} />
+                        <img
+                          src={item.imageUrl}
+                          alt={item.name}
+                          className={styles.productImg}
+                        />
                       ) : (
                         <div className={styles.productImgFallback}>
                           <span>{item.name.charAt(0)}</span>
@@ -310,13 +416,18 @@ export function PublicMenuClient({
 
                       {/* Blue Plus Button Overlay on Image */}
                       <button
+                        type="button"
                         className={styles.imagePlusBtn}
                         onClick={() => addToCart(item.id)}
                         aria-label={`Agregar ${item.name}`}
                         title="Agregar al pedido"
                       >
                         <IconPlus />
-                        {cart[item.id] ? <span className={styles.cartCountBadge}>{cart[item.id]}</span> : null}
+                        {cart[item.id] ? (
+                          <span className={styles.cartCountBadge}>
+                            {cart[item.id]}
+                          </span>
+                        ) : null}
                       </button>
                     </div>
                   </div>
@@ -329,9 +440,7 @@ export function PublicMenuClient({
 
       {/* Floating WhatsApp CTA */}
       <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={waUrl}
         className={styles.floatingWaBtn}
         title="¿Dudas o pedidos especiales? Escríbenos a WhatsApp"
       >
@@ -346,22 +455,49 @@ export function PublicMenuClient({
             <span className={styles.freeTierDiscreteText}>
               Lanza tu idea ahora con <strong>Restro</strong> · Carta digital gratis
             </span>
-            <a href="/register" target="_blank" rel="noopener noreferrer" className={styles.freeTierDiscreteBtn}>
+            <a
+              href="/register"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.freeTierDiscreteBtn}
+            >
               Crear gratis →
             </a>
           </div>
 
           <div className={styles.adamindBrandingRow}>
-            <span>Powered with <a href="https://restro.adamind.cloud" target="_blank" rel="noopener noreferrer"><strong style={{ color: "#2D6CD9" }}>Restro</strong></a> by  · </span>
-            <a href="https://adamind.cloud" target="_blank" rel="noopener noreferrer" className={styles.adamindLink}>
+            <span>
+              Powered with{" "}
+              <a
+                href="https://restro.adamind.cloud"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <strong style={{ color: "#2D6CD9" }}>Restro</strong>
+              </a>{" "}
+              by ·{" "}
+            </span>
+            <a
+              href="https://adamind.cloud"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.adamindLink}
+            >
               <strong>Adamind Technologies</strong>
             </a>
           </div>
         </footer>
       ) : (
         <footer className={styles.paidFooter}>
-          <span>Powered with Restro by <strong>Adamind Technologies</strong> · </span>
-          <a href="https://adamind.cloud" target="_blank" rel="noopener noreferrer" className={styles.adamindLink}>
+          <span>
+            Powered with Restro by <strong>Adamind Technologies</strong> ·{" "}
+          </span>
+          <a
+            href="https://adamind.cloud"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.adamindLink}
+          >
             adamind.cloud
           </a>
         </footer>

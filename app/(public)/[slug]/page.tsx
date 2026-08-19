@@ -25,17 +25,34 @@ export default async function PublicMenuPage({ params }: Props) {
 
   const menu = await menuRepository.getPublicMenu(tenant.id);
 
+  // Sanitize Prisma objects into plain JSON primitives to prevent React hydration failures
+  const categories =
+    menu?.categories.map((cat) => ({
+      id: cat.id,
+      name: cat.name,
+      description: cat.description ?? null,
+      items: cat.items.map((item) => ({
+        id: item.id,
+        name: item.name,
+        description: item.description ?? null,
+        price: Number(item.price),
+        imageUrl: item.imageUrl ?? null,
+        isAvailable: Boolean(item.isAvailable),
+        isHighlighted: Boolean(item.isHighlighted),
+      })),
+    })) || [];
+
   return (
     <PublicMenuClient
       tenantName={tenant.name}
-      tenantDescription={tenant.description}
-      logoUrl={tenant.logoUrl}
-      phone={tenant.phone}
-      address={tenant.address}
-      city={tenant.city}
-      brandColor={tenant.brandColor}
+      tenantDescription={tenant.description ?? null}
+      logoUrl={tenant.logoUrl ?? null}
+      phone={tenant.phone ?? null}
+      address={tenant.address ?? null}
+      city={tenant.city ?? null}
+      brandColor={tenant.brandColor ?? "#0066FF"}
       plan={tenant.plan}
-      categories={menu?.categories || []}
+      categories={categories}
     />
   );
 }
