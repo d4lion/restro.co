@@ -8,7 +8,10 @@ import { createHash } from "crypto";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const connectionString = `${process.env.DATABASE_URL}`;
+let connectionString = `${process.env.DATABASE_URL}`;
+if (connectionString.includes("?pgbouncer=true")) {
+  connectionString = connectionString.replace("?pgbouncer=true", "");
+}
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
