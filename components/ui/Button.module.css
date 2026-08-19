@@ -1,0 +1,146 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.01em;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Google & Adamind Variants ── */
+.button--primary {
+  background: var(--brand-blue);
+  color: #FFFFFF;
+  border-color: var(--brand-blue-hover);
+  box-shadow: var(--shadow-blue);
+}
+.button--primary:hover:not(:disabled) {
+  background: var(--brand-blue-hover);
+}
+
+.button--orange {
+  background: var(--brand-orange);
+  color: #FFFFFF;
+  border-color: var(--brand-orange-hover);
+  box-shadow: var(--shadow-orange);
+}
+.button--orange:hover:not(:disabled) {
+  background: var(--brand-orange-hover);
+}
+
+.button--adamind {
+  background: var(--brand-adamind);
+  color: #FFFFFF;
+  border-color: var(--brand-adamind-hover);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+}
+.button--adamind:hover:not(:disabled) {
+  background: var(--brand-adamind-hover);
+}
+
+.button--secondary {
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+.button--secondary:hover:not(:disabled) {
+  background: var(--bg-surface-3);
+  border-color: var(--text-muted);
+}
+
+.button--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+.button--ghost:hover:not(:disabled) {
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+}
+
+.button--outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+.button--outline:hover:not(:disabled) {
+  background: var(--bg-surface-2);
+  border-color: var(--brand-blue);
+  color: var(--brand-blue);
+}
+
+.button--danger {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.button--danger:hover:not(:disabled) {
+  background: var(--color-error);
+  color: #FFFFFF;
+}
+
+/* ── Sizes ── */
+.button--sm {
+  height: 34px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-xs);
+  border-radius: var(--radius-sm);
+}
+.button--md {
+  height: 44px;
+  padding: 0 var(--space-5);
+  font-size: var(--text-sm);
+}
+.button--lg {
+  height: 52px;
+  padding: 0 var(--space-8);
+  font-size: var(--text-base);
+  border-radius: var(--radius-lg);
+}
+
+.button--full {
+  width: 100%;
+}
+
+.button--loading {
+  cursor: wait;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.icon,
+.iconRight {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

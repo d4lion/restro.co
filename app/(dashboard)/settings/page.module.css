@@ -1,0 +1,154 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cardSub {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.slugBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-surface-2);
+  border-radius: var(--radius-lg);
+}
+
+.slugUrl {
+  font-size: var(--text-base);
+  font-family: monospace;
+  color: var(--brand-primary);
+}
+
+.slugHint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.planCard {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
+}
+
+.planCard--featured {
+  border-color: rgba(255, 107, 53, 0.4);
+  background: linear-gradient(180deg, rgba(255, 107, 53, 0.08) 0%, var(--bg-surface-2) 100%);
+}
+
+.planCard--active {
+  border-color: var(--color-success);
+}
+
+.activeBadge {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  background: var(--color-success);
+  color: #fff;
+  font-size: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.popularTag {
+  font-size: 11px;
+  color: var(--brand-primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.planName {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.planPrice {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--brand-primary);
+}
+
+.planPrice small {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.planFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  list-style: none;
+  padding: 0;
+}

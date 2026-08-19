@@ -1,0 +1,296 @@
+// Restro — Prisma Schema
+// Dev: SQLite (DATABASE_URL="file:./dev.db")
+// Prod: PostgreSQL (DATABASE_URL="postgresql://...")
+// To switch: change provider + DATABASE_URL only
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  // url is configured in prisma.config.ts (Prisma 7+)
+}
+
+// ─── ENUMS ────────────────────────────────────────────────────────────────────
+
+// SQLite doesn't support native enums — using String with validation at app level
+
+// Plan: "STARTER" | "RESTRO_IA" | "BUSINESS"
+// OrderType: "DINE_IN" | "TAKEOUT" | "DELIVERY"
+// OrderStatus: "PENDING" | "PREPARING" | "READY" | "DELIVERED" | "CANCELLED"
+// StaffRole: "OWNER" | "MANAGER" | "WAITER" | "KITCHEN"
+
+// ─── TENANT ──────────────────────────────────────────────────────────────────
+
+model Tenant {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Restaurant info
+  name        String
+  slug        String   @unique
+  description String?
+  logoUrl     String?
+  coverUrl    String?
+  phone       String?
+  address     String?
+  city        String?
+  country     String   @default("CO")
+
+  // Branding
+  brandColor  String   @default("#FF6B35")
+  accentColor String   @default("#1A1A2E")
+
+  // Slug policy: editable freely first 30 days, then locked
+  slugLockedAt DateTime?
+  slugChangedAt DateTime?
+
+  // Plan
+  plan        String   @default("STARTER") // STARTER | RESTRO_IA | BUSINESS
+
+  // Settings
+  isActive    Boolean  @default(true)
+  timezone    String   @default("America/Bogota")
+  currency    String   @default("COP")
+  language    String   @default("es")
+
+  // WhatsApp waitlist
+  whatsappWaitlistEmail String?
+
+  // Relations
+  menus         Menu[]
+  tables        Table[]
+  orders        Order[]
+  staff         StaffMember[]
+  analyticsEvents AnalyticsEvent[]
+  subscription  Subscription?
+  users         User[]
+}
+
+// ─── USER ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  email       String   @unique
+  name        String
+  passwordHash String
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  role        String   @default("OWNER") // OWNER | MANAGER | WAITER | KITCHEN
+
+  lastLoginAt DateTime?
+}
+
+// ─── MENU ─────────────────────────────────────────────────────────────────────
+
+model Menu {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  name        String   @default("Carta Principal")
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  categories  Category[]
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  menuId      String
+  menu        Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+  imageUrl    String?
+  emoji       String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  items       MenuItem[]
+}
+
+model MenuItem {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  categoryId   String
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  name         String
+  description  String?
+  price        Float    // In COP (e.g., 15000.0)
+  imageUrl     String?  // Available on all plans
+  isAvailable  Boolean  @default(true)
+  isHighlighted Boolean @default(false)
+  sortOrder    Int      @default(0)
+
+  // Nutritional / tags (future)
+  tags         String?  // JSON array stored as string for SQLite compat
+
+  orderItems   OrderItem[]
+}
+
+// ─── TABLE ────────────────────────────────────────────────────────────────────
+
+model Table {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  name        String   // e.g., "Mesa 1", "Terraza 3", "Barra"
+  qrToken     String   @unique @default(cuid()) // Stable token for QR (survives slug change)
+  capacity    Int?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  orders      Order[]
+}
+
+// ─── ORDER ────────────────────────────────────────────────────────────────────
+
+model Order {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Order type
+  type        String   @default("DINE_IN") // DINE_IN | TAKEOUT | DELIVERY
+
+  // For DINE_IN
+  tableId     String?
+  table       Table?   @relation(fields: [tableId], references: [id])
+
+  // For TAKEOUT & DELIVERY
+  customerName  String?
+  customerPhone String?
+
+  // For DELIVERY only
+  deliveryAddress String?
+  deliveryNotes   String?
+
+  // Status
+  status      String   @default("PENDING") // PENDING | PREPARING | READY | DELIVERED | CANCELLED
+
+  // Financial snapshot
+  subtotal    Float    @default(0)
+  total       Float    @default(0)
+
+  // Notes
+  notes       String?
+
+  // Order number (human-readable, per-tenant sequential)
+  orderNumber Int
+
+  // Items
+  items       OrderItem[]
+  statusHistory OrderStatusHistory[]
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  menuItemId  String
+  menuItem    MenuItem @relation(fields: [menuItemId], references: [id])
+
+  // Snapshot at time of order (price may change later)
+  name        String
+  price       Float
+  quantity    Int      @default(1)
+  notes       String?  // Per-item notes ("sin cebolla", "bien cocido")
+
+  subtotal    Float    // price * quantity
+}
+
+model OrderStatusHistory {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  fromStatus  String?
+  toStatus    String
+  changedById String?  // Staff user ID who changed the status
+  note        String?
+}
+
+// ─── STAFF ────────────────────────────────────────────────────────────────────
+
+model StaffMember {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  name        String
+  email       String
+  role        String   // OWNER | MANAGER | WAITER | KITCHEN
+  isActive    Boolean  @default(true)
+
+  @@unique([tenantId, email])
+}
+
+// ─── ANALYTICS ────────────────────────────────────────────────────────────────
+
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  event       String   // "menu_view" | "item_view" | "order_started" | "order_completed" | etc.
+  data        String?  // JSON payload
+  sessionId   String?  // Anonymous session identifier
+  userAgent   String?
+}
+
+// ─── SUBSCRIPTION ─────────────────────────────────────────────────────────────
+
+model Subscription {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenantId    String   @unique
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  plan        String   @default("STARTER") // STARTER | RESTRO_IA | BUSINESS
+  status      String   @default("ACTIVE")  // ACTIVE | CANCELLED | PAST_DUE | TRIAL
+
+  // Billing (Wompi — post-MVP)
+  wompiSubscriptionId String?
+  currentPeriodStart  DateTime?
+  currentPeriodEnd    DateTime?
+
+  // Trial
+  trialEndsAt DateTime?
+}
