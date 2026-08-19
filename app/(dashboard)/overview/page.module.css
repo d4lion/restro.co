@@ -15,10 +15,17 @@
 }
 
 .dateBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 13px;
   font-weight: 500;
-  color: #64748B;
+  color: #334155;
   text-transform: capitalize;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 6px 12px;
+  border-radius: 6px;
 }
 
 .viewMenuBtn {

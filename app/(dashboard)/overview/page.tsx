@@ -18,7 +18,7 @@ import {
 import styles from "./page.module.css";
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
+import { OverviewClock } from "@/components/dashboard/overview/OverviewClock";
 
 export const metadata: Metadata = { title: "Resumen" };
 
@@ -113,14 +113,7 @@ export default async function OverviewPage() {
     <div className={styles.page}>
       {/* ── Header Top Bar ──────────────────────────────────── */}
       <div className={styles.headerTopBar}>
-        <span className={styles.dateBadge}>
-          {new Date().toLocaleDateString("es-CO", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </span>
+        <OverviewClock />
         <a href={`/restaurant/${tenant.slug}`} target="_blank" className={styles.viewMenuBtn}>
           <ExternalLink size={15} strokeWidth={1.8} />
           Ver carta pública
@@ -141,13 +134,10 @@ export default async function OverviewPage() {
           </Link>
         </div>
         <div className={styles.heroIllustrationBox}>
-          <Image
+          <img
             src="/images/analytic-user.svg"
             alt="Resumen operativo"
             className={styles.heroIllustrationImg}
-            width={120}
-            height={120}
-            loading="eager"
           />
         </div>
       </div>
