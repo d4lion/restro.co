@@ -22,7 +22,7 @@ export const tenantRepository = {
     userId: string;
     userEmail: string;
     userName: string;
-    passwordHash: string;
+    passwordHash?: string;
   }) {
     return prisma.$transaction(async (tx) => {
       // Create tenant

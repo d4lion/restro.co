@@ -1,15 +1,8 @@
 "use server";
 
-import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
-import { createSession } from "@/lib/session";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
-import type { FormState, StaffRole, PlanKey } from "@/lib/types";
-
-// Simple hash for dev — use bcrypt in production
-function hashPassword(p: string) {
-  return createHash("sha256").update(p).digest("hex");
-}
+import { createClient } from "@/lib/supabase/server";
 
 export type AuthActionResult = ({ errors?: Record<string, string[]>; message?: string; success?: boolean; redirectUrl?: string }) | undefined;
 
@@ -24,22 +17,15 @@ export async function loginAction(
     return { errors: { email: ["Email y contraseña requeridos"] } };
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: email.toLowerCase().trim() },
-    include: { tenant: { include: { subscription: true } } },
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
   });
 
-  if (!user || user.passwordHash !== hashPassword(password)) {
+  if (error) {
     return { errors: { email: ["Credenciales incorrectas. Verifica tu email y contraseña."] } };
   }
-
-  await createSession({
-    userId: user.id,
-    tenantId: user.tenantId,
-    role: user.role as StaffRole,
-    plan: (user.tenant.plan as PlanKey),
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  });
 
   return { success: true, redirectUrl: "/overview" };
 }
@@ -64,44 +50,49 @@ export async function registerAction(
 
   if (Object.keys(errors).length > 0) return { errors };
 
-  // Check slug
+  // Check slug in Prisma
   const slugAvailable = await tenantRepository.isSlugAvailable(slug);
   if (!slugAvailable) {
     return { errors: { slug: ["Este slug ya está en uso. Prueba otro."] } };
   }
 
-  // Check email
+  // Check email in Prisma
   const existing = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
   if (existing) {
     return { errors: { email: ["Ya existe una cuenta con este email"] } };
   }
 
-  const { v4: uuidv4 } = await import("uuid");
-  const userId = uuidv4();
-
-  await tenantRepository.create({
-    userId,
-    userEmail: email.toLowerCase().trim(),
-    userName: name.trim(),
-    passwordHash: hashPassword(password),
-    name: restaurantName.trim(),
-    slug: slug.toLowerCase().trim(),
+  const supabase = await createClient();
+  
+  // Create user in Supabase Auth
+  const { data: authData, error: authError } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        name,
+      }
+    }
   });
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { tenant: true },
-  });
+  if (authError || !authData.user) {
+    return { message: authError?.message || "Error al crear la cuenta en Supabase. Intenta de nuevo." };
+  }
 
-  if (!user) return { message: "Error creando la cuenta. Intenta de nuevo." };
-
-  await createSession({
-    userId: user.id,
-    tenantId: user.tenantId,
-    role: "OWNER",
-    plan: "STARTER",
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  });
+  try {
+    // Create Tenant and User mapping in Prisma
+    await tenantRepository.create({
+      userId: authData.user.id, // We use the Supabase Auth UUID as the Prisma User ID
+      userEmail: email.toLowerCase().trim(),
+      userName: name.trim(),
+      name: restaurantName.trim(),
+      slug: slug.toLowerCase().trim(),
+    });
+  } catch (dbError) {
+    console.error("Failed to create tenant in DB after Supabase signup:", dbError);
+    return { message: "Error creando el restaurante en la base de datos." };
+  }
 
   return { success: true, redirectUrl: "/onboarding" };
 }
+
