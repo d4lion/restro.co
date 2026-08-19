@@ -1,130 +1,129 @@
-/* ── Button — Blue/White Light Theme ─────────────────────────── */
+/* ─── BUTTON SYSTEM — Restro Design System (Sections 8, 9, 10, 11) ────────── */
+
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  font-family: var(--font-display);
-  font-weight: 600;
-  border-radius: var(--radius-md);
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
   white-space: nowrap;
   text-decoration: none;
   position: relative;
-  overflow: hidden;
-  letter-spacing: 0.01em;
-}
-
-.button:active:not(:disabled) {
-  transform: scale(0.98);
 }
 
 .button:disabled {
-  opacity: 0.45;
   cursor: not-allowed;
 }
 
-/* ── Variants ─────────────────────────────────────────────── */
+/* ── Sizes (Section 8) ────────────────────────────────────────── */
+.button--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.button--md {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.button--lg {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+/* ── Variants (Section 9) ─────────────────────────────────────── */
 .button--primary {
   background: #2563EB;
   color: #FFFFFF;
-  border-color: #1D4ED8;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+  border-color: #2563EB;
 }
 .button--primary:hover:not(:disabled) {
   background: #1D4ED8;
-  box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+  border-color: #1D4ED8;
 }
-
-.button--orange {
-  background: #F97316;
+.button--primary:active:not(:disabled) {
+  background: #1E40AF;
+  border-color: #1E40AF;
+}
+.button--primary:disabled {
+  background: #BFDBFE;
   color: #FFFFFF;
-  border-color: #EA580C;
-  box-shadow: 0 2px 8px rgba(249,115,22,0.25);
-}
-.button--orange:hover:not(:disabled) {
-  background: #EA580C;
+  border-color: #BFDBFE;
 }
 
-.button--adamind {
-  background: #E11D48;
-  color: #FFFFFF;
-  border-color: #BE123C;
-  box-shadow: 0 2px 8px rgba(225,29,72,0.25);
+.button--secondary,
+.button--outline {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
 }
-.button--adamind:hover:not(:disabled) {
-  background: #BE123C;
+.button--secondary:hover:not(:disabled),
+.button--outline:hover:not(:disabled) {
+  background: #F8FAFC;
+  color: #0F172A;
 }
-
-.button--secondary {
-  background: #EFF6FF;
-  color: #1D4ED8;
-  border: 1px solid #BFDBFE;
-}
-.button--secondary:hover:not(:disabled) {
-  background: #DBEAFE;
-  border-color: #93C5FD;
+.button--secondary:disabled,
+.button--outline:disabled {
+  background: #F8FAFC;
+  color: #94A3B8;
+  border-color: #E2E8F0;
 }
 
 .button--ghost {
   background: transparent;
   color: #475569;
-  border-color: transparent;
 }
 .button--ghost:hover:not(:disabled) {
   background: #F1F5F9;
   color: #0F172A;
 }
-
-.button--outline {
-  background: #FFFFFF;
-  color: #2563EB;
-  border: 1px solid #BFDBFE;
-}
-.button--outline:hover:not(:disabled) {
-  background: #EFF6FF;
-  border-color: #93C5FD;
+.button--ghost:disabled {
+  color: #94A3B8;
 }
 
-.button--danger {
-  background: #FEF2F2;
-  color: #DC2626;
-  border: 1px solid #FECACA;
-}
-.button--danger:hover:not(:disabled) {
+.button--danger,
+.button--destructive,
+.button--adamind {
   background: #DC2626;
   color: #FFFFFF;
   border-color: #DC2626;
 }
+.button--danger:hover:not(:disabled),
+.button--destructive:hover:not(:disabled),
+.button--adamind:hover:not(:disabled) {
+  background: #B91C1C;
+  border-color: #B91C1C;
+}
 
-/* ── Sizes ─────────────────────────────────────────────────── */
-.button--sm {
-  height: 34px;
-  padding: 0 0.75rem;
-  font-size: 0.75rem;
-  border-radius: 8px;
+.button--orange {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #2563EB;
 }
-.button--md {
-  height: 42px;
-  padding: 0 1.25rem;
-  font-size: 0.875rem;
-}
-.button--lg {
-  height: 50px;
-  padding: 0 1.75rem;
-  font-size: 1rem;
-  border-radius: 14px;
+.button--orange:hover:not(:disabled) {
+  background: #1D4ED8;
+  border-color: #1D4ED8;
 }
 
 .button--full { width: 100%; }
 .button--loading { cursor: wait; }
 
 .spinner {
-  width: 15px;
-  height: 15px;
-  border: 2px solid rgba(255,255,255,0.35);
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
   border-top-color: currentColor;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
