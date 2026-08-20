@@ -27,6 +27,8 @@ async function main() {
   console.log("Seeding Restro dev database...");
 
   // Cleanup
+  await prisma.billingEvent.deleteMany();
+  await prisma.tenantFeatureOverride.deleteMany();
   await prisma.orderStatusHistory.deleteMany();
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
@@ -37,6 +39,68 @@ async function main() {
   await prisma.subscription.deleteMany();
   await prisma.user.deleteMany();
   await prisma.tenant.deleteMany();
+  await prisma.plan.deleteMany();
+
+  // Create Plans
+  const starterPlan = await prisma.plan.create({
+    data: {
+      key: "STARTER",
+      label: "Starter",
+      tag: "GRATIS",
+      priceMonthly: 0,
+      maxTables: 5,
+      maxMenuItems: 20,
+      maxStaff: 1,
+      maxMenus: 1,
+      analyticsDays: 7,
+      sortOrder: 1,
+    }
+  });
+
+  await prisma.plan.create({
+    data: {
+      key: "RESTRO_IA",
+      label: "Restro IA",
+      tag: "PRO",
+      priceMonthly: 49900,
+      priceYearly: 479000,
+      maxTables: 30,
+      maxMenuItems: -1,
+      maxStaff: 10,
+      maxMenus: 5,
+      analyticsDays: 365,
+      hasAI: true,
+      hasInventory: true,
+      hasMultiLanguage: true,
+      hasExportPDF: true,
+      hasCustomBranding: true,
+      sortOrder: 2,
+    }
+  });
+
+  await prisma.plan.create({
+    data: {
+      key: "BUSINESS",
+      label: "Business",
+      tag: "ENTERPRISE",
+      priceMonthly: 99900,
+      priceYearly: 959000,
+      maxTables: -1,
+      maxMenuItems: -1,
+      maxStaff: -1,
+      maxMenus: -1,
+      analyticsDays: 365,
+      hasAI: true,
+      hasInventory: true,
+      hasMultiLanguage: true,
+      hasExportPDF: true,
+      hasExportExcel: true,
+      hasCustomBranding: true,
+      hasWhatsApp: true,
+      hasPrioritySupport: true,
+      sortOrder: 3,
+    }
+  });
 
   // Tenant: Restaurante Demo (Starter / Free Plan)
   const tenant = await prisma.tenant.create({
@@ -48,7 +112,6 @@ async function main() {
       address: "Calle 93 # 15-40, Chapinero",
       city: "Bogotá",
       brandColor: "#2563EB",
-      plan: "STARTER", // Starter Free plan to show free tier promo footer
     },
   });
 
@@ -69,7 +132,7 @@ async function main() {
   await prisma.subscription.create({
     data: {
       tenantId: tenant.id,
-      plan: "STARTER",
+      planId: starterPlan.id,
       status: "ACTIVE",
     },
   });
