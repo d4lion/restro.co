@@ -1,10 +1,88 @@
-// ─── PLAN LIMITS ──────────────────────────────────────────────────────────────
+// ─── PLAN TYPES ───────────────────────────────────────────────────────────────
 
+/** Keys used in the Plan.key column */
+export type PlanKey = "STARTER" | "RESTRO_IA" | "BUSINESS";
+
+/** Shape of a Plan record from the database */
+export interface PlanRecord {
+  id: string;
+  key: PlanKey;
+  label: string;
+  tag: string;
+  description: string | null;
+  priceMonthly: number;
+  priceYearly: number | null;
+  maxTables: number;     // -1 = unlimited
+  maxMenuItems: number;  // -1 = unlimited
+  maxStaff: number;      // -1 = unlimited
+  maxMenus: number;      // -1 = unlimited
+  analyticsDays: number;
+  hasAI: boolean;
+  hasInventory: boolean;
+  hasMultiLanguage: boolean;
+  hasExportPDF: boolean;
+  hasExportExcel: boolean;
+  hasCustomBranding: boolean;
+  hasWhatsApp: boolean;
+  hasPrioritySupport: boolean;
+  sortOrder: number;
+  isActive: boolean;
+}
+
+/** Runtime-friendly limits (converts -1 → Infinity for easy comparisons) */
+export interface PlanLimits {
+  maxTables: number;
+  maxMenuItems: number;
+  maxStaff: number;
+  maxMenus: number;
+  analyticsDays: number;
+  hasAI: boolean;
+  hasInventory: boolean;
+  hasMultiLanguage: boolean;
+  hasExportPDF: boolean;
+  hasExportExcel: boolean;
+  hasCustomBranding: boolean;
+  hasWhatsApp: boolean;
+  hasPrioritySupport: boolean;
+  priceMonthly: number;
+  priceYearly: number | null;
+  label: string;
+  tag: string;
+}
+
+/** Convert a DB Plan record to runtime limits (-1 → Infinity) */
+export function getPlanLimits(plan: PlanRecord): PlanLimits {
+  const unlimit = (v: number) => (v === -1 ? Infinity : v);
+  return {
+    maxTables: unlimit(plan.maxTables),
+    maxMenuItems: unlimit(plan.maxMenuItems),
+    maxStaff: unlimit(plan.maxStaff),
+    maxMenus: unlimit(plan.maxMenus),
+    analyticsDays: plan.analyticsDays,
+    hasAI: plan.hasAI,
+    hasInventory: plan.hasInventory,
+    hasMultiLanguage: plan.hasMultiLanguage,
+    hasExportPDF: plan.hasExportPDF,
+    hasExportExcel: plan.hasExportExcel,
+    hasCustomBranding: plan.hasCustomBranding,
+    hasWhatsApp: plan.hasWhatsApp,
+    hasPrioritySupport: plan.hasPrioritySupport,
+    priceMonthly: plan.priceMonthly,
+    priceYearly: plan.priceYearly,
+    label: plan.label,
+    tag: plan.tag,
+  };
+}
+
+/**
+ * @deprecated Use Plan table from DB instead. Kept as static fallback only.
+ */
 export const PLAN_LIMITS = {
   STARTER: {
     maxTables: 5,
     maxMenuItems: 20,
     maxStaff: 1,
+    maxMenus: 1,
     analyticsDays: 7,
     hasImages: true,
     hasAI: false,
@@ -12,7 +90,11 @@ export const PLAN_LIMITS = {
     hasMultiLanguage: false,
     hasExportPDF: false,
     hasExportExcel: false,
+    hasCustomBranding: false,
+    hasWhatsApp: false,
+    hasPrioritySupport: false,
     priceMonthly: 0,
+    priceYearly: null,
     label: "Starter",
     tag: "GRATIS",
   },
@@ -20,6 +102,7 @@ export const PLAN_LIMITS = {
     maxTables: 30,
     maxMenuItems: Infinity,
     maxStaff: 10,
+    maxMenus: 5,
     analyticsDays: 365,
     hasImages: true,
     hasAI: true,
@@ -27,7 +110,11 @@ export const PLAN_LIMITS = {
     hasMultiLanguage: true,
     hasExportPDF: true,
     hasExportExcel: false,
+    hasCustomBranding: true,
+    hasWhatsApp: false,
+    hasPrioritySupport: false,
     priceMonthly: 49900,
+    priceYearly: 479000,
     label: "Restro IA",
     tag: "PRO",
   },
@@ -35,6 +122,7 @@ export const PLAN_LIMITS = {
     maxTables: Infinity,
     maxMenuItems: Infinity,
     maxStaff: Infinity,
+    maxMenus: Infinity,
     analyticsDays: 365,
     hasImages: true,
     hasAI: true,
@@ -42,13 +130,16 @@ export const PLAN_LIMITS = {
     hasMultiLanguage: true,
     hasExportPDF: true,
     hasExportExcel: true,
+    hasCustomBranding: true,
+    hasWhatsApp: true,
+    hasPrioritySupport: true,
     priceMonthly: 99900,
+    priceYearly: 959000,
     label: "Business",
     tag: "ENTERPRISE",
   },
 } as const;
 
-export type PlanKey = keyof typeof PLAN_LIMITS;
 
 // ─── ORDER TYPES ──────────────────────────────────────────────────────────────
 
@@ -101,6 +192,7 @@ export interface SessionPayload {
   tenantId: string;
   role: StaffRole;
   plan: PlanKey;
+  planId: string;
   expiresAt: Date;
 }
 
@@ -111,7 +203,8 @@ export interface TenantContext {
   logoUrl: string | null;
   brandColor: string;
   plan: PlanKey;
-  planLimits: (typeof PLAN_LIMITS)[PlanKey];
+  planId: string;
+  planLimits: PlanLimits;
 }
 
 export interface CreateOrderDto {

@@ -15,16 +15,28 @@ export async function getSession(): Promise<SessionPayload | null> {
     // Supabase user is logged in, find their Prisma User record to get Tenant & Role info
     const prismaUser = await prisma.user.findUnique({
       where: { id: user.id },
-      include: { tenant: true },
+      include: {
+        tenant: {
+          include: {
+            subscription: {
+              include: { plan: true },
+            },
+          },
+        },
+      },
     });
 
     if (!prismaUser) return null;
+
+    const planKey = prismaUser.tenant.subscription?.plan?.key ?? "STARTER";
+    const planId = prismaUser.tenant.subscription?.planId ?? "";
 
     return {
       userId: prismaUser.id,
       tenantId: prismaUser.tenantId,
       role: prismaUser.role as SessionPayload["role"],
-      plan: prismaUser.tenant.plan as SessionPayload["plan"],
+      plan: planKey as SessionPayload["plan"],
+      planId,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Mocked for compatibility
     };
   } catch (error) {

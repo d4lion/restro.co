@@ -1,18 +1,25 @@
 import { prisma } from "@/lib/prisma";
-import type { PlanKey } from "@/lib/types";
+
+/** Shared include to always load subscription → plan + overrides */
+const TENANT_INCLUDE = {
+  subscription: {
+    include: { plan: true },
+  },
+  featureOverrides: true,
+} as const;
 
 export const tenantRepository = {
   async findBySlug(slug: string) {
     return prisma.tenant.findUnique({
       where: { slug },
-      include: { subscription: true },
+      include: TENANT_INCLUDE,
     });
   },
 
   async findById(id: string) {
     return prisma.tenant.findUnique({
       where: { id },
-      include: { subscription: true },
+      include: TENANT_INCLUDE,
     });
   },
 
@@ -25,12 +32,20 @@ export const tenantRepository = {
     passwordHash?: string;
   }) {
     return prisma.$transaction(async (tx) => {
-      // Create tenant
+      // Find the STARTER plan
+      const starterPlan = await tx.plan.findUnique({
+        where: { key: "STARTER" },
+      });
+
+      if (!starterPlan) {
+        throw new Error("Plan STARTER not found in database. Run seed first.");
+      }
+
+      // Create tenant (no plan field — source of truth is subscription)
       const tenant = await tx.tenant.create({
         data: {
           name: data.name,
           slug: data.slug,
-          plan: "STARTER",
         },
       });
 
@@ -51,11 +66,11 @@ export const tenantRepository = {
         },
       });
 
-      // Create subscription
+      // Create subscription with FK to Plan
       await tx.subscription.create({
         data: {
           tenantId: tenant.id,
-          plan: "STARTER",
+          planId: starterPlan.id,
           status: "ACTIVE",
         },
       });
@@ -125,3 +140,4 @@ export const tenantRepository = {
     });
   },
 };
+
