@@ -78,6 +78,12 @@ model Tenant {
   city        String?
   country     String   @default("CO")
 
+  // Social Links
+  instagramUrl String?
+  facebookUrl  String?
+  tiktokUrl    String?
+  websiteUrl   String?
+
   // Branding
   brandColor  String   @default("#FF6B35")
   accentColor String   @default("#1A1A2E")
@@ -91,6 +97,11 @@ model Tenant {
   timezone    String   @default("America/Bogota")
   currency    String   @default("COP")
   language    String   @default("es")
+  
+  // Ordering Capabilities
+  allowDineIn   Boolean @default(true)
+  allowTakeout  Boolean @default(false)
+  allowDelivery Boolean @default(false)
 
   // WhatsApp waitlist
   whatsappWaitlistEmail String?
@@ -179,7 +190,39 @@ model MenuItem {
   // Nutritional / tags (future)
   tags         String?  // JSON array stored as string for SQLite compat
 
-  orderItems   OrderItem[]
+  orderItems     OrderItem[]
+  modifierGroups MenuItemModifierGroup[]
+}
+
+model MenuItemModifierGroup {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  menuItemId    String
+  menuItem      MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  name          String   // e.g. "Elige 1 Acompañamiento"
+  isRequired    Boolean  @default(false)
+  minSelections Int      @default(0)
+  maxSelections Int      @default(1)
+  sortOrder     Int      @default(0)
+
+  options       MenuItemModifierOption[]
+}
+
+model MenuItemModifierOption {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  groupId       String
+  group         MenuItemModifierGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  name          String   // e.g. "Papas a la Francesa"
+  priceExtra    Float    @default(0) // Extra cost (COP)
+  isAvailable   Boolean  @default(true)
+  sortOrder     Int      @default(0)
 }
 
 // ─── TABLE ────────────────────────────────────────────────────────────────────
@@ -259,8 +302,11 @@ model OrderItem {
   price       Float
   quantity    Int      @default(1)
   notes       String?  // Per-item notes ("sin cebolla", "bien cocido")
+  
+  // JSON array of selected modifiers: [{ optionId: string, name: string, priceExtra: number, groupId: string, groupName: string }]
+  modifiersJson String?
 
-  subtotal    Float    // price * quantity
+  subtotal    Float    // (price + sum(priceExtra)) * quantity
 }
 
 model OrderStatusHistory {

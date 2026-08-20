@@ -72,6 +72,16 @@ export type Category = Prisma.CategoryModel
  */
 export type MenuItem = Prisma.MenuItemModel
 /**
+ * Model MenuItemModifierGroup
+ * 
+ */
+export type MenuItemModifierGroup = Prisma.MenuItemModifierGroupModel
+/**
+ * Model MenuItemModifierOption
+ * 
+ */
+export type MenuItemModifierOption = Prisma.MenuItemModifierOptionModel
+/**
  * Model Table
  * 
  */

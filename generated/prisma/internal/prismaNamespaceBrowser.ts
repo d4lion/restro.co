@@ -57,6 +57,8 @@ export const ModelName = {
   Menu: 'Menu',
   Category: 'Category',
   MenuItem: 'MenuItem',
+  MenuItemModifierGroup: 'MenuItemModifierGroup',
+  MenuItemModifierOption: 'MenuItemModifierOption',
   Table: 'Table',
   Order: 'Order',
   OrderItem: 'OrderItem',
@@ -127,6 +129,10 @@ export const TenantScalarFieldEnum = {
   address: 'address',
   city: 'city',
   country: 'country',
+  instagramUrl: 'instagramUrl',
+  facebookUrl: 'facebookUrl',
+  tiktokUrl: 'tiktokUrl',
+  websiteUrl: 'websiteUrl',
   brandColor: 'brandColor',
   accentColor: 'accentColor',
   slugLockedAt: 'slugLockedAt',
@@ -135,6 +141,9 @@ export const TenantScalarFieldEnum = {
   timezone: 'timezone',
   currency: 'currency',
   language: 'language',
+  allowDineIn: 'allowDineIn',
+  allowTakeout: 'allowTakeout',
+  allowDelivery: 'allowDelivery',
   whatsappWaitlistEmail: 'whatsappWaitlistEmail'
 } as const
 
@@ -203,6 +212,35 @@ export const MenuItemScalarFieldEnum = {
 export type MenuItemScalarFieldEnum = (typeof MenuItemScalarFieldEnum)[keyof typeof MenuItemScalarFieldEnum]
 
 
+export const MenuItemModifierGroupScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  menuItemId: 'menuItemId',
+  name: 'name',
+  isRequired: 'isRequired',
+  minSelections: 'minSelections',
+  maxSelections: 'maxSelections',
+  sortOrder: 'sortOrder'
+} as const
+
+export type MenuItemModifierGroupScalarFieldEnum = (typeof MenuItemModifierGroupScalarFieldEnum)[keyof typeof MenuItemModifierGroupScalarFieldEnum]
+
+
+export const MenuItemModifierOptionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  groupId: 'groupId',
+  name: 'name',
+  priceExtra: 'priceExtra',
+  isAvailable: 'isAvailable',
+  sortOrder: 'sortOrder'
+} as const
+
+export type MenuItemModifierOptionScalarFieldEnum = (typeof MenuItemModifierOptionScalarFieldEnum)[keyof typeof MenuItemModifierOptionScalarFieldEnum]
+
+
 export const TableScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -248,6 +286,7 @@ export const OrderItemScalarFieldEnum = {
   price: 'price',
   quantity: 'quantity',
   notes: 'notes',
+  modifiersJson: 'modifiersJson',
   subtotal: 'subtotal'
 } as const
 
