@@ -76,40 +76,75 @@
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* Store Header Section */
+/* Banner Section */
+.bannerContainer {
+  width: 100%;
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.bannerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bannerPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--brandColor, #0066FF), #4F46E5);
+}
+
+/* Store Header Section - Overlapping Banner */
 .storeHeaderContainer {
-  padding: 28px 32px 16px;
-  background: #FFFFFF;
+  padding: 0 32px 16px;
+  background: transparent;
+  position: relative;
+  margin-top: -60px;
+  z-index: 10;
 }
 
 .storeCard {
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid #E2E8F0;
+}
+
+.storeCardMain {
   display: flex;
   align-items: center;
   gap: 24px;
 }
 
 .storeAvatarBox {
-  width: 84px;
-  height: 84px;
-  border-radius: 20px;
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
   background: #FFFFFF;
-  border: 2.5px solid #0066FF;
-  padding: 3px;
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.12);
+  border: 2px solid #E2E8F0;
+  padding: 4px;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .storeAvatarImg {
   width: 100%;
   height: 100%;
-  border-radius: 14px;
+  border-radius: 12px;
   object-fit: cover;
 }
 
 .storeAvatarFallback {
   width: 100%;
   height: 100%;
-  border-radius: 14px;
+  border-radius: 12px;
   background: #EFF6FF;
   display: flex;
   align-items: center;
@@ -119,7 +154,8 @@
 .storeMetaInfo {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  flex: 1;
 }
 
 .storeTitleRow {
@@ -131,18 +167,20 @@
 
 .storeName {
   font-family: var(--font-display);
-  font-size: 1.65rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: #0F172A;
-  line-height: 1.2;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 .openBadge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 10px;
-  border-radius: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
   background: #DCFCE7;
   color: #166534;
   font-family: var(--font-display);
@@ -158,296 +196,226 @@
   background: #16A34A;
 }
 
-.storeButtonsRow {
+.storeTagsRow {
   display: flex;
-  align-items: center;
-  gap: 12px;
   flex-wrap: wrap;
-}
-
-.infoBtn {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  border-radius: 10px;
-  background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
-  color: #475569;
-  font-family: var(--font-display);
-  font-size: 0.825rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  gap: 8px;
+  color: #64748B;
+  font-size: 0.85rem;
 }
 
-.infoBtn:hover {
-  background: #F8FAFC;
-  border-color: #CBD5E1;
-  color: #0F172A;
-}
-
-.whatsappCtaBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  border-radius: 10px;
-  background: rgba(37, 211, 102, 0.12);
-  border: 1.5px solid rgba(37, 211, 102, 0.4);
-  color: #15803D;
-  font-family: var(--font-display);
-  font-size: 0.825rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-.whatsappCtaBtn:hover {
-  background: #25D366;
-  color: #FFFFFF;
-  border-color: #25D366;
-}
-
-/* Info & Horarios Floating Modal Backdrop */
-.modalBackdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
+.storeDesc {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 16px;
-  animation: fadeIn 0.2s ease;
+  gap: 6px;
 }
 
-.infoModalCard {
-  width: 100%;
-  max-width: 520px;
-  max-height: 85vh;
-  overflow-y: auto;
-  margin: 0;
-  padding: 24px;
-  background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+.storeDesc::after {
+  content: "•";
+  color: #CBD5E1;
+  margin-left: 8px;
+}
+
+.storeAddress {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.storeAddress svg {
+  color: #EF4444;
+}
+
+/* Accordions */
+.storeAccordions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 0;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 16px;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+.infoAccordion {
+  border-bottom: 1px solid #F1F5F9;
 }
 
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+.infoAccordion:last-child {
+  border-bottom: none;
 }
 
-.infoModalHeader {
+.infoAccordion summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  transition: color 0.2s ease;
 }
 
-.infoModalHeader h3 {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 800;
+.infoAccordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.infoAccordion summary:hover {
   color: #0F172A;
 }
 
-.closeInfoBtn {
-  background: none;
-  border: none;
-  color: #94A3B8;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.infoModalDesc {
-  font-size: 0.875rem;
-  color: #475569;
-  line-height: 1.5;
-}
-
-.infoDetailsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  padding-top: 10px;
-  border-top: 1px solid #E2E8F0;
-}
-
-.infoDetailItem {
+.summaryContent {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
 }
 
-.infoIcon {
-  padding: 8px;
-  background: #EFF6FF;
-  color: #0066FF;
-  border-radius: 10px;
-  display: flex;
-  flex-shrink: 0;
+.chevron {
+  transition: transform 0.2s ease;
+  font-size: 1.1rem;
 }
 
-.infoDetailItem strong {
-  font-family: var(--font-display);
+.infoAccordion[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.accordionContent {
+  padding: 0 0 16px 28px;
   font-size: 0.85rem;
-  color: #0F172A;
-  display: block;
-}
-
-.infoDetailItem p {
-  font-size: 0.825rem;
-  color: #475569;
-  margin-top: 2px;
-}
-
-.subText {
-  font-size: 0.75rem !important;
-  color: #94A3B8 !important;
-}
-
-.infoWaLink {
-  display: inline-block;
-  margin-top: 4px;
-  font-size: 0.8rem;
-  color: #15803D;
-  font-family: var(--font-display);
-  font-weight: 700;
-  background: rgba(37, 211, 102, 0.12);
-  border: 1px solid rgba(37, 211, 102, 0.3);
-  padding: 5px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  touch-action: manipulation;
-  transition: all 0.15s ease;
-}
-.infoWaLink:hover {
-  background: #25D366;
-  color: #FFFFFF;
-}
-
-
-/* Controls & Category Tabs */
-.controlsRow {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 32px 0;
-  border-bottom: 1.5px solid #F1F5F9;
-  position: sticky;
-  top: 0;
-  background: #FFFFFF;
-  z-index: 50;
-}
-
-.iconControlBtn {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #F8FAFC;
-  border: 1.5px solid #E2E8F0;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-.iconControlBtn:hover {
-  background: #F1F5F9;
-  color: #0066FF;
-  border-color: #0066FF;
-}
-
-.iconControlBtn--active {
-  background: #0066FF;
-  color: #FFFFFF;
-  border-color: #0066FF;
-}
-
-.categoryNavTabs {
-  display: flex;
-  gap: 24px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: 2px;
-  flex: 1;
-}
-
-.categoryNavTabs::-webkit-scrollbar { display: none; }
-
-.categoryTabBtn {
-  padding: 8px 12px 14px;
-  background: none;
-  border: none;
-  border-bottom: 2.5px solid transparent;
   color: #64748B;
-  font-family: var(--font-display);
-  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.accordionContent p {
+  margin: 4px 0;
+}
+
+.accordionContent strong {
+  color: #334155;
+  font-weight: 600;
+}
+
+.whatsappLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: #15803D;
   font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
 }
 
-.categoryTabBtn:hover {
-  color: #0F172A;
+.whatsappLink:hover {
+  text-decoration: underline;
 }
 
-.categoryTabBtn--active {
-  color: #0066FF;
-  border-bottom-color: #0066FF;
-}
+
 
 
 /* Search Input Bar */
 .searchBarContainer {
   padding: 12px 32px;
   background: #FFFFFF;
-  border-bottom: 1px solid #F1F5F9;
-  position: relative;
+  margin-top: 8px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  color: #64748B;
+  transition: border-color 0.2s ease;
+}
+
+.searchBox:focus-within {
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 .searchInput {
-  width: 100%;
-  height: 44px;
-  padding: 0 40px 0 16px;
-  background: #F8FAFC;
-  border: 1.5px solid #0066FF;
-  border-radius: 12px;
-  font-size: 0.9rem;
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
   color: #0F172A;
   outline: none;
 }
 
 .clearSearchBtn {
-  position: absolute;
-  right: 44px;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
   color: #94A3B8;
   cursor: pointer;
+}
+
+/* Nav Controls & Category Tabs */
+.controlsRow {
+  display: flex;
+  align-items: center;
+  padding: 16px 32px;
+  border-bottom: 1.5px solid #F1F5F9;
+  position: sticky;
+  top: 0;
+  background: #FFFFFF;
+  z-index: 50;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.categoryNavTabs {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  align-items: center;
+  width: 100%;
+}
+
+.categoryNavTabs::-webkit-scrollbar { display: none; }
+
+.categoryTabBtn {
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #475569;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.categoryTabBtn:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+.categoryTabBtn--active {
+  background: #8B5CF6;
+  color: #FFFFFF;
+}
+
+.categoryTabBtn--active:hover {
+  background: #7C3AED;
+  color: #FFFFFF;
+}
+
+.catItemCount {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 /* Menu Categories */
@@ -484,41 +452,67 @@
 /* HIGH VISIBILITY RESPONSIVE GRID */
 .productsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .productCard {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px;
+  flex-direction: column;
   background: #FFFFFF;
-  border: 1.5px solid #F1F5F9;
-  border-radius: 18px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .productCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 102, 255, 0.08);
-  border-color: #E2E8F0;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: #CBD5E1;
 }
 
-/* Left Column */
-.productLeftInfo {
+/* Top Image Column */
+.productTopImage {
+  width: 100%;
+  height: 200px;
+  background: #F8FAFC;
+  position: relative;
+}
+
+.productImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.productImgFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #EFF6FF;
+  color: #8B5CF6;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3rem;
+}
+
+/* Bottom Column */
+.productBottomInfo {
   display: flex;
   flex-direction: column;
+  padding: 16px;
+  gap: 8px;
   flex: 1;
-  min-width: 0;
-  gap: 6px;
 }
 
 .productName {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: #0F172A;
   line-height: 1.3;
@@ -532,98 +526,58 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-bottom: auto; /* Pushes footer down */
 }
 
-.productPriceRow {
-  margin-top: 8px;
+.productFooter {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  margin-top: 12px;
 }
 
 .productPrice {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: #0F172A;
+  color: #8B5CF6;
 }
 
-/* Right Image Column with Blue Overlay Plus Button */
-.productRightImage {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  flex-shrink: 0;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #F8FAFC;
-}
-
-.productImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 16px;
-}
-
-.productImgFallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #EFF6FF;
-  color: #0066FF;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.8rem;
-  border-radius: 16px;
-}
-
-/* Blue Plus Button Overlay on Image Bottom-Right */
-.imagePlusBtn {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  width: 36px;
-  height: 36px;
+.productAddBtn {
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
-  background: #0066FF;
-  border: 2px solid #FFFFFF;
+  background: #8B5CF6;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 102, 255, 0.4);
   transition: transform 0.2s ease, background-color 0.2s ease;
-  z-index: 5;
+  position: relative;
 }
 
-.imagePlusBtn:hover {
-  background: #0052CC;
-  transform: scale(1.08);
-}
-
-.imagePlusBtn:active {
-  transform: scale(0.95);
+.productAddBtn:hover {
+  background: #7C3AED;
+  transform: scale(1.05);
 }
 
 .cartCountBadge {
   position: absolute;
   top: -6px;
-  left: -6px;
+  right: -6px;
   background: #0F172A;
   color: #FFFFFF;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   font-family: var(--font-display);
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #FFFFFF;
+  border: 2px solid #FFFFFF;
 }
 
 /* Floating WhatsApp Button */
@@ -770,6 +724,61 @@
   margin-top: 4px;
 }
 
+/* Sticky Cart Banner */
+.stickyCartBanner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 400px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  z-index: 100;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stickyCartBanner:hover {
+  transform: translate(-50%, -2px);
+  box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.3);
+}
+
+.stickyCartInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stickyCartCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.stickyCartTotal {
+  font-weight: 700;
+  font-size: 1.05rem;
+  font-family: var(--font-display);
+}
+
+.stickyCartAction {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
 @media (max-width: 640px) {
   .lightWrapper {
     max-width: 100%;
@@ -782,15 +791,24 @@
   }
   
   .storeHeaderContainer {
-    padding: 20px 16px 12px;
+    padding: 0 16px 12px;
+  }
+  
+  .bannerContainer {
+    height: 180px;
+  }
+  
+  .storeCardMain {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .storeAvatarBox {
+    margin-top: -48px; /* Lift avatar into banner on mobile */
   }
 
-  .infoModalCard {
-    margin: 0 16px 16px;
-    padding: 16px;
-  }
-
-  .controlsRow, .categoriesContent {
+  .controlsRow, .categoriesContent, .searchBarContainer {
     padding-left: 16px;
     padding-right: 16px;
   }

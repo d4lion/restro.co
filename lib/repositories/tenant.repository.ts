@@ -89,6 +89,13 @@ export const tenantRepository = {
     city: string;
     brandColor: string;
     accentColor: string;
+    allowDineIn: boolean;
+    allowTakeout: boolean;
+    allowDelivery: boolean;
+    instagramUrl: string;
+    facebookUrl: string;
+    tiktokUrl: string;
+    websiteUrl: string;
   }>) {
     return prisma.tenant.update({
       where: { id: tenantId },

@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import type { PlanKey, PlanRecord } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
-import { ProfileCard } from "@/components/dashboard/settings/ProfileCard";
+import { LocalDataCard } from "@/components/dashboard/settings/LocalDataCard";
+import { CommercialProfileCard } from "@/components/dashboard/settings/CommercialProfileCard";
+import { OrderSettingsCard } from "@/components/dashboard/settings/OrderSettingsCard";
 import { LogoutCard } from "@/components/dashboard/settings/LogoutCard";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
@@ -32,15 +34,34 @@ export default async function SettingsPage() {
         </div>
       </div>
 
-      {/* ── Restaurant Profile — client component with edit mode ── */}
-      <ProfileCard
+      {/* ── Commercial Profile — client component with edit mode ── */}
+      <CommercialProfileCard
+        tenantId={tenant.id}
+        name={tenant.name}
+        logoUrl={tenant.logoUrl ?? null}
+        coverUrl={tenant.coverUrl ?? null}
+        brandColor={tenant.brandColor ?? "#0066FF"}
+        instagramUrl={tenant.instagramUrl ?? null}
+        facebookUrl={tenant.facebookUrl ?? null}
+        tiktokUrl={tenant.tiktokUrl ?? null}
+        websiteUrl={tenant.websiteUrl ?? null}
+      />
+
+      {/* ── Local Data — client component with edit mode ── */}
+      <LocalDataCard
         tenantId={tenant.id}
         name={tenant.name}
         description={tenant.description ?? null}
         phone={tenant.phone ?? null}
         address={tenant.address ?? null}
         city={tenant.city ?? null}
-        logoUrl={tenant.logoUrl ?? null}
+      />
+
+      {/* ── Order Settings ───────────────────────────────────── */}
+      <OrderSettingsCard
+        allowDineIn={tenant.allowDineIn}
+        allowTakeout={tenant.allowTakeout}
+        allowDelivery={tenant.allowDelivery}
       />
 
       {/* ── Slug Policy Info Card ───────────────────────────── */}

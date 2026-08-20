@@ -1,46 +1,37 @@
 "use client";
 
-import React, { useState, useTransition, useRef } from "react";
-import { Pencil, X, Check, Loader2, Upload, Image as ImageIcon } from "lucide-react";
+import React, { useState, useTransition } from "react";
+import { Pencil, X, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateRestaurantAction } from "@/app/actions/settings";
-import { uploadImageAction } from "@/app/actions/storage";
+import { updateLocalDataAction } from "@/app/actions/settings";
 import { Input, Textarea } from "@/components/ui/Input";
 import styles from "./ProfileCard.module.css";
 
-interface ProfileCardProps {
+interface LocalDataCardProps {
   tenantId: string;
   name: string;
   description: string | null;
   phone: string | null;
   address: string | null;
   city: string | null;
-  logoUrl?: string | null;
 }
 
-export function ProfileCard({
+export function LocalDataCard({
   name,
   description,
   phone,
   address,
   city,
-  logoUrl: initialLogoUrl,
-}: ProfileCardProps) {
+}: LocalDataCardProps) {
   const [editing, setEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  // Logo upload state
-  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
-  const logoInputRef = useRef<HTMLInputElement>(null);
-
-  // Form draft state
   const [draft, setDraft] = useState({
     name,
     description: description ?? "",
     phone: phone ?? "",
     address: address ?? "",
     city: city ?? "Bogotá",
-    logoUrl: initialLogoUrl ?? "",
   });
 
   function handleCancel() {
@@ -50,46 +41,19 @@ export function ProfileCard({
       phone: phone ?? "",
       address: address ?? "",
       city: city ?? "Bogotá",
-      logoUrl: initialLogoUrl ?? "",
     });
     setEditing(false);
-  }
-
-  async function handleLogoFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("El archivo no debe superar los 5MB");
-      return;
-    }
-
-    setIsUploadingLogo(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await uploadImageAction(formData, "logos");
-    setIsUploadingLogo(false);
-
-    if (res.publicUrl) {
-      setDraft((d) => ({ ...d, logoUrl: res.publicUrl }));
-      toast.success("Logo subido. Haz clic en Guardar Cambios para aplicar.");
-    } else {
-      toast.error(res.error || "No se pudo subir la imagen");
-    }
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const fd = new FormData(form);
-    fd.append("logoUrl", draft.logoUrl);
 
     startTransition(async () => {
-      const result = await updateRestaurantAction(fd);
+      const result = await updateLocalDataAction(fd);
       if (result.success) {
         toast.success(result.message, {
-          description: "Los cambios ya están visibles en tu carta digital.",
           duration: 4000,
         });
         setEditing(false);
@@ -101,28 +65,14 @@ export function ProfileCard({
 
   return (
     <div className={`${styles.card} ${editing ? styles.cardEditing : ""}`}>
-      {/* ── Header ─────────────────────────────────────────── */}
       <div className={styles.cardHeader}>
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          {/* Logo Avatar Display */}
-          <div className={styles.logoAvatarBox}>
-            {draft.logoUrl ? (
-              <img src={draft.logoUrl} alt="Logo" className={styles.logoAvatarImg} />
-            ) : (
-              <div className={styles.logoAvatarPlaceholder}>
-                {name.charAt(0).toUpperCase()}
-              </div>
-            )}
-          </div>
-
-          <div>
-            <h2 className={styles.cardTitle}>Perfil Comercial y Logo del Local</h2>
-            {!editing && (
-              <p className={styles.cardHint}>
-                Haz clic en <strong>Editar</strong> para actualizar datos o cargar el logo oficial.
-              </p>
-            )}
-          </div>
+        <div>
+          <h2 className={styles.cardTitle}>Datos del Local</h2>
+          {!editing && (
+            <p className={styles.cardHint}>
+              Haz clic en <strong>Editar</strong> para actualizar la información básica de tu restaurante.
+            </p>
+          )}
         </div>
 
         {!editing ? (
@@ -149,61 +99,8 @@ export function ProfileCard({
         )}
       </div>
 
-      {/* ── Content ─────────────────────────────────────────── */}
       {editing ? (
-        /* ── Edit Mode ─────────────────────────────────────── */
         <form onSubmit={handleSubmit} className={styles.form}>
-          <input type="hidden" name="logoUrl" value={draft.logoUrl} />
-
-          {/* Logo Upload Dropzone */}
-          <div className={styles.logoUploadRow}>
-            <label className={styles.fieldLabel}>Logo del Restaurante</label>
-            <input
-              ref={logoInputRef}
-              type="file"
-              accept="image/*"
-              className={styles.hiddenFileInput}
-              onChange={handleLogoFileChange}
-            />
-
-            <div className={styles.logoEditPreview}>
-              {draft.logoUrl ? (
-                <div className={styles.logoPreviewContent}>
-                  <img src={draft.logoUrl} alt="Logo cargado" className={styles.logoPreviewThumb} />
-                  <div className={styles.logoPreviewText}>
-                    <strong>Logo Actualizado</strong>
-                    <span>Listo para guardar</span>
-                  </div>
-                  <button
-                    type="button"
-                    className={styles.changeLogoBtn}
-                    onClick={() => logoInputRef.current?.click()}
-                    disabled={isUploadingLogo}
-                  >
-                    Cambiar Imagen
-                  </button>
-                </div>
-              ) : (
-                <div
-                  className={styles.logoUploadDropzone}
-                  onClick={() => logoInputRef.current?.click()}
-                >
-                  {isUploadingLogo ? (
-                    <span className={styles.uploadSpinText}>
-                      <Loader2 size={18} className={styles.spin} /> Subiendo logo...
-                    </span>
-                  ) : (
-                    <>
-                      <Upload size={18} color="#2563EB" />
-                      <span>Haz clic para seleccionar tu logo</span>
-                      <small>PNG, JPG, WEBP (Máx 5MB)</small>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
           <Input
             name="name"
             label="Nombre Comercial"
@@ -241,13 +138,12 @@ export function ProfileCard({
             onChange={(e) => setDraft((d) => ({ ...d, address: e.target.value }))}
           />
 
-          {/* ── Save bar ─────────────────────────────────────── */}
           <div className={styles.saveBar}>
             <button
               type="button"
               className={styles.cancelBtnInline}
               onClick={handleCancel}
-              disabled={isPending || isUploadingLogo}
+              disabled={isPending}
             >
               <X size={14} strokeWidth={2.5} />
               Cancelar
@@ -255,7 +151,7 @@ export function ProfileCard({
             <button
               type="submit"
               className={styles.saveBtn}
-              disabled={isPending || isUploadingLogo}
+              disabled={isPending}
             >
               {isPending ? (
                 <>
@@ -272,16 +168,10 @@ export function ProfileCard({
           </div>
         </form>
       ) : (
-        /* ── Read-only Mode ─────────────────────────────────── */
         <div className={styles.readView}>
           <ReadField
             label="Nombre Comercial"
             value={name}
-            onDoubleClick={() => setEditing(true)}
-          />
-          <ReadField
-            label="Logo Oficial"
-            value={initialLogoUrl ? "Logo activo ✓ (haz doble clic para cambiar)" : "Sin logo (haz doble clic para cargar)"}
             onDoubleClick={() => setEditing(true)}
           />
           <ReadField
@@ -312,7 +202,6 @@ export function ProfileCard({
   );
 }
 
-/* ── Read-only field with double-click hint ──────────────────── */
 function ReadField({
   label,
   value,

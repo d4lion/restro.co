@@ -37,6 +37,10 @@ export type TenantMinAggregateOutputType = {
   address: string | null
   city: string | null
   country: string | null
+  instagramUrl: string | null
+  facebookUrl: string | null
+  tiktokUrl: string | null
+  websiteUrl: string | null
   brandColor: string | null
   accentColor: string | null
   slugLockedAt: Date | null
@@ -45,6 +49,9 @@ export type TenantMinAggregateOutputType = {
   timezone: string | null
   currency: string | null
   language: string | null
+  allowDineIn: boolean | null
+  allowTakeout: boolean | null
+  allowDelivery: boolean | null
   whatsappWaitlistEmail: string | null
 }
 
@@ -61,6 +68,10 @@ export type TenantMaxAggregateOutputType = {
   address: string | null
   city: string | null
   country: string | null
+  instagramUrl: string | null
+  facebookUrl: string | null
+  tiktokUrl: string | null
+  websiteUrl: string | null
   brandColor: string | null
   accentColor: string | null
   slugLockedAt: Date | null
@@ -69,6 +80,9 @@ export type TenantMaxAggregateOutputType = {
   timezone: string | null
   currency: string | null
   language: string | null
+  allowDineIn: boolean | null
+  allowTakeout: boolean | null
+  allowDelivery: boolean | null
   whatsappWaitlistEmail: string | null
 }
 
@@ -85,6 +99,10 @@ export type TenantCountAggregateOutputType = {
   address: number
   city: number
   country: number
+  instagramUrl: number
+  facebookUrl: number
+  tiktokUrl: number
+  websiteUrl: number
   brandColor: number
   accentColor: number
   slugLockedAt: number
@@ -93,6 +111,9 @@ export type TenantCountAggregateOutputType = {
   timezone: number
   currency: number
   language: number
+  allowDineIn: number
+  allowTakeout: number
+  allowDelivery: number
   whatsappWaitlistEmail: number
   _all: number
 }
@@ -111,6 +132,10 @@ export type TenantMinAggregateInputType = {
   address?: true
   city?: true
   country?: true
+  instagramUrl?: true
+  facebookUrl?: true
+  tiktokUrl?: true
+  websiteUrl?: true
   brandColor?: true
   accentColor?: true
   slugLockedAt?: true
@@ -119,6 +144,9 @@ export type TenantMinAggregateInputType = {
   timezone?: true
   currency?: true
   language?: true
+  allowDineIn?: true
+  allowTakeout?: true
+  allowDelivery?: true
   whatsappWaitlistEmail?: true
 }
 
@@ -135,6 +163,10 @@ export type TenantMaxAggregateInputType = {
   address?: true
   city?: true
   country?: true
+  instagramUrl?: true
+  facebookUrl?: true
+  tiktokUrl?: true
+  websiteUrl?: true
   brandColor?: true
   accentColor?: true
   slugLockedAt?: true
@@ -143,6 +175,9 @@ export type TenantMaxAggregateInputType = {
   timezone?: true
   currency?: true
   language?: true
+  allowDineIn?: true
+  allowTakeout?: true
+  allowDelivery?: true
   whatsappWaitlistEmail?: true
 }
 
@@ -159,6 +194,10 @@ export type TenantCountAggregateInputType = {
   address?: true
   city?: true
   country?: true
+  instagramUrl?: true
+  facebookUrl?: true
+  tiktokUrl?: true
+  websiteUrl?: true
   brandColor?: true
   accentColor?: true
   slugLockedAt?: true
@@ -167,6 +206,9 @@ export type TenantCountAggregateInputType = {
   timezone?: true
   currency?: true
   language?: true
+  allowDineIn?: true
+  allowTakeout?: true
+  allowDelivery?: true
   whatsappWaitlistEmail?: true
   _all?: true
 }
@@ -256,6 +298,10 @@ export type TenantGroupByOutputType = {
   address: string | null
   city: string | null
   country: string
+  instagramUrl: string | null
+  facebookUrl: string | null
+  tiktokUrl: string | null
+  websiteUrl: string | null
   brandColor: string
   accentColor: string
   slugLockedAt: Date | null
@@ -264,6 +310,9 @@ export type TenantGroupByOutputType = {
   timezone: string
   currency: string
   language: string
+  allowDineIn: boolean
+  allowTakeout: boolean
+  allowDelivery: boolean
   whatsappWaitlistEmail: string | null
   _count: TenantCountAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
@@ -301,6 +350,10 @@ export type TenantWhereInput = {
   address?: Prisma.StringNullableFilter<"Tenant"> | string | null
   city?: Prisma.StringNullableFilter<"Tenant"> | string | null
   country?: Prisma.StringFilter<"Tenant"> | string
+  instagramUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  facebookUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  tiktokUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  websiteUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   brandColor?: Prisma.StringFilter<"Tenant"> | string
   accentColor?: Prisma.StringFilter<"Tenant"> | string
   slugLockedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
@@ -309,6 +362,9 @@ export type TenantWhereInput = {
   timezone?: Prisma.StringFilter<"Tenant"> | string
   currency?: Prisma.StringFilter<"Tenant"> | string
   language?: Prisma.StringFilter<"Tenant"> | string
+  allowDineIn?: Prisma.BoolFilter<"Tenant"> | boolean
+  allowTakeout?: Prisma.BoolFilter<"Tenant"> | boolean
+  allowDelivery?: Prisma.BoolFilter<"Tenant"> | boolean
   whatsappWaitlistEmail?: Prisma.StringNullableFilter<"Tenant"> | string | null
   menus?: Prisma.MenuListRelationFilter
   tables?: Prisma.TableListRelationFilter
@@ -333,6 +389,10 @@ export type TenantOrderByWithRelationInput = {
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   country?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  facebookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tiktokUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -341,6 +401,9 @@ export type TenantOrderByWithRelationInput = {
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   language?: Prisma.SortOrder
+  allowDineIn?: Prisma.SortOrder
+  allowTakeout?: Prisma.SortOrder
+  allowDelivery?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   menus?: Prisma.MenuOrderByRelationAggregateInput
   tables?: Prisma.TableOrderByRelationAggregateInput
@@ -368,6 +431,10 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringNullableFilter<"Tenant"> | string | null
   city?: Prisma.StringNullableFilter<"Tenant"> | string | null
   country?: Prisma.StringFilter<"Tenant"> | string
+  instagramUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  facebookUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  tiktokUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  websiteUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   brandColor?: Prisma.StringFilter<"Tenant"> | string
   accentColor?: Prisma.StringFilter<"Tenant"> | string
   slugLockedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
@@ -376,6 +443,9 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   timezone?: Prisma.StringFilter<"Tenant"> | string
   currency?: Prisma.StringFilter<"Tenant"> | string
   language?: Prisma.StringFilter<"Tenant"> | string
+  allowDineIn?: Prisma.BoolFilter<"Tenant"> | boolean
+  allowTakeout?: Prisma.BoolFilter<"Tenant"> | boolean
+  allowDelivery?: Prisma.BoolFilter<"Tenant"> | boolean
   whatsappWaitlistEmail?: Prisma.StringNullableFilter<"Tenant"> | string | null
   menus?: Prisma.MenuListRelationFilter
   tables?: Prisma.TableListRelationFilter
@@ -400,6 +470,10 @@ export type TenantOrderByWithAggregationInput = {
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   country?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  facebookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tiktokUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -408,6 +482,9 @@ export type TenantOrderByWithAggregationInput = {
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   language?: Prisma.SortOrder
+  allowDineIn?: Prisma.SortOrder
+  allowTakeout?: Prisma.SortOrder
+  allowDelivery?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
@@ -430,6 +507,10 @@ export type TenantScalarWhereWithAggregatesInput = {
   address?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   city?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   country?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  instagramUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  facebookUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  tiktokUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  websiteUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   brandColor?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   accentColor?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   slugLockedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
@@ -438,6 +519,9 @@ export type TenantScalarWhereWithAggregatesInput = {
   timezone?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   currency?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   language?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  allowDineIn?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  allowTakeout?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  allowDelivery?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   whatsappWaitlistEmail?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
 }
 
@@ -454,6 +538,10 @@ export type TenantCreateInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -462,6 +550,9 @@ export type TenantCreateInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -486,6 +577,10 @@ export type TenantUncheckedCreateInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -494,6 +589,9 @@ export type TenantUncheckedCreateInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -518,6 +616,10 @@ export type TenantUpdateInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -526,6 +628,9 @@ export type TenantUpdateInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -550,6 +655,10 @@ export type TenantUncheckedUpdateInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -558,6 +667,9 @@ export type TenantUncheckedUpdateInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -582,6 +694,10 @@ export type TenantCreateManyInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -590,6 +706,9 @@ export type TenantCreateManyInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
 }
 
@@ -606,6 +725,10 @@ export type TenantUpdateManyMutationInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614,6 +737,9 @@ export type TenantUpdateManyMutationInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -630,6 +756,10 @@ export type TenantUncheckedUpdateManyInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638,6 +768,9 @@ export type TenantUncheckedUpdateManyInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -654,6 +787,10 @@ export type TenantCountOrderByAggregateInput = {
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrder
+  facebookUrl?: Prisma.SortOrder
+  tiktokUrl?: Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrder
@@ -662,6 +799,9 @@ export type TenantCountOrderByAggregateInput = {
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   language?: Prisma.SortOrder
+  allowDineIn?: Prisma.SortOrder
+  allowTakeout?: Prisma.SortOrder
+  allowDelivery?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrder
 }
 
@@ -678,6 +818,10 @@ export type TenantMaxOrderByAggregateInput = {
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrder
+  facebookUrl?: Prisma.SortOrder
+  tiktokUrl?: Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrder
@@ -686,6 +830,9 @@ export type TenantMaxOrderByAggregateInput = {
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   language?: Prisma.SortOrder
+  allowDineIn?: Prisma.SortOrder
+  allowTakeout?: Prisma.SortOrder
+  allowDelivery?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrder
 }
 
@@ -702,6 +849,10 @@ export type TenantMinOrderByAggregateInput = {
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrder
+  facebookUrl?: Prisma.SortOrder
+  tiktokUrl?: Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrder
@@ -710,6 +861,9 @@ export type TenantMinOrderByAggregateInput = {
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   language?: Prisma.SortOrder
+  allowDineIn?: Prisma.SortOrder
+  allowTakeout?: Prisma.SortOrder
+  allowDelivery?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrder
 }
 
@@ -847,6 +1001,10 @@ export type TenantCreateWithoutUsersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -855,6 +1013,9 @@ export type TenantCreateWithoutUsersInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -878,6 +1039,10 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -886,6 +1051,9 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -925,6 +1093,10 @@ export type TenantUpdateWithoutUsersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -933,6 +1105,9 @@ export type TenantUpdateWithoutUsersInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -956,6 +1131,10 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -964,6 +1143,9 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -987,6 +1169,10 @@ export type TenantCreateWithoutMenusInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -995,6 +1181,9 @@ export type TenantCreateWithoutMenusInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
@@ -1018,6 +1207,10 @@ export type TenantUncheckedCreateWithoutMenusInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1026,6 +1219,9 @@ export type TenantUncheckedCreateWithoutMenusInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
@@ -1065,6 +1261,10 @@ export type TenantUpdateWithoutMenusInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1073,6 +1273,9 @@ export type TenantUpdateWithoutMenusInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
@@ -1096,6 +1299,10 @@ export type TenantUncheckedUpdateWithoutMenusInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1104,6 +1311,9 @@ export type TenantUncheckedUpdateWithoutMenusInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
@@ -1127,6 +1337,10 @@ export type TenantCreateWithoutTablesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1135,6 +1349,9 @@ export type TenantCreateWithoutTablesInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
@@ -1158,6 +1375,10 @@ export type TenantUncheckedCreateWithoutTablesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1166,6 +1387,9 @@ export type TenantUncheckedCreateWithoutTablesInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
@@ -1205,6 +1429,10 @@ export type TenantUpdateWithoutTablesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1213,6 +1441,9 @@ export type TenantUpdateWithoutTablesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
@@ -1236,6 +1467,10 @@ export type TenantUncheckedUpdateWithoutTablesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1244,6 +1479,9 @@ export type TenantUncheckedUpdateWithoutTablesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
@@ -1267,6 +1505,10 @@ export type TenantCreateWithoutOrdersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1275,6 +1517,9 @@ export type TenantCreateWithoutOrdersInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1298,6 +1543,10 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1306,6 +1555,9 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1345,6 +1597,10 @@ export type TenantUpdateWithoutOrdersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1353,6 +1609,9 @@ export type TenantUpdateWithoutOrdersInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1376,6 +1635,10 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1384,6 +1647,9 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -1407,6 +1673,10 @@ export type TenantCreateWithoutStaffInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1415,6 +1685,9 @@ export type TenantCreateWithoutStaffInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1438,6 +1711,10 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1446,6 +1723,9 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1485,6 +1765,10 @@ export type TenantUpdateWithoutStaffInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1493,6 +1777,9 @@ export type TenantUpdateWithoutStaffInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1516,6 +1803,10 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1524,6 +1815,9 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -1547,6 +1841,10 @@ export type TenantCreateWithoutAnalyticsEventsInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1555,6 +1853,9 @@ export type TenantCreateWithoutAnalyticsEventsInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1578,6 +1879,10 @@ export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1586,6 +1891,9 @@ export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1625,6 +1933,10 @@ export type TenantUpdateWithoutAnalyticsEventsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1633,6 +1945,9 @@ export type TenantUpdateWithoutAnalyticsEventsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1656,6 +1971,10 @@ export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1664,6 +1983,9 @@ export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -1687,6 +2009,10 @@ export type TenantCreateWithoutSubscriptionInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1695,6 +2021,9 @@ export type TenantCreateWithoutSubscriptionInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1718,6 +2047,10 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1726,6 +2059,9 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1765,6 +2101,10 @@ export type TenantUpdateWithoutSubscriptionInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1773,6 +2113,9 @@ export type TenantUpdateWithoutSubscriptionInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1796,6 +2139,10 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1804,6 +2151,9 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -1827,6 +2177,10 @@ export type TenantCreateWithoutFeatureOverridesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1835,6 +2189,9 @@ export type TenantCreateWithoutFeatureOverridesInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1858,6 +2215,10 @@ export type TenantUncheckedCreateWithoutFeatureOverridesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
   brandColor?: string
   accentColor?: string
   slugLockedAt?: Date | string | null
@@ -1866,6 +2227,9 @@ export type TenantUncheckedCreateWithoutFeatureOverridesInput = {
   timezone?: string
   currency?: string
   language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1905,6 +2269,10 @@ export type TenantUpdateWithoutFeatureOverridesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1913,6 +2281,9 @@ export type TenantUpdateWithoutFeatureOverridesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1936,6 +2307,10 @@ export type TenantUncheckedUpdateWithoutFeatureOverridesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.StringFieldUpdateOperationsInput | string
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1944,6 +2319,9 @@ export type TenantUncheckedUpdateWithoutFeatureOverridesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -2052,6 +2430,10 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   address?: boolean
   city?: boolean
   country?: boolean
+  instagramUrl?: boolean
+  facebookUrl?: boolean
+  tiktokUrl?: boolean
+  websiteUrl?: boolean
   brandColor?: boolean
   accentColor?: boolean
   slugLockedAt?: boolean
@@ -2060,6 +2442,9 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   timezone?: boolean
   currency?: boolean
   language?: boolean
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: boolean
   menus?: boolean | Prisma.Tenant$menusArgs<ExtArgs>
   tables?: boolean | Prisma.Tenant$tablesArgs<ExtArgs>
@@ -2085,6 +2470,10 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   address?: boolean
   city?: boolean
   country?: boolean
+  instagramUrl?: boolean
+  facebookUrl?: boolean
+  tiktokUrl?: boolean
+  websiteUrl?: boolean
   brandColor?: boolean
   accentColor?: boolean
   slugLockedAt?: boolean
@@ -2093,6 +2482,9 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   timezone?: boolean
   currency?: boolean
   language?: boolean
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: boolean
 }, ExtArgs["result"]["tenant"]>
 
@@ -2109,6 +2501,10 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   address?: boolean
   city?: boolean
   country?: boolean
+  instagramUrl?: boolean
+  facebookUrl?: boolean
+  tiktokUrl?: boolean
+  websiteUrl?: boolean
   brandColor?: boolean
   accentColor?: boolean
   slugLockedAt?: boolean
@@ -2117,6 +2513,9 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   timezone?: boolean
   currency?: boolean
   language?: boolean
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: boolean
 }, ExtArgs["result"]["tenant"]>
 
@@ -2133,6 +2532,10 @@ export type TenantSelectScalar = {
   address?: boolean
   city?: boolean
   country?: boolean
+  instagramUrl?: boolean
+  facebookUrl?: boolean
+  tiktokUrl?: boolean
+  websiteUrl?: boolean
   brandColor?: boolean
   accentColor?: boolean
   slugLockedAt?: boolean
@@ -2141,10 +2544,13 @@ export type TenantSelectScalar = {
   timezone?: boolean
   currency?: boolean
   language?: boolean
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
   whatsappWaitlistEmail?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "isActive" | "timezone" | "currency" | "language" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "instagramUrl" | "facebookUrl" | "tiktokUrl" | "websiteUrl" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "isActive" | "timezone" | "currency" | "language" | "allowDineIn" | "allowTakeout" | "allowDelivery" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   menus?: boolean | Prisma.Tenant$menusArgs<ExtArgs>
   tables?: boolean | Prisma.Tenant$tablesArgs<ExtArgs>
@@ -2184,6 +2590,10 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     address: string | null
     city: string | null
     country: string
+    instagramUrl: string | null
+    facebookUrl: string | null
+    tiktokUrl: string | null
+    websiteUrl: string | null
     brandColor: string
     accentColor: string
     slugLockedAt: Date | null
@@ -2192,6 +2602,9 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     timezone: string
     currency: string
     language: string
+    allowDineIn: boolean
+    allowTakeout: boolean
+    allowDelivery: boolean
     whatsappWaitlistEmail: string | null
   }, ExtArgs["result"]["tenant"]>
   composites: {}
@@ -2636,6 +3049,10 @@ export interface TenantFieldRefs {
   readonly address: Prisma.FieldRef<"Tenant", 'String'>
   readonly city: Prisma.FieldRef<"Tenant", 'String'>
   readonly country: Prisma.FieldRef<"Tenant", 'String'>
+  readonly instagramUrl: Prisma.FieldRef<"Tenant", 'String'>
+  readonly facebookUrl: Prisma.FieldRef<"Tenant", 'String'>
+  readonly tiktokUrl: Prisma.FieldRef<"Tenant", 'String'>
+  readonly websiteUrl: Prisma.FieldRef<"Tenant", 'String'>
   readonly brandColor: Prisma.FieldRef<"Tenant", 'String'>
   readonly accentColor: Prisma.FieldRef<"Tenant", 'String'>
   readonly slugLockedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
@@ -2644,6 +3061,9 @@ export interface TenantFieldRefs {
   readonly timezone: Prisma.FieldRef<"Tenant", 'String'>
   readonly currency: Prisma.FieldRef<"Tenant", 'String'>
   readonly language: Prisma.FieldRef<"Tenant", 'String'>
+  readonly allowDineIn: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly allowTakeout: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly allowDelivery: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly whatsappWaitlistEmail: Prisma.FieldRef<"Tenant", 'String'>
 }
     
