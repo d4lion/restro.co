@@ -2,6 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import styles from "@/app/(public)/restaurant/[slug]/page.module.css";
+import { ItemConfiguratorModal, ConfiguratorItem } from "./ItemConfiguratorModal";
+import { CartDrawer } from "./CartDrawer";
+
+export interface CartItem {
+  id: string;
+  menuItem: ConfiguratorItem;
+  quantity: number;
+  selections: Record<string, string[]>;
+  subtotal: number;
+}
 
 interface MenuItem {
   id: string;
@@ -11,6 +21,7 @@ interface MenuItem {
   imageUrl: string | null;
   isAvailable: boolean;
   isHighlighted: boolean;
+  modifierGroups?: any[];
 }
 
 interface Category {
@@ -21,13 +32,19 @@ interface Category {
 }
 
 interface PublicMenuClientProps {
+  tenantId: string;
   tenantName: string;
   tenantDescription: string | null;
   logoUrl: string | null;
+  coverUrl: string | null;
   phone: string | null;
   address: string | null;
   city: string | null;
   brandColor: string;
+  instagramUrl: string | null;
+  facebookUrl: string | null;
+  tiktokUrl: string | null;
+  websiteUrl: string | null;
   plan?: string;
   categories: Category[];
 }
@@ -81,6 +98,42 @@ const IconStore = () => (
   </svg>
 );
 
+const IconInstagram = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+
+const IconFacebook = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3.81l.19-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+
+const IconTiktok = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+  </svg>
+);
+
+const IconGlobe = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="2" y1="12" x2="22" y2="12"></line>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+  </svg>
+);
+
+const IconShoppingBag = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+    <path d="M3 6h18"></path>
+    <path d="M16 10a4 4 0 0 1-8 0"></path>
+  </svg>
+);
+
 /**
  * Universal WhatsApp deep link generator with Colombian country code auto-format.
  */
@@ -106,37 +159,43 @@ function formatCOP(amount: number): string {
 }
 
 export function PublicMenuClient({
+  tenantId,
   tenantName,
   tenantDescription,
   logoUrl,
+  coverUrl,
   phone,
   address,
   city,
+  brandColor,
+  instagramUrl,
+  facebookUrl,
+  tiktokUrl,
+  websiteUrl,
   plan = "STARTER",
   categories,
 }: PublicMenuClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string>(
-    categories[0]?.id || ""
-  );
-  const [cart, setCart] = useState<{ [id: string]: number }>({});
-  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>("ALL");
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<ConfiguratorItem | null>(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const isFreeTier = plan === "STARTER";
   const waUrl = getWhatsAppUrl(phone, tenantName);
 
-  // Prevent scroll when modal is open
-  useEffect(() => {
-    if (showInfoModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [showInfoModal]);
+  // Helper to determine text color over buttons
+  const getContrastColor = (hexColor: string) => {
+    const hex = hexColor.replace("#", "");
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 128 ? "#000000" : "#FFFFFF";
+  };
+  const buttonTextColor = getContrastColor(brandColor);
+
 
   const filteredCategories = categories
     .map((cat) => ({
@@ -150,10 +209,39 @@ export function PublicMenuClient({
     }))
     .filter((cat) => cat.items.length > 0);
 
-  const totalCartCount = Object.values(cart).reduce((a, b) => a + b, 0);
+  const displayedCategories = activeCategory === "ALL" 
+    ? filteredCategories 
+    : filteredCategories.filter(cat => cat.id === activeCategory);
 
-  const addToCart = (itemId: string) => {
-    setCart((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
+  const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  const handleAddToCart = (
+    item: ConfiguratorItem,
+    quantity: number,
+    selections: Record<string, string[]>
+  ) => {
+    // Calculate subtotal
+    let unitPrice = item.price;
+    if (item.modifierGroups) {
+      item.modifierGroups.forEach((g) => {
+        const selectedIds = selections[g.id] || [];
+        g.options.forEach((opt) => {
+          if (selectedIds.includes(opt.id)) {
+            unitPrice += opt.priceExtra;
+          }
+        });
+      });
+    }
+
+    const newItem: CartItem = {
+      id: crypto.randomUUID(),
+      menuItem: item,
+      quantity,
+      selections,
+      subtotal: unitPrice * quantity,
+    };
+
+    setCart((prev) => [...prev, newItem]);
   };
 
   const handleCategoryTabClick = (
@@ -169,187 +257,146 @@ export function PublicMenuClient({
       block: "nearest",
     });
 
+    if (catId === "ALL") return; // Let it render all and user can scroll down naturally
+
     // Scroll category section into view below sticky navbar
-    const sectionEl = document.getElementById(`cat-sec-${catId}`);
-    if (sectionEl) {
-      const headerOffset = 80;
-      const elementPosition = sectionEl.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerOffset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
+    setTimeout(() => {
+      const sectionEl = document.getElementById(`cat-sec-${catId}`);
+      if (sectionEl) {
+        const headerOffset = 80;
+        const elementPosition = sectionEl.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
   };
 
   return (
     <div className={styles.lightWrapper}>
       {/* Top Announcement Bar */}
-      <div className={styles.topAnnounceBar}>
+      <div className={styles.topAnnounceBar} style={{ backgroundColor: brandColor, color: buttonTextColor }}>
         <span className={styles.announceText}>¡Gana puntos y recompensas!</span>
         <div className={styles.topActionsGroup}>
           <button
             type="button"
             className={styles.topCartBtn}
-            onClick={() => {}}
+            onClick={() => setIsCartOpen(true)}
+            style={{ backgroundColor: buttonTextColor, color: brandColor }}
           >
             Ver mi pedido {totalCartCount > 0 ? `(${totalCartCount})` : ""} ›
           </button>
         </div>
       </div>
 
-      {/* Store Header Section */}
+      {/* Banner Section */}
+      <div className={styles.bannerContainer}>
+        {coverUrl ? (
+          <img src={coverUrl} alt="Banner" className={styles.bannerImage} />
+        ) : (
+          <div className={styles.bannerPlaceholder} />
+        )}
+      </div>
+
+      {/* Store Header Section - Overlapping Banner */}
       <div className={styles.storeHeaderContainer}>
         <div className={styles.storeCard}>
-          <div className={styles.storeAvatarBox}>
-            {logoUrl ? (
-              <img src={logoUrl} alt={tenantName} className={styles.storeAvatarImg} />
-            ) : (
-              <div className={styles.storeAvatarFallback}>
-                <IconStore />
+          <div className={styles.storeCardMain}>
+            <div className={styles.storeAvatarBox}>
+              {logoUrl ? (
+                <img src={logoUrl} alt={tenantName} className={styles.storeAvatarImg} />
+              ) : (
+                <div className={styles.storeAvatarFallback}>
+                  <IconStore />
+                </div>
+              )}
+            </div>
+
+            <div className={styles.storeMetaInfo}>
+              <div className={styles.storeTitleRow}>
+                <h1 className={styles.storeName}>{tenantName}</h1>
+                <span className={styles.openBadge}>
+                  <span className={styles.openDot} /> Abierto
+                </span>
               </div>
-            )}
+              
+              <div className={styles.storeTagsRow}>
+                {tenantDescription && <span className={styles.storeDesc}>{tenantDescription}</span>}
+                <span className={styles.storeAddress}><IconMapPin /> {address || "Sin dirección"}, {city || "Colombia"}</span>
+              </div>
+            </div>
           </div>
-
-          <div className={styles.storeMetaInfo}>
-            <div className={styles.storeTitleRow}>
-              <h1 className={styles.storeName}>{tenantName}</h1>
-              <span className={styles.openBadge}>
-                <span className={styles.openDot} /> Abierto
-              </span>
-            </div>
-
-            <div className={styles.storeButtonsRow}>
-              <button
-                type="button"
-                className={styles.infoBtn}
-                onClick={() => setShowInfoModal(true)}
-              >
-                <IconInfo /> Información y Horarios
-              </button>
-
-              <a
-                href={waUrl}
-                className={styles.whatsappCtaBtn}
-              >
-                <IconWhatsApp /> Escribir a WhatsApp
-              </a>
-            </div>
+          
+          <div className={styles.storeAccordions}>
+            <details className={styles.infoAccordion}>
+              <summary>
+                <div className={styles.summaryContent}>
+                  <IconMapPin /> <span>Contacto y redes</span>
+                </div>
+                <span className={styles.chevron}>▾</span>
+              </summary>
+              <div className={styles.accordionContent}>
+                <p><strong>Ubicación:</strong> {address || "Sin dirección"}, {city || "Colombia"}</p>
+                <p><strong>WhatsApp:</strong> {phone || "+57 310 555 0000"}</p>
+                <a href={waUrl} className={styles.whatsappLink}><IconWhatsApp /> Escribir al WhatsApp</a>
+                
+                {(instagramUrl || facebookUrl || tiktokUrl || websiteUrl) && (
+                  <div style={{ display: "flex", gap: "12px", marginTop: "16px", paddingTop: "12px", borderTop: "1px solid #e2e8f0" }}>
+                    {instagramUrl && (
+                      <a href={instagramUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                        <IconInstagram />
+                      </a>
+                    )}
+                    {facebookUrl && (
+                      <a href={facebookUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                        <IconFacebook />
+                      </a>
+                    )}
+                    {tiktokUrl && (
+                      <a href={tiktokUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                        <IconTiktok />
+                      </a>
+                    )}
+                    {websiteUrl && (
+                      <a href={websiteUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                        <IconGlobe />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </details>
+            
+            <details className={styles.infoAccordion}>
+              <summary>
+                <div className={styles.summaryContent}>
+                  <IconClock /> <span>Horarios de atención</span>
+                </div>
+                <span className={styles.chevron}>▾</span>
+              </summary>
+              <div className={styles.accordionContent}>
+                <p>Lunes a Domingo: 12:00 PM – 10:00 PM</p>
+                <p className={styles.subText}>Jornada continua</p>
+              </div>
+            </details>
           </div>
         </div>
       </div>
 
-      {/* Store Information & Horarios — Floating Modal Sheet Backdrop */}
-      {showInfoModal && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setShowInfoModal(false)}
-        >
-          <div
-            className={styles.infoModalCard}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={styles.infoModalHeader}>
-              <h3>Información del Establecimiento</h3>
-              <button
-                type="button"
-                className={styles.closeInfoBtn}
-                onClick={() => setShowInfoModal(false)}
-                aria-label="Cerrar ventana"
-              >
-                ✕
-              </button>
-            </div>
 
-            {tenantDescription && (
-              <p className={styles.infoModalDesc}>{tenantDescription}</p>
-            )}
-
-            <div className={styles.infoDetailsGrid}>
-              <div className={styles.infoDetailItem}>
-                <span className={styles.infoIcon}>
-                  <IconClock />
-                </span>
-                <div>
-                  <strong>Horarios de Atención</strong>
-                  <p>Lunes a Domingo: 12:00 PM – 10:00 PM</p>
-                  <p className={styles.subText}>Jornada continua</p>
-                </div>
-              </div>
-
-              <div className={styles.infoDetailItem}>
-                <span className={styles.infoIcon}>
-                  <IconMapPin />
-                </span>
-                <div>
-                  <strong>Ubicación Física</strong>
-                  <p>{address || "Calle 93 # 15-40, Chapinero"}</p>
-                  <p className={styles.subText}>{city || "Bogotá, Colombia"}</p>
-                </div>
-              </div>
-
-              <div className={styles.infoDetailItem}>
-                <span className={styles.infoIcon}>
-                  <IconWhatsApp />
-                </span>
-                <div>
-                  <strong>Atención por WhatsApp</strong>
-                  <p>{phone || "+57 310 555 0000"}</p>
-                  <a
-                    href={waUrl}
-                    className={styles.infoWaLink}
-                  >
-                    Abrir chat en WhatsApp →
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Nav Controls & Category Tabs */}
-      <div className={styles.controlsRow}>
-        <button
-          type="button"
-          className={`${styles.iconControlBtn} ${
-            showSearch ? styles["iconControlBtn--active"] : ""
-          }`}
-          onClick={() => setShowSearch(!showSearch)}
-          aria-label="Buscar plato"
-        >
-          <IconSearch />
-        </button>
-
-        <nav className={styles.categoryNavTabs}>
-          {filteredCategories.map((cat) => {
-            const isActive = activeCategory === cat.id;
-            return (
-              <button
-                type="button"
-                key={cat.id}
-                className={`${styles.categoryTabBtn} ${
-                  isActive ? styles["categoryTabBtn--active"] : ""
-                }`}
-                onClick={(e) => handleCategoryTabClick(cat.id, e)}
-              >
-                {cat.name}
-              </button>
-            );
-          })}
-        </nav>
-      </div>
 
       {/* Search Input Bar */}
-      {showSearch && (
-        <div className={styles.searchBarContainer}>
+      <div className={styles.searchBarContainer}>
+        <div className={styles.searchBox}>
+          <IconSearch />
           <input
             type="text"
             className={styles.searchInput}
-            placeholder="Buscar plato, ingrediente o bebida..."
+            placeholder="Buscar en el menú..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            autoFocus
           />
           {searchQuery && (
             <button
@@ -361,47 +408,66 @@ export function PublicMenuClient({
             </button>
           )}
         </div>
-      )}
+      </div>
+
+      {/* Nav Controls & Category Tabs */}
+      <div className={styles.controlsRow}>
+        <nav className={styles.categoryNavTabs}>
+          <button
+            type="button"
+            className={`${styles.categoryTabBtn} ${
+              activeCategory === "ALL" ? styles["categoryTabBtn--active"] : ""
+            }`}
+            style={activeCategory === "ALL" ? { backgroundColor: brandColor, color: buttonTextColor, borderColor: brandColor } : {}}
+            onClick={(e) => handleCategoryTabClick("ALL", e)}
+          >
+            Todos ({categories.reduce((acc, cat) => acc + cat.items.length, 0)})
+          </button>
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat.id;
+            return (
+              <button
+                type="button"
+                key={cat.id}
+                className={`${styles.categoryTabBtn} ${
+                  isActive ? styles["categoryTabBtn--active"] : ""
+                }`}
+                style={isActive ? { backgroundColor: brandColor, color: buttonTextColor, borderColor: brandColor } : {}}
+                onClick={(e) => handleCategoryTabClick(cat.id, e)}
+              >
+                {cat.name.toUpperCase()} <span className={styles.catItemCount}>({cat.items.length})</span>
+              </button>
+            );
+          })}
+        </nav>
+      </div>
+
+
 
       {/* Menu Categories & High Visibility Product Grid */}
       <div className={styles.categoriesContent}>
-        {filteredCategories.length === 0 ? (
+        {displayedCategories.length === 0 ? (
           <div className={styles.noResults}>
             <p className={styles.noResultsTitle}>No se encontraron platos</p>
-            <p className={styles.noResultsSub}>Intenta con otro término de búsqueda.</p>
+            <p className={styles.noResultsSub}>Intenta con otro término de búsqueda o selecciona otra categoría.</p>
           </div>
         ) : (
-          filteredCategories.map((category) => (
+          displayedCategories.map((category) => (
             <section
               key={category.id}
               id={`cat-sec-${category.id}`}
               className={styles.categorySection}
             >
-              <h2 className={styles.categorySectionTitle}>{category.name}</h2>
+              <h2 className={styles.categorySectionTitle}>{category.name.toUpperCase()}</h2>
               {category.description && (
                 <p className={styles.categorySectionDesc}>{category.description}</p>
               )}
 
-              {/* Responsive PC & Mobile Grid */}
+              {/* Responsive PC & Mobile Grid - New Layout */}
               <div className={styles.productsGrid}>
                 {category.items.map((item) => (
-                  <div key={item.id} className={styles.productCard}>
-                    {/* Left: Info & Price */}
-                    <div className={styles.productLeftInfo}>
-                      <h3 className={styles.productName}>{item.name}</h3>
-                      {item.description && (
-                        <p className={styles.productDesc}>{item.description}</p>
-                      )}
-
-                      <div className={styles.productPriceRow}>
-                        <span className={styles.productPrice}>
-                          {formatCOP(item.price)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Right: Image with Blue Overlay Plus Button */}
-                    <div className={styles.productRightImage}>
+                  <div key={item.id} className={styles.productCard} onClick={() => setSelectedProduct(item as ConfiguratorItem)}>
+                    <div className={styles.productTopImage}>
                       {item.imageUrl ? (
                         <img
                           src={item.imageUrl}
@@ -413,22 +479,37 @@ export function PublicMenuClient({
                           <span>{item.name.charAt(0)}</span>
                         </div>
                       )}
+                    </div>
 
-                      {/* Blue Plus Button Overlay on Image */}
-                      <button
-                        type="button"
-                        className={styles.imagePlusBtn}
-                        onClick={() => addToCart(item.id)}
-                        aria-label={`Agregar ${item.name}`}
-                        title="Agregar al pedido"
-                      >
-                        <IconPlus />
-                        {cart[item.id] ? (
-                          <span className={styles.cartCountBadge}>
-                            {cart[item.id]}
-                          </span>
-                        ) : null}
-                      </button>
+                    <div className={styles.productBottomInfo}>
+                      <h3 className={styles.productName}>{item.name}</h3>
+                      {item.description && (
+                        <p className={styles.productDesc}>{item.description}</p>
+                      )}
+                      
+                      <div className={styles.productFooter}>
+                        <span className={styles.productPrice} style={{ color: "#000000" }}>
+                          {formatCOP(item.price)}
+                        </span>
+                        
+                        <button
+                          type="button"
+                          className={styles.productAddBtn}
+                          aria-label={`Agregar ${item.name}`}
+                          title="Agregar al pedido"
+                          style={{ backgroundColor: brandColor, color: buttonTextColor }}
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={buttonTextColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                          {cart.filter((c) => c.menuItem.id === item.id).reduce((a, b) => a + b.quantity, 0) > 0 ? (
+                            <span className={styles.cartCountBadge} style={{ backgroundColor: buttonTextColor, color: brandColor }}>
+                              {cart.filter((c) => c.menuItem.id === item.id).reduce((a, b) => a + b.quantity, 0)}
+                            </span>
+                          ) : null}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -438,15 +519,6 @@ export function PublicMenuClient({
         )}
       </div>
 
-      {/* Floating WhatsApp CTA */}
-      <a
-        href={waUrl}
-        className={styles.floatingWaBtn}
-        title="¿Dudas o pedidos especiales? Escríbenos a WhatsApp"
-      >
-        <IconWhatsApp />
-        <span className={styles.floatingWaText}>WhatsApp</span>
-      </a>
 
       {/* Subtle & Discrete Free Tier Footer */}
       {isFreeTier ? (
@@ -501,6 +573,48 @@ export function PublicMenuClient({
             adamind.cloud
           </a>
         </footer>
+      )}
+
+      {/* Item Configurator Modal */}
+      <ItemConfiguratorModal
+        item={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onAddToCart={handleAddToCart}
+        brandColor={brandColor}
+        buttonTextColor={buttonTextColor}
+      />
+
+      {/* Cart Drawer */}
+      <CartDrawer
+        tenantId={tenantId}
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cart={cart}
+        setCart={setCart}
+        brandColor={brandColor}
+        buttonTextColor={buttonTextColor}
+      />
+
+      {/* Floating Sticky Cart Banner */}
+      {totalCartCount > 0 && (
+        <div 
+          className={styles.stickyCartBanner} 
+          style={{ backgroundColor: brandColor, color: buttonTextColor }}
+          onClick={() => setIsCartOpen(true)}
+        >
+          <div className={styles.stickyCartInfo}>
+            <span className={styles.stickyCartCount} style={{ backgroundColor: buttonTextColor, color: brandColor }}>
+              {totalCartCount}
+            </span>
+            <span className={styles.stickyCartTotal}>
+              {formatCOP(cart.reduce((acc, item) => acc + item.subtotal, 0))}
+            </span>
+          </div>
+          <div className={styles.stickyCartAction}>
+            <span>Ver carrito</span>
+            <IconShoppingBag />
+          </div>
+        </div>
       )}
     </div>
   );

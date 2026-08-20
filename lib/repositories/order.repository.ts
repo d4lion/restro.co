@@ -35,6 +35,7 @@ function mapOrderToDto(order: any): OrderWithItems {
       price: item.price,
       quantity: item.quantity,
       notes: item.notes,
+      modifiersJson: item.modifiersJson,
       subtotal: item.subtotal,
     })),
     total: order.total,
@@ -65,14 +66,17 @@ export const orderRepository: OrderRepository = {
     const orderItems = data.items.map((item) => {
       const menuItem = menuItemMap.get(item.menuItemId);
       if (!menuItem) throw new Error(`MenuItem ${item.menuItemId} not found`);
-      const itemSubtotal = menuItem.price * item.quantity;
+      const extraPrice = item.modifiers?.reduce((sum, mod) => sum + mod.priceExtra, 0) || 0;
+      const unitPrice = menuItem.price + extraPrice;
+      const itemSubtotal = unitPrice * item.quantity;
       subtotal += itemSubtotal;
       return {
         menuItemId: item.menuItemId,
         name: menuItem.name,
-        price: menuItem.price,
+        price: menuItem.price, // Storing base price here
         quantity: item.quantity,
         notes: item.notes ?? null,
+        modifiersJson: item.modifiers ? JSON.stringify(item.modifiers) : null,
         subtotal: itemSubtotal,
       };
     });

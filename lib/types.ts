@@ -220,6 +220,7 @@ export interface CreateOrderDto {
     menuItemId: string;
     quantity: number;
     notes?: string;
+    modifiers?: { optionId: string; name: string; priceExtra: number; groupId: string; groupName: string }[];
   }[];
 }
 
@@ -245,6 +246,7 @@ export interface OrderWithItems {
     price: number;
     quantity: number;
     notes: string | null;
+    modifiersJson: string | null;
     subtotal: number;
   }[];
   total: number;
