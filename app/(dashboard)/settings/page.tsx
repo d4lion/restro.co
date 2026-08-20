@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
-import type { PlanKey } from "@/lib/types";
+import type { PlanKey, PlanRecord } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import { ProfileCard } from "@/components/dashboard/settings/ProfileCard";
 import { LogoutCard } from "@/components/dashboard/settings/LogoutCard";
@@ -17,7 +17,8 @@ export default async function SettingsPage() {
   const tenant = await tenantRepository.findById(session.tenantId);
   if (!tenant) redirect("/login");
 
-  const currentPlan = tenant.plan as PlanKey;
+  const planRecord = tenant.subscription?.plan as PlanRecord | undefined;
+  const currentPlan = (planRecord?.key ?? "STARTER") as PlanKey;
 
   return (
     <div className={styles.page}>

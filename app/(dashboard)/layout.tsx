@@ -24,7 +24,7 @@ export default async function DashboardLayout({
         <Sidebar
           restaurantName={tenant.name}
           restaurantSlug={tenant.slug}
-          plan={tenant.plan}
+          plan={tenant.subscription?.plan?.key ?? "STARTER"}
         />
       </div>
 

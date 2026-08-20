@@ -2,8 +2,8 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import { orderRepository } from "@/lib/repositories/order.repository";
-import { PLAN_LIMITS } from "@/lib/types";
-import type { PlanKey } from "@/lib/types";
+import { PLAN_LIMITS, getPlanLimits } from "@/lib/types";
+import type { PlanKey, PlanRecord } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
@@ -19,8 +19,10 @@ export default async function AnalyticsPage() {
   if (!tenant) redirect("/login");
 
   const orders = await orderRepository.findByTenant(session.tenantId, 100);
-  const plan = tenant.plan as PlanKey;
-  const hasAI = PLAN_LIMITS[plan].hasAI;
+  const planRecord = tenant.subscription?.plan as PlanRecord | undefined;
+  const plan = (planRecord?.key ?? "STARTER") as PlanKey;
+  const limits = planRecord ? getPlanLimits(planRecord) : PLAN_LIMITS[plan];
+  const hasAI = limits.hasAI;
 
   const formatCOP = (n: number) =>
     new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);

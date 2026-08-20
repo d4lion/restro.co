@@ -51,7 +51,7 @@ export default async function PublicMenuPage({ params }: Props) {
       address={tenant.address ?? null}
       city={tenant.city ?? null}
       brandColor={tenant.brandColor ?? "#0066FF"}
-      plan={tenant.plan}
+      plan={tenant.subscription?.plan?.key ?? "STARTER"}
       categories={categories}
     />
   );

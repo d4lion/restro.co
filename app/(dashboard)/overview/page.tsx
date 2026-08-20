@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { orderRepository } from "@/lib/repositories/order.repository";
 import { tableRepository } from "@/lib/repositories/table.repository";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
-import { PLAN_LIMITS, ORDER_STATUSES } from "@/lib/types";
-import type { PlanKey } from "@/lib/types";
+import { PLAN_LIMITS, ORDER_STATUSES, getPlanLimits } from "@/lib/types";
+import type { PlanKey, PlanRecord } from "@/lib/types";
 import {
   ClipboardCheck,
   LayoutGrid,
@@ -73,8 +73,9 @@ export default async function OverviewPage() {
 
   if (!tenant) redirect("/login");
 
-  const plan = tenant.plan as PlanKey;
-  const limits = PLAN_LIMITS[plan];
+  const planRecord = tenant.subscription?.plan as PlanRecord | undefined;
+  const plan = (planRecord?.key ?? "STARTER") as PlanKey;
+  const limits = planRecord ? getPlanLimits(planRecord) : PLAN_LIMITS[plan];
 
   const activeTables   = tables.filter((t) => t.activeOrderCount > 0);
   const totalToday     = activeOrders.reduce((sum, o) => sum + o.total, 0);
@@ -167,7 +168,7 @@ export default async function OverviewPage() {
         />
         <StatCard
           label="Suscripción SaaS"
-          value={PLAN_LIMITS[plan].label}
+          value={limits.label}
           sub={`${limits.maxTables === Infinity ? "Ilimitadas" : limits.maxTables} mesas · ${limits.hasAI ? "Analítica IA activa" : "Sin IA"}`}
           colorKey={plan === "RESTRO_IA" ? "teal" : plan === "BUSINESS" ? "blue" : "slate"}
           icon={<Star size={20} strokeWidth={1.8} />}
