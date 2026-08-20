@@ -509,14 +509,6 @@ export type TableUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.TableScalarWhereInput | Prisma.TableScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type TableCreateNestedOneWithoutOrdersInput = {
   create?: Prisma.XOR<Prisma.TableCreateWithoutOrdersInput, Prisma.TableUncheckedCreateWithoutOrdersInput>
   connectOrCreate?: Prisma.TableCreateOrConnectWithoutOrdersInput

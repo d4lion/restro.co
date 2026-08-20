@@ -397,6 +397,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  Plan: 'Plan',
   Tenant: 'Tenant',
   User: 'User',
   Menu: 'Menu',
@@ -408,7 +409,9 @@ export const ModelName = {
   OrderStatusHistory: 'OrderStatusHistory',
   StaffMember: 'StaffMember',
   AnalyticsEvent: 'AnalyticsEvent',
-  Subscription: 'Subscription'
+  Subscription: 'Subscription',
+  BillingEvent: 'BillingEvent',
+  TenantFeatureOverride: 'TenantFeatureOverride'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,10 +427,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "menu" | "category" | "menuItem" | "table" | "order" | "orderItem" | "orderStatusHistory" | "staffMember" | "analyticsEvent" | "subscription"
+    modelProps: "plan" | "tenant" | "user" | "menu" | "category" | "menuItem" | "table" | "order" | "orderItem" | "orderStatusHistory" | "staffMember" | "analyticsEvent" | "subscription" | "billingEvent" | "tenantFeatureOverride"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    Plan: {
+      payload: Prisma.$PlanPayload<ExtArgs>
+      fields: Prisma.PlanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        findFirst: {
+          args: Prisma.PlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        findMany: {
+          args: Prisma.PlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
+        }
+        create: {
+          args: Prisma.PlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        createMany: {
+          args: Prisma.PlanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
+        }
+        delete: {
+          args: Prisma.PlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        update: {
+          args: Prisma.PlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        aggregate: {
+          args: Prisma.PlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlan>
+        }
+        groupBy: {
+          args: Prisma.PlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanCountAggregateOutputType> | number
+        }
+      }
+    }
     Tenant: {
       payload: Prisma.$TenantPayload<ExtArgs>
       fields: Prisma.TenantFieldRefs
@@ -1316,6 +1393,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BillingEvent: {
+      payload: Prisma.$BillingEventPayload<ExtArgs>
+      fields: Prisma.BillingEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BillingEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BillingEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>
+        }
+        findFirst: {
+          args: Prisma.BillingEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BillingEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>
+        }
+        findMany: {
+          args: Prisma.BillingEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>[]
+        }
+        create: {
+          args: Prisma.BillingEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>
+        }
+        createMany: {
+          args: Prisma.BillingEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BillingEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>[]
+        }
+        delete: {
+          args: Prisma.BillingEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>
+        }
+        update: {
+          args: Prisma.BillingEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.BillingEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BillingEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BillingEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.BillingEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillingEventPayload>
+        }
+        aggregate: {
+          args: Prisma.BillingEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBillingEvent>
+        }
+        groupBy: {
+          args: Prisma.BillingEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BillingEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BillingEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BillingEventCountAggregateOutputType> | number
+        }
+      }
+    }
+    TenantFeatureOverride: {
+      payload: Prisma.$TenantFeatureOverridePayload<ExtArgs>
+      fields: Prisma.TenantFeatureOverrideFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TenantFeatureOverrideFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TenantFeatureOverrideFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>
+        }
+        findFirst: {
+          args: Prisma.TenantFeatureOverrideFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TenantFeatureOverrideFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>
+        }
+        findMany: {
+          args: Prisma.TenantFeatureOverrideFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>[]
+        }
+        create: {
+          args: Prisma.TenantFeatureOverrideCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>
+        }
+        createMany: {
+          args: Prisma.TenantFeatureOverrideCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TenantFeatureOverrideCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>[]
+        }
+        delete: {
+          args: Prisma.TenantFeatureOverrideDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>
+        }
+        update: {
+          args: Prisma.TenantFeatureOverrideUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>
+        }
+        deleteMany: {
+          args: Prisma.TenantFeatureOverrideDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TenantFeatureOverrideUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TenantFeatureOverrideUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>[]
+        }
+        upsert: {
+          args: Prisma.TenantFeatureOverrideUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantFeatureOverridePayload>
+        }
+        aggregate: {
+          args: Prisma.TenantFeatureOverrideAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTenantFeatureOverride>
+        }
+        groupBy: {
+          args: Prisma.TenantFeatureOverrideGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TenantFeatureOverrideGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TenantFeatureOverrideCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TenantFeatureOverrideCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1355,6 +1580,36 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  label: 'label',
+  tag: 'tag',
+  description: 'description',
+  priceMonthly: 'priceMonthly',
+  priceYearly: 'priceYearly',
+  maxTables: 'maxTables',
+  maxMenuItems: 'maxMenuItems',
+  maxStaff: 'maxStaff',
+  maxMenus: 'maxMenus',
+  analyticsDays: 'analyticsDays',
+  hasAI: 'hasAI',
+  hasInventory: 'hasInventory',
+  hasMultiLanguage: 'hasMultiLanguage',
+  hasExportPDF: 'hasExportPDF',
+  hasExportExcel: 'hasExportExcel',
+  hasCustomBranding: 'hasCustomBranding',
+  hasWhatsApp: 'hasWhatsApp',
+  hasPrioritySupport: 'hasPrioritySupport',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
 export const TenantScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -1372,7 +1627,6 @@ export const TenantScalarFieldEnum = {
   accentColor: 'accentColor',
   slugLockedAt: 'slugLockedAt',
   slugChangedAt: 'slugChangedAt',
-  plan: 'plan',
   isActive: 'isActive',
   timezone: 'timezone',
   currency: 'currency',
@@ -1541,15 +1795,48 @@ export const SubscriptionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   tenantId: 'tenantId',
-  plan: 'plan',
+  planId: 'planId',
   status: 'status',
-  wompiSubscriptionId: 'wompiSubscriptionId',
   currentPeriodStart: 'currentPeriodStart',
   currentPeriodEnd: 'currentPeriodEnd',
-  trialEndsAt: 'trialEndsAt'
+  trialEndsAt: 'trialEndsAt',
+  cancelledAt: 'cancelledAt',
+  cancelReason: 'cancelReason',
+  wompiSubscriptionId: 'wompiSubscriptionId',
+  wompiCustomerId: 'wompiCustomerId'
 } as const
 
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const BillingEventScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  subscriptionId: 'subscriptionId',
+  type: 'type',
+  amount: 'amount',
+  currency: 'currency',
+  fromPlanId: 'fromPlanId',
+  toPlanId: 'toPlanId',
+  wompiTransactionId: 'wompiTransactionId',
+  metadata: 'metadata',
+  note: 'note'
+} as const
+
+export type BillingEventScalarFieldEnum = (typeof BillingEventScalarFieldEnum)[keyof typeof BillingEventScalarFieldEnum]
+
+
+export const TenantFeatureOverrideScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  tenantId: 'tenantId',
+  feature: 'feature',
+  value: 'value',
+  reason: 'reason',
+  expiresAt: 'expiresAt'
+} as const
+
+export type TenantFeatureOverrideScalarFieldEnum = (typeof TenantFeatureOverrideScalarFieldEnum)[keyof typeof TenantFeatureOverrideScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1611,13 +1898,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1628,6 +1908,13 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1795,6 +2082,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
  */
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
+  plan?: Prisma.PlanOmit
   tenant?: Prisma.TenantOmit
   user?: Prisma.UserOmit
   menu?: Prisma.MenuOmit
@@ -1807,6 +2095,8 @@ export type GlobalOmitConfig = {
   staffMember?: Prisma.StaffMemberOmit
   analyticsEvent?: Prisma.AnalyticsEventOmit
   subscription?: Prisma.SubscriptionOmit
+  billingEvent?: Prisma.BillingEventOmit
+  tenantFeatureOverride?: Prisma.TenantFeatureOverrideOmit
 }
 
 /* Types for Logging */

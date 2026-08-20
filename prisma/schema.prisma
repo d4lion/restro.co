@@ -1,7 +1,5 @@
 // Restro — Prisma Schema
-// Dev: SQLite (DATABASE_URL="file:./dev.db")
 // Prod: PostgreSQL (DATABASE_URL="postgresql://...")
-// To switch: change provider + DATABASE_URL only
 
 generator client {
   provider = "prisma-client"
@@ -14,12 +12,53 @@ datasource db {
 
 // ─── ENUMS ────────────────────────────────────────────────────────────────────
 
-// SQLite doesn't support native enums — using String with validation at app level
-
-// Plan: "STARTER" | "RESTRO_IA" | "BUSINESS"
 // OrderType: "DINE_IN" | "TAKEOUT" | "DELIVERY"
 // OrderStatus: "PENDING" | "PREPARING" | "READY" | "DELIVERED" | "CANCELLED"
 // StaffRole: "OWNER" | "MANAGER" | "WAITER" | "KITCHEN"
+// SubscriptionStatus: "ACTIVE" | "CANCELLED" | "PAST_DUE" | "TRIAL" | "EXPIRED"
+// BillingEventType: "PAYMENT_SUCCESS" | "PAYMENT_FAILED" | "PLAN_CHANGED" | "TRIAL_STARTED" | "TRIAL_ENDED" | "SUBSCRIPTION_CANCELLED" | "SUBSCRIPTION_RENEWED"
+
+// ─── PLAN ─────────────────────────────────────────────────────────────────────
+
+model Plan {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Identity
+  key           String  @unique // "STARTER" | "RESTRO_IA" | "BUSINESS"
+  label         String          // "Starter", "Restro IA", "Business"
+  tag           String          // "GRATIS", "PRO", "ENTERPRISE"
+  description   String?
+
+  // Pricing (COP — integer, e.g. 49900 = $49.900)
+  priceMonthly  Int     @default(0)
+  priceYearly   Int?            // Descuento anual si aplica
+
+  // Resource limits (-1 = unlimited)
+  maxTables     Int     @default(5)
+  maxMenuItems  Int     @default(20)
+  maxStaff      Int     @default(1)
+  maxMenus      Int     @default(1)
+  analyticsDays Int     @default(7)
+
+  // Feature flags
+  hasAI              Boolean @default(false)
+  hasInventory       Boolean @default(false)
+  hasMultiLanguage   Boolean @default(false)
+  hasExportPDF       Boolean @default(false)
+  hasExportExcel     Boolean @default(false)
+  hasCustomBranding  Boolean @default(false)
+  hasWhatsApp        Boolean @default(false)
+  hasPrioritySupport Boolean @default(false)
+
+  // Ordering & visibility
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true) // Visible on pricing page
+
+  // Relations
+  subscriptions Subscription[]
+}
 
 // ─── TENANT ──────────────────────────────────────────────────────────────────
 
@@ -47,9 +86,6 @@ model Tenant {
   slugLockedAt DateTime?
   slugChangedAt DateTime?
 
-  // Plan
-  plan        String   @default("STARTER") // STARTER | RESTRO_IA | BUSINESS
-
   // Settings
   isActive    Boolean  @default(true)
   timezone    String   @default("America/Bogota")
@@ -60,13 +96,14 @@ model Tenant {
   whatsappWaitlistEmail String?
 
   // Relations
-  menus         Menu[]
-  tables        Table[]
-  orders        Order[]
-  staff         StaffMember[]
-  analyticsEvents AnalyticsEvent[]
-  subscription  Subscription?
-  users         User[]
+  menus             Menu[]
+  tables            Table[]
+  orders            Order[]
+  staff             StaffMember[]
+  analyticsEvents   AnalyticsEvent[]
+  subscription      Subscription?
+  users             User[]
+  featureOverrides  TenantFeatureOverride[]
 }
 
 // ─── USER ─────────────────────────────────────────────────────────────────────
@@ -282,14 +319,74 @@ model Subscription {
   tenantId    String   @unique
   tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  plan        String   @default("STARTER") // STARTER | RESTRO_IA | BUSINESS
-  status      String   @default("ACTIVE")  // ACTIVE | CANCELLED | PAST_DUE | TRIAL
+  // Plan reference (FK — source of truth)
+  planId      String
+  plan        Plan     @relation(fields: [planId], references: [id])
 
-  // Billing (Wompi — post-MVP)
-  wompiSubscriptionId String?
+  // Status
+  status      String   @default("ACTIVE") // ACTIVE | CANCELLED | PAST_DUE | TRIAL | EXPIRED
+
+  // Billing cycle
   currentPeriodStart  DateTime?
   currentPeriodEnd    DateTime?
 
   // Trial
   trialEndsAt DateTime?
+
+  // Cancellation
+  cancelledAt   DateTime?
+  cancelReason  String?
+
+  // Payment provider (Wompi)
+  wompiSubscriptionId String?
+  wompiCustomerId     String?
+
+  // Relations
+  billingEvents BillingEvent[]
 }
+
+// ─── BILLING EVENT ────────────────────────────────────────────────────────────
+
+model BillingEvent {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  // Event type
+  type        String // PAYMENT_SUCCESS | PAYMENT_FAILED | PLAN_CHANGED | TRIAL_STARTED | TRIAL_ENDED | SUBSCRIPTION_CANCELLED | SUBSCRIPTION_RENEWED
+
+  // Financial
+  amount      Int?     // En COP (integer, e.g. 49900)
+  currency    String   @default("COP")
+
+  // Plan change tracking
+  fromPlanId  String?
+  toPlanId    String?
+
+  // Provider reference
+  wompiTransactionId String?
+
+  // Metadata
+  metadata    String?  // JSON for extra data
+  note        String?
+}
+
+// ─── TENANT FEATURE OVERRIDE ──────────────────────────────────────────────────
+
+model TenantFeatureOverride {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  feature     String   // "hasAI" | "maxTables" | etc.
+  value       String   // "true" | "50" — parsed by app code based on feature type
+  reason      String?  // "Promoción lanzamiento" | "Override manual"
+  expiresAt   DateTime?
+
+  @@unique([tenantId, feature])
+}
+

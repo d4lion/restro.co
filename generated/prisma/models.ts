@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Plan'
 export type * from './models/Tenant'
 export type * from './models/User'
 export type * from './models/Menu'
@@ -20,4 +21,6 @@ export type * from './models/OrderStatusHistory'
 export type * from './models/StaffMember'
 export type * from './models/AnalyticsEvent'
 export type * from './models/Subscription'
+export type * from './models/BillingEvent'
+export type * from './models/TenantFeatureOverride'
 export type * from './commonInputTypes'

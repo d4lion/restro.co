@@ -18,6 +18,11 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
+ * Model Plan
+ * 
+ */
+export type Plan = Prisma.PlanModel
+/**
  * Model Tenant
  * 
  */
@@ -77,3 +82,13 @@ export type AnalyticsEvent = Prisma.AnalyticsEventModel
  * 
  */
 export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model BillingEvent
+ * 
+ */
+export type BillingEvent = Prisma.BillingEventModel
+/**
+ * Model TenantFeatureOverride
+ * 
+ */
+export type TenantFeatureOverride = Prisma.TenantFeatureOverrideModel

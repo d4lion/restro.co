@@ -41,7 +41,6 @@ export type TenantMinAggregateOutputType = {
   accentColor: string | null
   slugLockedAt: Date | null
   slugChangedAt: Date | null
-  plan: string | null
   isActive: boolean | null
   timezone: string | null
   currency: string | null
@@ -66,7 +65,6 @@ export type TenantMaxAggregateOutputType = {
   accentColor: string | null
   slugLockedAt: Date | null
   slugChangedAt: Date | null
-  plan: string | null
   isActive: boolean | null
   timezone: string | null
   currency: string | null
@@ -91,7 +89,6 @@ export type TenantCountAggregateOutputType = {
   accentColor: number
   slugLockedAt: number
   slugChangedAt: number
-  plan: number
   isActive: number
   timezone: number
   currency: number
@@ -118,7 +115,6 @@ export type TenantMinAggregateInputType = {
   accentColor?: true
   slugLockedAt?: true
   slugChangedAt?: true
-  plan?: true
   isActive?: true
   timezone?: true
   currency?: true
@@ -143,7 +139,6 @@ export type TenantMaxAggregateInputType = {
   accentColor?: true
   slugLockedAt?: true
   slugChangedAt?: true
-  plan?: true
   isActive?: true
   timezone?: true
   currency?: true
@@ -168,7 +163,6 @@ export type TenantCountAggregateInputType = {
   accentColor?: true
   slugLockedAt?: true
   slugChangedAt?: true
-  plan?: true
   isActive?: true
   timezone?: true
   currency?: true
@@ -266,7 +260,6 @@ export type TenantGroupByOutputType = {
   accentColor: string
   slugLockedAt: Date | null
   slugChangedAt: Date | null
-  plan: string
   isActive: boolean
   timezone: string
   currency: string
@@ -312,7 +305,6 @@ export type TenantWhereInput = {
   accentColor?: Prisma.StringFilter<"Tenant"> | string
   slugLockedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   slugChangedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  plan?: Prisma.StringFilter<"Tenant"> | string
   isActive?: Prisma.BoolFilter<"Tenant"> | boolean
   timezone?: Prisma.StringFilter<"Tenant"> | string
   currency?: Prisma.StringFilter<"Tenant"> | string
@@ -325,6 +317,7 @@ export type TenantWhereInput = {
   analyticsEvents?: Prisma.AnalyticsEventListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   users?: Prisma.UserListRelationFilter
+  featureOverrides?: Prisma.TenantFeatureOverrideListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -344,7 +337,6 @@ export type TenantOrderByWithRelationInput = {
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   slugChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  plan?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -357,6 +349,7 @@ export type TenantOrderByWithRelationInput = {
   analyticsEvents?: Prisma.AnalyticsEventOrderByRelationAggregateInput
   subscription?: Prisma.SubscriptionOrderByWithRelationInput
   users?: Prisma.UserOrderByRelationAggregateInput
+  featureOverrides?: Prisma.TenantFeatureOverrideOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -379,7 +372,6 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   accentColor?: Prisma.StringFilter<"Tenant"> | string
   slugLockedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   slugChangedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  plan?: Prisma.StringFilter<"Tenant"> | string
   isActive?: Prisma.BoolFilter<"Tenant"> | boolean
   timezone?: Prisma.StringFilter<"Tenant"> | string
   currency?: Prisma.StringFilter<"Tenant"> | string
@@ -392,6 +384,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   analyticsEvents?: Prisma.AnalyticsEventListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   users?: Prisma.UserListRelationFilter
+  featureOverrides?: Prisma.TenantFeatureOverrideListRelationFilter
 }, "id" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -411,7 +404,6 @@ export type TenantOrderByWithAggregationInput = {
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   slugChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  plan?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -442,7 +434,6 @@ export type TenantScalarWhereWithAggregatesInput = {
   accentColor?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   slugLockedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
   slugChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
-  plan?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   timezone?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   currency?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
@@ -467,7 +458,6 @@ export type TenantCreateInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -480,6 +470,7 @@ export type TenantCreateInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -499,7 +490,6 @@ export type TenantUncheckedCreateInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -512,6 +502,7 @@ export type TenantUncheckedCreateInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -531,7 +522,6 @@ export type TenantUpdateInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -544,6 +534,7 @@ export type TenantUpdateInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -563,7 +554,6 @@ export type TenantUncheckedUpdateInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -576,6 +566,7 @@ export type TenantUncheckedUpdateInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -595,7 +586,6 @@ export type TenantCreateManyInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -620,7 +610,6 @@ export type TenantUpdateManyMutationInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -645,7 +634,6 @@ export type TenantUncheckedUpdateManyInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -670,7 +658,6 @@ export type TenantCountOrderByAggregateInput = {
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrder
   slugChangedAt?: Prisma.SortOrder
-  plan?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -695,7 +682,6 @@ export type TenantMaxOrderByAggregateInput = {
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrder
   slugChangedAt?: Prisma.SortOrder
-  plan?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -720,7 +706,6 @@ export type TenantMinOrderByAggregateInput = {
   accentColor?: Prisma.SortOrder
   slugLockedAt?: Prisma.SortOrder
   slugChangedAt?: Prisma.SortOrder
-  plan?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -733,24 +718,8 @@ export type TenantScalarRelationFilter = {
   isNot?: Prisma.TenantWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type TenantCreateNestedOneWithoutUsersInput = {
@@ -851,6 +820,20 @@ export type TenantUpdateOneRequiredWithoutSubscriptionNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSubscriptionInput, Prisma.TenantUpdateWithoutSubscriptionInput>, Prisma.TenantUncheckedUpdateWithoutSubscriptionInput>
 }
 
+export type TenantCreateNestedOneWithoutFeatureOverridesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFeatureOverridesInput, Prisma.TenantUncheckedCreateWithoutFeatureOverridesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFeatureOverridesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutFeatureOverridesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFeatureOverridesInput, Prisma.TenantUncheckedCreateWithoutFeatureOverridesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFeatureOverridesInput
+  upsert?: Prisma.TenantUpsertWithoutFeatureOverridesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutFeatureOverridesInput, Prisma.TenantUpdateWithoutFeatureOverridesInput>, Prisma.TenantUncheckedUpdateWithoutFeatureOverridesInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   createdAt?: Date | string
@@ -868,7 +851,6 @@ export type TenantCreateWithoutUsersInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -880,6 +862,7 @@ export type TenantCreateWithoutUsersInput = {
   staff?: Prisma.StaffMemberCreateNestedManyWithoutTenantInput
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -899,7 +882,6 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -911,6 +893,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   staff?: Prisma.StaffMemberUncheckedCreateNestedManyWithoutTenantInput
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -946,7 +929,6 @@ export type TenantUpdateWithoutUsersInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -958,6 +940,7 @@ export type TenantUpdateWithoutUsersInput = {
   staff?: Prisma.StaffMemberUpdateManyWithoutTenantNestedInput
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -977,7 +960,6 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -989,6 +971,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   staff?: Prisma.StaffMemberUncheckedUpdateManyWithoutTenantNestedInput
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutMenusInput = {
@@ -1008,7 +991,6 @@ export type TenantCreateWithoutMenusInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1020,6 +1002,7 @@ export type TenantCreateWithoutMenusInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMenusInput = {
@@ -1039,7 +1022,6 @@ export type TenantUncheckedCreateWithoutMenusInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1051,6 +1033,7 @@ export type TenantUncheckedCreateWithoutMenusInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMenusInput = {
@@ -1086,7 +1069,6 @@ export type TenantUpdateWithoutMenusInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1098,6 +1080,7 @@ export type TenantUpdateWithoutMenusInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMenusInput = {
@@ -1117,7 +1100,6 @@ export type TenantUncheckedUpdateWithoutMenusInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1129,6 +1111,7 @@ export type TenantUncheckedUpdateWithoutMenusInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutTablesInput = {
@@ -1148,7 +1131,6 @@ export type TenantCreateWithoutTablesInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1160,6 +1142,7 @@ export type TenantCreateWithoutTablesInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutTablesInput = {
@@ -1179,7 +1162,6 @@ export type TenantUncheckedCreateWithoutTablesInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1191,6 +1173,7 @@ export type TenantUncheckedCreateWithoutTablesInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutTablesInput = {
@@ -1226,7 +1209,6 @@ export type TenantUpdateWithoutTablesInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1238,6 +1220,7 @@ export type TenantUpdateWithoutTablesInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutTablesInput = {
@@ -1257,7 +1240,6 @@ export type TenantUncheckedUpdateWithoutTablesInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1269,6 +1251,7 @@ export type TenantUncheckedUpdateWithoutTablesInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutOrdersInput = {
@@ -1288,7 +1271,6 @@ export type TenantCreateWithoutOrdersInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1300,6 +1282,7 @@ export type TenantCreateWithoutOrdersInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutOrdersInput = {
@@ -1319,7 +1302,6 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1331,6 +1313,7 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutOrdersInput = {
@@ -1366,7 +1349,6 @@ export type TenantUpdateWithoutOrdersInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1378,6 +1360,7 @@ export type TenantUpdateWithoutOrdersInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutOrdersInput = {
@@ -1397,7 +1380,6 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1409,6 +1391,7 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStaffInput = {
@@ -1428,7 +1411,6 @@ export type TenantCreateWithoutStaffInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1440,6 +1422,7 @@ export type TenantCreateWithoutStaffInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStaffInput = {
@@ -1459,7 +1442,6 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1471,6 +1453,7 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStaffInput = {
@@ -1506,7 +1489,6 @@ export type TenantUpdateWithoutStaffInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1518,6 +1500,7 @@ export type TenantUpdateWithoutStaffInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStaffInput = {
@@ -1537,7 +1520,6 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1549,6 +1531,7 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAnalyticsEventsInput = {
@@ -1568,7 +1551,6 @@ export type TenantCreateWithoutAnalyticsEventsInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1580,6 +1562,7 @@ export type TenantCreateWithoutAnalyticsEventsInput = {
   staff?: Prisma.StaffMemberCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
@@ -1599,7 +1582,6 @@ export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1611,6 +1593,7 @@ export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
   staff?: Prisma.StaffMemberUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAnalyticsEventsInput = {
@@ -1646,7 +1629,6 @@ export type TenantUpdateWithoutAnalyticsEventsInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1658,6 +1640,7 @@ export type TenantUpdateWithoutAnalyticsEventsInput = {
   staff?: Prisma.StaffMemberUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
@@ -1677,7 +1660,6 @@ export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1689,6 +1671,7 @@ export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
   staff?: Prisma.StaffMemberUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSubscriptionInput = {
@@ -1708,7 +1691,6 @@ export type TenantCreateWithoutSubscriptionInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1720,6 +1702,7 @@ export type TenantCreateWithoutSubscriptionInput = {
   staff?: Prisma.StaffMemberCreateNestedManyWithoutTenantInput
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSubscriptionInput = {
@@ -1739,7 +1722,6 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   accentColor?: string
   slugLockedAt?: Date | string | null
   slugChangedAt?: Date | string | null
-  plan?: string
   isActive?: boolean
   timezone?: string
   currency?: string
@@ -1751,6 +1733,7 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   staff?: Prisma.StaffMemberUncheckedCreateNestedManyWithoutTenantInput
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSubscriptionInput = {
@@ -1786,7 +1769,6 @@ export type TenantUpdateWithoutSubscriptionInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1798,6 +1780,7 @@ export type TenantUpdateWithoutSubscriptionInput = {
   staff?: Prisma.StaffMemberUpdateManyWithoutTenantNestedInput
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSubscriptionInput = {
@@ -1817,7 +1800,6 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   accentColor?: Prisma.StringFieldUpdateOperationsInput | string
   slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  plan?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1828,6 +1810,147 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   staff?: Prisma.StaffMemberUncheckedUpdateManyWithoutTenantNestedInput
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutFeatureOverridesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  coverUrl?: string | null
+  phone?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string
+  brandColor?: string
+  accentColor?: string
+  slugLockedAt?: Date | string | null
+  slugChangedAt?: Date | string | null
+  isActive?: boolean
+  timezone?: string
+  currency?: string
+  language?: string
+  whatsappWaitlistEmail?: string | null
+  menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
+  tables?: Prisma.TableCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
+  staff?: Prisma.StaffMemberCreateNestedManyWithoutTenantInput
+  analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutFeatureOverridesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  coverUrl?: string | null
+  phone?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string
+  brandColor?: string
+  accentColor?: string
+  slugLockedAt?: Date | string | null
+  slugChangedAt?: Date | string | null
+  isActive?: boolean
+  timezone?: string
+  currency?: string
+  language?: string
+  whatsappWaitlistEmail?: string | null
+  menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
+  tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
+  staff?: Prisma.StaffMemberUncheckedCreateNestedManyWithoutTenantInput
+  analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutFeatureOverridesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFeatureOverridesInput, Prisma.TenantUncheckedCreateWithoutFeatureOverridesInput>
+}
+
+export type TenantUpsertWithoutFeatureOverridesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutFeatureOverridesInput, Prisma.TenantUncheckedUpdateWithoutFeatureOverridesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFeatureOverridesInput, Prisma.TenantUncheckedCreateWithoutFeatureOverridesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutFeatureOverridesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutFeatureOverridesInput, Prisma.TenantUncheckedUpdateWithoutFeatureOverridesInput>
+}
+
+export type TenantUpdateWithoutFeatureOverridesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  brandColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
+  tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
+  staff?: Prisma.StaffMemberUpdateManyWithoutTenantNestedInput
+  analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutFeatureOverridesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  brandColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
+  tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
+  staff?: Prisma.StaffMemberUncheckedUpdateManyWithoutTenantNestedInput
+  analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1843,6 +1966,7 @@ export type TenantCountOutputType = {
   staff: number
   analyticsEvents: number
   users: number
+  featureOverrides: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1852,6 +1976,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   staff?: boolean | TenantCountOutputTypeCountStaffArgs
   analyticsEvents?: boolean | TenantCountOutputTypeCountAnalyticsEventsArgs
   users?: boolean | TenantCountOutputTypeCountUsersArgs
+  featureOverrides?: boolean | TenantCountOutputTypeCountFeatureOverridesArgs
 }
 
 /**
@@ -1906,6 +2031,13 @@ export type TenantCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.UserWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountFeatureOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TenantFeatureOverrideWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1924,7 +2056,6 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   accentColor?: boolean
   slugLockedAt?: boolean
   slugChangedAt?: boolean
-  plan?: boolean
   isActive?: boolean
   timezone?: boolean
   currency?: boolean
@@ -1937,6 +2068,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   analyticsEvents?: boolean | Prisma.Tenant$analyticsEventsArgs<ExtArgs>
   subscription?: boolean | Prisma.Tenant$subscriptionArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
+  featureOverrides?: boolean | Prisma.Tenant$featureOverridesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -1957,7 +2089,6 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   accentColor?: boolean
   slugLockedAt?: boolean
   slugChangedAt?: boolean
-  plan?: boolean
   isActive?: boolean
   timezone?: boolean
   currency?: boolean
@@ -1982,7 +2113,6 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   accentColor?: boolean
   slugLockedAt?: boolean
   slugChangedAt?: boolean
-  plan?: boolean
   isActive?: boolean
   timezone?: boolean
   currency?: boolean
@@ -2007,7 +2137,6 @@ export type TenantSelectScalar = {
   accentColor?: boolean
   slugLockedAt?: boolean
   slugChangedAt?: boolean
-  plan?: boolean
   isActive?: boolean
   timezone?: boolean
   currency?: boolean
@@ -2015,7 +2144,7 @@ export type TenantSelectScalar = {
   whatsappWaitlistEmail?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "plan" | "isActive" | "timezone" | "currency" | "language" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "isActive" | "timezone" | "currency" | "language" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   menus?: boolean | Prisma.Tenant$menusArgs<ExtArgs>
   tables?: boolean | Prisma.Tenant$tablesArgs<ExtArgs>
@@ -2024,6 +2153,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   analyticsEvents?: boolean | Prisma.Tenant$analyticsEventsArgs<ExtArgs>
   subscription?: boolean | Prisma.Tenant$subscriptionArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
+  featureOverrides?: boolean | Prisma.Tenant$featureOverridesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2039,6 +2169,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     analyticsEvents: Prisma.$AnalyticsEventPayload<ExtArgs>[]
     subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
     users: Prisma.$UserPayload<ExtArgs>[]
+    featureOverrides: Prisma.$TenantFeatureOverridePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2057,7 +2188,6 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     accentColor: string
     slugLockedAt: Date | null
     slugChangedAt: Date | null
-    plan: string
     isActive: boolean
     timezone: string
     currency: string
@@ -2464,6 +2594,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   analyticsEvents<T extends Prisma.Tenant$analyticsEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$analyticsEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnalyticsEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscription<T extends Prisma.Tenant$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.Tenant$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  featureOverrides<T extends Prisma.Tenant$featureOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$featureOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantFeatureOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2509,7 +2640,6 @@ export interface TenantFieldRefs {
   readonly accentColor: Prisma.FieldRef<"Tenant", 'String'>
   readonly slugLockedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly slugChangedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
-  readonly plan: Prisma.FieldRef<"Tenant", 'String'>
   readonly isActive: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly timezone: Prisma.FieldRef<"Tenant", 'String'>
   readonly currency: Prisma.FieldRef<"Tenant", 'String'>
@@ -3068,6 +3198,30 @@ export type Tenant$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Tenant.featureOverrides
+ */
+export type Tenant$featureOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TenantFeatureOverride
+   */
+  select?: Prisma.TenantFeatureOverrideSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TenantFeatureOverride
+   */
+  omit?: Prisma.TenantFeatureOverrideOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantFeatureOverrideInclude<ExtArgs> | null
+  where?: Prisma.TenantFeatureOverrideWhereInput
+  orderBy?: Prisma.TenantFeatureOverrideOrderByWithRelationInput | Prisma.TenantFeatureOverrideOrderByWithRelationInput[]
+  cursor?: Prisma.TenantFeatureOverrideWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TenantFeatureOverrideScalarFieldEnum | Prisma.TenantFeatureOverrideScalarFieldEnum[]
 }
 
 /**

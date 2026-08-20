@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Plan: 'Plan',
   Tenant: 'Tenant',
   User: 'User',
   Menu: 'Menu',
@@ -62,7 +63,9 @@ export const ModelName = {
   OrderStatusHistory: 'OrderStatusHistory',
   StaffMember: 'StaffMember',
   AnalyticsEvent: 'AnalyticsEvent',
-  Subscription: 'Subscription'
+  Subscription: 'Subscription',
+  BillingEvent: 'BillingEvent',
+  TenantFeatureOverride: 'TenantFeatureOverride'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -79,6 +82,36 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  label: 'label',
+  tag: 'tag',
+  description: 'description',
+  priceMonthly: 'priceMonthly',
+  priceYearly: 'priceYearly',
+  maxTables: 'maxTables',
+  maxMenuItems: 'maxMenuItems',
+  maxStaff: 'maxStaff',
+  maxMenus: 'maxMenus',
+  analyticsDays: 'analyticsDays',
+  hasAI: 'hasAI',
+  hasInventory: 'hasInventory',
+  hasMultiLanguage: 'hasMultiLanguage',
+  hasExportPDF: 'hasExportPDF',
+  hasExportExcel: 'hasExportExcel',
+  hasCustomBranding: 'hasCustomBranding',
+  hasWhatsApp: 'hasWhatsApp',
+  hasPrioritySupport: 'hasPrioritySupport',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
 
 
 export const TenantScalarFieldEnum = {
@@ -98,7 +131,6 @@ export const TenantScalarFieldEnum = {
   accentColor: 'accentColor',
   slugLockedAt: 'slugLockedAt',
   slugChangedAt: 'slugChangedAt',
-  plan: 'plan',
   isActive: 'isActive',
   timezone: 'timezone',
   currency: 'currency',
@@ -267,15 +299,48 @@ export const SubscriptionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   tenantId: 'tenantId',
-  plan: 'plan',
+  planId: 'planId',
   status: 'status',
-  wompiSubscriptionId: 'wompiSubscriptionId',
   currentPeriodStart: 'currentPeriodStart',
   currentPeriodEnd: 'currentPeriodEnd',
-  trialEndsAt: 'trialEndsAt'
+  trialEndsAt: 'trialEndsAt',
+  cancelledAt: 'cancelledAt',
+  cancelReason: 'cancelReason',
+  wompiSubscriptionId: 'wompiSubscriptionId',
+  wompiCustomerId: 'wompiCustomerId'
 } as const
 
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const BillingEventScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  subscriptionId: 'subscriptionId',
+  type: 'type',
+  amount: 'amount',
+  currency: 'currency',
+  fromPlanId: 'fromPlanId',
+  toPlanId: 'toPlanId',
+  wompiTransactionId: 'wompiTransactionId',
+  metadata: 'metadata',
+  note: 'note'
+} as const
+
+export type BillingEventScalarFieldEnum = (typeof BillingEventScalarFieldEnum)[keyof typeof BillingEventScalarFieldEnum]
+
+
+export const TenantFeatureOverrideScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  tenantId: 'tenantId',
+  feature: 'feature',
+  value: 'value',
+  reason: 'reason',
+  expiresAt: 'expiresAt'
+} as const
+
+export type TenantFeatureOverrideScalarFieldEnum = (typeof TenantFeatureOverrideScalarFieldEnum)[keyof typeof TenantFeatureOverrideScalarFieldEnum]
 
 
 export const SortOrder = {
