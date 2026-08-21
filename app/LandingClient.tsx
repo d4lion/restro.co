@@ -350,7 +350,7 @@ export default function LandingClient() {
       <nav className={styles.nav}>
         <div className={styles.navInner}>
           <Link href="/" className={styles.navLogo}>
-            <Image src="/images/logo/logo.png" alt="Restro logo" className={styles.navLogoIcon} />
+            <Image width={32} height={32} src="/images/logo/logo.png" alt="Restro logo" className={styles.navLogoIcon} />
             <span className={styles.navLogoText}>Restro</span>
           </Link>
           <ul className={styles.navLinks}>
@@ -453,7 +453,7 @@ export default function LandingClient() {
               
               {/* Card 1 (Top/Front): Main Analytics Dashboard */}
               <div className={`${styles.luloCard} ${styles.luloCard1}`} id="lulo-card-1">
-                <Image src="/images/mockup-analytics-dark.png" alt="Dashboard Restro" className={styles.luloCardImage} />
+                <Image src="/images/mockup-analytics-dark.png" alt="Dashboard Restro" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopLeft}`}>
                   <span className={styles.badgeIcon}><TrendingUp size={18} color="#2563EB" /></span>
                   <div>
@@ -465,7 +465,7 @@ export default function LandingClient() {
 
               {/* Card 2 (Middle): KDS Kitchen Screen */}
               <div className={`${styles.luloCard} ${styles.luloCard2}`} id="lulo-card-2">
-                <Image src="/images/mockup-kds.png" alt="KDS Cocina" className={styles.luloCardImage} />
+                <Image src="/images/mockup-kds.png" alt="KDS Cocina" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeBottomRight}`}>
                   <span className={styles.badgeIcon}><MonitorCheck size={18} color="#0D9488" /></span>
                   <div>
@@ -477,7 +477,7 @@ export default function LandingClient() {
 
               {/* Card 3 (Back/Bottom): Menu Digital QR */}
               <div className={`${styles.luloCard} ${styles.luloCard3}`} id="lulo-card-3">
-                <Image src="/images/mockup-menu-dark.png" alt="Carta Digital QR" className={styles.luloCardImage} />
+                <Image src="/images/mockup-menu-dark.png" alt="Carta Digital QR" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopRight}`}>
                   <span className={styles.badgeIcon}><Sparkles size={18} color="#7C3AED" /></span>
                   <div>
@@ -520,7 +520,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Crear mi carta gratis</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-menu">
-            <Image src="/images/mockup-menu-dark.png" alt="Carta Digital" className={styles.productMockupMobileOnly} />
+            <Image src="/images/mockup-menu-dark.png" alt="Carta Digital" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -540,7 +540,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Probar KDS gratis</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-kds">
-            <Image src="/images/mockup-kds.png" alt="KDS" className={styles.productMockupMobileOnly} />
+            <Image src="/images/mockup-kds.png" alt="KDS" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -560,7 +560,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Activar Restro IA</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-ia">
-            <Image src="/images/mockup-analytics-dark.png" alt="IA Analytics" className={styles.productMockupMobileOnly} />
+            <Image src="/images/mockup-analytics-dark.png" alt="IA Analytics" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
