@@ -8,11 +8,11 @@ const TENANT_INCLUDE = {
   featureOverrides: true,
   businessHours: {
     orderBy: [
-      { dayOfWeek: 'asc' },
-      { openTime: 'asc' }
+      { dayOfWeek: 'asc' as const },
+      { openTime: 'asc' as const }
     ]
   },
-} as const;
+};
 
 export const tenantRepository = {
   async findBySlug(slug: string) {

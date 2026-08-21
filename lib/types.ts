@@ -240,6 +240,7 @@ export interface OrderWithItems {
   status: OrderStatus;
   createdAt: Date;
   customerName: string | null;
+  tableId: string | null;
   items: {
     id: string;
     name: string;

@@ -29,6 +29,7 @@ function mapOrderToDto(order: any): OrderWithItems {
     status: order.status,
     createdAt: order.createdAt,
     customerName: order.customerName,
+    tableId: order.tableId ?? null,
     items: order.items.map((item: any) => ({
       id: item.id,
       name: item.name,
