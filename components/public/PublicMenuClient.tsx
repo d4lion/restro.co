@@ -47,6 +47,8 @@ interface PublicMenuClientProps {
   websiteUrl: string | null;
   plan?: string;
   categories: Category[];
+  isOpen?: boolean;
+  businessHours?: Array<{ dayOfWeek: number; openTime: string; closeTime: string }>;
 }
 
 const IconSearch = () => (
@@ -174,6 +176,8 @@ export function PublicMenuClient({
   websiteUrl,
   plan = "STARTER",
   categories,
+  isOpen = true,
+  businessHours = [],
 }: PublicMenuClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -317,9 +321,15 @@ export function PublicMenuClient({
             <div className={styles.storeMetaInfo}>
               <div className={styles.storeTitleRow}>
                 <h1 className={styles.storeName}>{tenantName}</h1>
-                <span className={styles.openBadge}>
-                  <span className={styles.openDot} /> Abierto
-                </span>
+                {isOpen ? (
+                  <span className={styles.openBadge}>
+                    <span className={styles.openDot} /> Abierto
+                  </span>
+                ) : (
+                  <span className={styles.openBadge} style={{ backgroundColor: "#FEE2E2", color: "#991B1B" }}>
+                    <span className={styles.openDot} style={{ backgroundColor: "#DC2626" }} /> Cerrado
+                  </span>
+                )}
               </div>
               
               <div className={styles.storeTagsRow}>
@@ -377,8 +387,36 @@ export function PublicMenuClient({
                 <span className={styles.chevron}>▾</span>
               </summary>
               <div className={styles.accordionContent}>
-                <p>Lunes a Domingo: 12:00 PM – 10:00 PM</p>
-                <p className={styles.subText}>Jornada continua</p>
+                {businessHours && businessHours.length > 0 ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {[1, 2, 3, 4, 5, 6, 0].map((dayValue) => {
+                      const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+                      const blocks = businessHours.filter(h => h.dayOfWeek === dayValue);
+                      
+                      const formatT = (t: string) => {
+                        const [h, m] = t.split(":");
+                        let hi = parseInt(h, 10);
+                        const am = hi >= 12 ? "PM" : "AM";
+                        hi = hi % 12 || 12;
+                        return `${hi}:${m} ${am}`;
+                      };
+
+                      if (blocks.length === 0) return null;
+                      return (
+                        <div key={dayValue} style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+                          <span style={{ fontWeight: 500 }}>{dayNames[dayValue]}</span>
+                          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                            {blocks.map((b, i) => (
+                              <span key={i}>{formatT(b.openTime)} - {formatT(b.closeTime)}</span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p style={{ color: "#64748B", fontStyle: "italic", fontSize: "14px" }}>Horario no configurado</p>
+                )}
               </div>
             </details>
           </div>
@@ -593,6 +631,7 @@ export function PublicMenuClient({
         setCart={setCart}
         brandColor={brandColor}
         buttonTextColor={buttonTextColor}
+        isStoreOpen={isOpen}
       />
 
       {/* Floating Sticky Cart Banner */}

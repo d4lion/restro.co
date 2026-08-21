@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { LocalDataCard } from "@/components/dashboard/settings/LocalDataCard";
 import { CommercialProfileCard } from "@/components/dashboard/settings/CommercialProfileCard";
 import { OrderSettingsCard } from "@/components/dashboard/settings/OrderSettingsCard";
+import { BusinessHoursCard } from "@/components/dashboard/settings/BusinessHoursCard";
 import { LogoutCard } from "@/components/dashboard/settings/LogoutCard";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
@@ -62,6 +63,15 @@ export default async function SettingsPage() {
         allowDineIn={tenant.allowDineIn}
         allowTakeout={tenant.allowTakeout}
         allowDelivery={tenant.allowDelivery}
+      />
+
+      {/* ── Business Hours ────────────────────────────────────── */}
+      <BusinessHoursCard
+        initialHours={tenant.businessHours.map((h) => ({
+          dayOfWeek: h.dayOfWeek,
+          openTime: h.openTime,
+          closeTime: h.closeTime,
+        }))}
       />
 
       {/* ── Slug Policy Info Card ───────────────────────────── */}

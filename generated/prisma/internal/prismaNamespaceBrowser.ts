@@ -54,6 +54,7 @@ export const ModelName = {
   Plan: 'Plan',
   Tenant: 'Tenant',
   User: 'User',
+  BusinessHour: 'BusinessHour',
   Menu: 'Menu',
   Category: 'Category',
   MenuItem: 'MenuItem',
@@ -163,6 +164,19 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const BusinessHourScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  tenantId: 'tenantId',
+  dayOfWeek: 'dayOfWeek',
+  openTime: 'openTime',
+  closeTime: 'closeTime'
+} as const
+
+export type BusinessHourScalarFieldEnum = (typeof BusinessHourScalarFieldEnum)[keyof typeof BusinessHourScalarFieldEnum]
 
 
 export const MenuScalarFieldEnum = {

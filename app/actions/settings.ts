@@ -95,3 +95,20 @@ export async function updateOrderSettingsAction(
 
   return { success: true, message: "Ajustes de pedidos actualizados correctamente" };
 }
+
+export async function updateBusinessHoursAction(
+  hours: Array<{ dayOfWeek: number; openTime: string; closeTime: string }>
+): Promise<SettingsActionResult> {
+  const session = await getSession();
+  if (!session) return { success: false, message: "Sesión expirada" };
+
+  try {
+    await tenantRepository.updateBusinessHours(session.tenantId, hours);
+    revalidatePath("/settings");
+    revalidatePath("/overview");
+    return { success: true, message: "Horarios de atención actualizados" };
+  } catch (error) {
+    console.error("Failed to update business hours:", error);
+    return { success: false, message: "No se pudieron actualizar los horarios" };
+  }
+}

@@ -15,9 +15,10 @@ interface Props {
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
   brandColor?: string;
   buttonTextColor?: string;
+  isStoreOpen?: boolean;
 }
 
-export function CartDrawer({ tenantId, isOpen, onClose, cart, setCart, brandColor, buttonTextColor }: Props) {
+export function CartDrawer({ tenantId, isOpen, onClose, cart, setCart, brandColor, buttonTextColor, isStoreOpen = true }: Props) {
   const [isPending, startTransition] = useTransition();
 
   if (!isOpen) return null;
@@ -176,20 +177,26 @@ export function CartDrawer({ tenantId, isOpen, onClose, cart, setCart, brandColo
               <span>Total a pagar</span>
               <span>{formatCOP(totalAmount)}</span>
             </div>
-            <button
-              className={styles.checkoutBtn}
-              onClick={handleCheckout}
-              disabled={isPending}
-              style={{ backgroundColor: brandColor || "#0066FF", color: buttonTextColor || "#FFFFFF" }}
-            >
-              {isPending ? (
-                <>
-                  <Loader2 size={20} className={styles.spin} /> Procesando...
-                </>
-              ) : (
-                "Confirmar Pedido"
-              )}
-            </button>
+            {!isStoreOpen ? (
+              <div style={{ padding: "12px", backgroundColor: "#FEE2E2", color: "#991B1B", borderRadius: "8px", textAlign: "center", fontSize: "14px", fontWeight: 500, marginTop: "8px" }}>
+                El restaurante está cerrado en este momento.
+              </div>
+            ) : (
+              <button
+                className={styles.checkoutBtn}
+                onClick={handleCheckout}
+                disabled={isPending}
+                style={{ backgroundColor: brandColor || "#0066FF", color: buttonTextColor || "#FFFFFF" }}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 size={20} className={styles.spin} /> Procesando...
+                  </>
+                ) : (
+                  "Confirmar Pedido"
+                )}
+              </button>
+            )}
           </div>
         )}
       </div>

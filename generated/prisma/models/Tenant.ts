@@ -374,6 +374,7 @@ export type TenantWhereInput = {
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   users?: Prisma.UserListRelationFilter
   featureOverrides?: Prisma.TenantFeatureOverrideListRelationFilter
+  businessHours?: Prisma.BusinessHourListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -413,6 +414,7 @@ export type TenantOrderByWithRelationInput = {
   subscription?: Prisma.SubscriptionOrderByWithRelationInput
   users?: Prisma.UserOrderByRelationAggregateInput
   featureOverrides?: Prisma.TenantFeatureOverrideOrderByRelationAggregateInput
+  businessHours?: Prisma.BusinessHourOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -455,6 +457,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   users?: Prisma.UserListRelationFilter
   featureOverrides?: Prisma.TenantFeatureOverrideListRelationFilter
+  businessHours?: Prisma.BusinessHourListRelationFilter
 }, "id" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -562,6 +565,7 @@ export type TenantCreateInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -601,6 +605,7 @@ export type TenantUncheckedCreateInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -640,6 +645,7 @@ export type TenantUpdateInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -679,6 +685,7 @@ export type TenantUncheckedUpdateInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -890,6 +897,20 @@ export type TenantUpdateOneRequiredWithoutUsersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutUsersInput, Prisma.TenantUpdateWithoutUsersInput>, Prisma.TenantUncheckedUpdateWithoutUsersInput>
 }
 
+export type TenantCreateNestedOneWithoutBusinessHoursInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBusinessHoursInput, Prisma.TenantUncheckedCreateWithoutBusinessHoursInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBusinessHoursInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutBusinessHoursNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBusinessHoursInput, Prisma.TenantUncheckedCreateWithoutBusinessHoursInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBusinessHoursInput
+  upsert?: Prisma.TenantUpsertWithoutBusinessHoursInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutBusinessHoursInput, Prisma.TenantUpdateWithoutBusinessHoursInput>, Prisma.TenantUncheckedUpdateWithoutBusinessHoursInput>
+}
+
 export type TenantCreateNestedOneWithoutMenusInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutMenusInput, Prisma.TenantUncheckedCreateWithoutMenusInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutMenusInput
@@ -1024,6 +1045,7 @@ export type TenantCreateWithoutUsersInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -1062,6 +1084,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -1116,6 +1139,7 @@ export type TenantUpdateWithoutUsersInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -1153,6 +1177,179 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   staff?: Prisma.StaffMemberUncheckedUpdateManyWithoutTenantNestedInput
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutBusinessHoursInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  coverUrl?: string | null
+  phone?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
+  brandColor?: string
+  accentColor?: string
+  slugLockedAt?: Date | string | null
+  slugChangedAt?: Date | string | null
+  isActive?: boolean
+  timezone?: string
+  currency?: string
+  language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
+  whatsappWaitlistEmail?: string | null
+  menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
+  tables?: Prisma.TableCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
+  staff?: Prisma.StaffMemberCreateNestedManyWithoutTenantInput
+  analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutBusinessHoursInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  coverUrl?: string | null
+  phone?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  tiktokUrl?: string | null
+  websiteUrl?: string | null
+  brandColor?: string
+  accentColor?: string
+  slugLockedAt?: Date | string | null
+  slugChangedAt?: Date | string | null
+  isActive?: boolean
+  timezone?: string
+  currency?: string
+  language?: string
+  allowDineIn?: boolean
+  allowTakeout?: boolean
+  allowDelivery?: boolean
+  whatsappWaitlistEmail?: string | null
+  menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
+  tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
+  staff?: Prisma.StaffMemberUncheckedCreateNestedManyWithoutTenantInput
+  analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutBusinessHoursInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBusinessHoursInput, Prisma.TenantUncheckedCreateWithoutBusinessHoursInput>
+}
+
+export type TenantUpsertWithoutBusinessHoursInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutBusinessHoursInput, Prisma.TenantUncheckedUpdateWithoutBusinessHoursInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBusinessHoursInput, Prisma.TenantUncheckedCreateWithoutBusinessHoursInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutBusinessHoursInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutBusinessHoursInput, Prisma.TenantUncheckedUpdateWithoutBusinessHoursInput>
+}
+
+export type TenantUpdateWithoutBusinessHoursInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
+  tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
+  staff?: Prisma.StaffMemberUpdateManyWithoutTenantNestedInput
+  analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutBusinessHoursInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  slugLockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  slugChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
+  tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
+  staff?: Prisma.StaffMemberUncheckedUpdateManyWithoutTenantNestedInput
+  analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1192,6 +1389,7 @@ export type TenantCreateWithoutMenusInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMenusInput = {
@@ -1230,6 +1428,7 @@ export type TenantUncheckedCreateWithoutMenusInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMenusInput = {
@@ -1284,6 +1483,7 @@ export type TenantUpdateWithoutMenusInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMenusInput = {
@@ -1322,6 +1522,7 @@ export type TenantUncheckedUpdateWithoutMenusInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutTablesInput = {
@@ -1360,6 +1561,7 @@ export type TenantCreateWithoutTablesInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutTablesInput = {
@@ -1398,6 +1600,7 @@ export type TenantUncheckedCreateWithoutTablesInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutTablesInput = {
@@ -1452,6 +1655,7 @@ export type TenantUpdateWithoutTablesInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutTablesInput = {
@@ -1490,6 +1694,7 @@ export type TenantUncheckedUpdateWithoutTablesInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutOrdersInput = {
@@ -1528,6 +1733,7 @@ export type TenantCreateWithoutOrdersInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutOrdersInput = {
@@ -1566,6 +1772,7 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutOrdersInput = {
@@ -1620,6 +1827,7 @@ export type TenantUpdateWithoutOrdersInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutOrdersInput = {
@@ -1658,6 +1866,7 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStaffInput = {
@@ -1696,6 +1905,7 @@ export type TenantCreateWithoutStaffInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStaffInput = {
@@ -1734,6 +1944,7 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStaffInput = {
@@ -1788,6 +1999,7 @@ export type TenantUpdateWithoutStaffInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStaffInput = {
@@ -1826,6 +2038,7 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAnalyticsEventsInput = {
@@ -1864,6 +2077,7 @@ export type TenantCreateWithoutAnalyticsEventsInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
@@ -1902,6 +2116,7 @@ export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAnalyticsEventsInput = {
@@ -1956,6 +2171,7 @@ export type TenantUpdateWithoutAnalyticsEventsInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
@@ -1994,6 +2210,7 @@ export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSubscriptionInput = {
@@ -2032,6 +2249,7 @@ export type TenantCreateWithoutSubscriptionInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSubscriptionInput = {
@@ -2070,6 +2288,7 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSubscriptionInput = {
@@ -2124,6 +2343,7 @@ export type TenantUpdateWithoutSubscriptionInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSubscriptionInput = {
@@ -2162,6 +2382,7 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   featureOverrides?: Prisma.TenantFeatureOverrideUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFeatureOverridesInput = {
@@ -2200,6 +2421,7 @@ export type TenantCreateWithoutFeatureOverridesInput = {
   analyticsEvents?: Prisma.AnalyticsEventCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFeatureOverridesInput = {
@@ -2238,6 +2460,7 @@ export type TenantUncheckedCreateWithoutFeatureOverridesInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  businessHours?: Prisma.BusinessHourUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFeatureOverridesInput = {
@@ -2292,6 +2515,7 @@ export type TenantUpdateWithoutFeatureOverridesInput = {
   analyticsEvents?: Prisma.AnalyticsEventUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFeatureOverridesInput = {
@@ -2330,6 +2554,7 @@ export type TenantUncheckedUpdateWithoutFeatureOverridesInput = {
   analyticsEvents?: Prisma.AnalyticsEventUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  businessHours?: Prisma.BusinessHourUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -2345,6 +2570,7 @@ export type TenantCountOutputType = {
   analyticsEvents: number
   users: number
   featureOverrides: number
+  businessHours: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2355,6 +2581,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   analyticsEvents?: boolean | TenantCountOutputTypeCountAnalyticsEventsArgs
   users?: boolean | TenantCountOutputTypeCountUsersArgs
   featureOverrides?: boolean | TenantCountOutputTypeCountFeatureOverridesArgs
+  businessHours?: boolean | TenantCountOutputTypeCountBusinessHoursArgs
 }
 
 /**
@@ -2416,6 +2643,13 @@ export type TenantCountOutputTypeCountFeatureOverridesArgs<ExtArgs extends runti
   where?: Prisma.TenantFeatureOverrideWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountBusinessHoursArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BusinessHourWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2454,6 +2688,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   subscription?: boolean | Prisma.Tenant$subscriptionArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   featureOverrides?: boolean | Prisma.Tenant$featureOverridesArgs<ExtArgs>
+  businessHours?: boolean | Prisma.Tenant$businessHoursArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -2560,6 +2795,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   subscription?: boolean | Prisma.Tenant$subscriptionArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   featureOverrides?: boolean | Prisma.Tenant$featureOverridesArgs<ExtArgs>
+  businessHours?: boolean | Prisma.Tenant$businessHoursArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2576,6 +2812,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
     users: Prisma.$UserPayload<ExtArgs>[]
     featureOverrides: Prisma.$TenantFeatureOverridePayload<ExtArgs>[]
+    businessHours: Prisma.$BusinessHourPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3008,6 +3245,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   subscription<T extends Prisma.Tenant$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.Tenant$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   featureOverrides<T extends Prisma.Tenant$featureOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$featureOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantFeatureOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  businessHours<T extends Prisma.Tenant$businessHoursArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$businessHoursArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3642,6 +3880,30 @@ export type Tenant$featureOverridesArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.TenantFeatureOverrideScalarFieldEnum | Prisma.TenantFeatureOverrideScalarFieldEnum[]
+}
+
+/**
+ * Tenant.businessHours
+ */
+export type Tenant$businessHoursArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BusinessHour
+   */
+  select?: Prisma.BusinessHourSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BusinessHour
+   */
+  omit?: Prisma.BusinessHourOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BusinessHourInclude<ExtArgs> | null
+  where?: Prisma.BusinessHourWhereInput
+  orderBy?: Prisma.BusinessHourOrderByWithRelationInput | Prisma.BusinessHourOrderByWithRelationInput[]
+  cursor?: Prisma.BusinessHourWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BusinessHourScalarFieldEnum | Prisma.BusinessHourScalarFieldEnum[]
 }
 
 /**

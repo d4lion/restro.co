@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 // ─── ENUMS ────────────────────────────────────────────────────────────────────
@@ -26,21 +26,21 @@ model Plan {
   updatedAt DateTime @updatedAt
 
   // Identity
-  key           String  @unique // "STARTER" | "RESTRO_IA" | "BUSINESS"
-  label         String          // "Starter", "Restro IA", "Business"
-  tag           String          // "GRATIS", "PRO", "ENTERPRISE"
-  description   String?
+  key         String  @unique // "STARTER" | "RESTRO_IA" | "BUSINESS"
+  label       String // "Starter", "Restro IA", "Business"
+  tag         String // "GRATIS", "PRO", "ENTERPRISE"
+  description String?
 
   // Pricing (COP — integer, e.g. 49900 = $49.900)
-  priceMonthly  Int     @default(0)
-  priceYearly   Int?            // Descuento anual si aplica
+  priceMonthly Int  @default(0)
+  priceYearly  Int? // Descuento anual si aplica
 
   // Resource limits (-1 = unlimited)
-  maxTables     Int     @default(5)
-  maxMenuItems  Int     @default(20)
-  maxStaff      Int     @default(1)
-  maxMenus      Int     @default(1)
-  analyticsDays Int     @default(7)
+  maxTables     Int @default(5)
+  maxMenuItems  Int @default(20)
+  maxStaff      Int @default(1)
+  maxMenus      Int @default(1)
+  analyticsDays Int @default(7)
 
   // Feature flags
   hasAI              Boolean @default(false)
@@ -53,8 +53,8 @@ model Plan {
   hasPrioritySupport Boolean @default(false)
 
   // Ordering & visibility
-  sortOrder  Int      @default(0)
-  isActive   Boolean  @default(true) // Visible on pricing page
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true) // Visible on pricing page
 
   // Relations
   subscriptions Subscription[]
@@ -63,20 +63,20 @@ model Plan {
 // ─── TENANT ──────────────────────────────────────────────────────────────────
 
 model Tenant {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Restaurant info
   name        String
-  slug        String   @unique
+  slug        String  @unique
   description String?
   logoUrl     String?
   coverUrl    String?
   phone       String?
   address     String?
   city        String?
-  country     String   @default("CO")
+  country     String  @default("CO")
 
   // Social Links
   instagramUrl String?
@@ -85,19 +85,19 @@ model Tenant {
   websiteUrl   String?
 
   // Branding
-  brandColor  String   @default("#FF6B35")
-  accentColor String   @default("#1A1A2E")
+  brandColor  String @default("#FF6B35")
+  accentColor String @default("#1A1A2E")
 
   // Slug policy: editable freely first 30 days, then locked
-  slugLockedAt DateTime?
+  slugLockedAt  DateTime?
   slugChangedAt DateTime?
 
   // Settings
-  isActive    Boolean  @default(true)
-  timezone    String   @default("America/Bogota")
-  currency    String   @default("COP")
-  language    String   @default("es")
-  
+  isActive Boolean @default(true)
+  timezone String  @default("America/Bogota")
+  currency String  @default("COP")
+  language String  @default("es")
+
   // Ordering Capabilities
   allowDineIn   Boolean @default(true)
   allowTakeout  Boolean @default(false)
@@ -107,159 +107,177 @@ model Tenant {
   whatsappWaitlistEmail String?
 
   // Relations
-  menus             Menu[]
-  tables            Table[]
-  orders            Order[]
-  staff             StaffMember[]
-  analyticsEvents   AnalyticsEvent[]
-  subscription      Subscription?
-  users             User[]
-  featureOverrides  TenantFeatureOverride[]
+  menus            Menu[]
+  tables           Table[]
+  orders           Order[]
+  staff            StaffMember[]
+  analyticsEvents  AnalyticsEvent[]
+  subscription     Subscription?
+  users            User[]
+  featureOverrides TenantFeatureOverride[]
+  businessHours    BusinessHour[]
 }
 
 // ─── USER ─────────────────────────────────────────────────────────────────────
 
 model User {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  email       String   @unique
-  name        String
+  email        String  @unique
+  name         String
   passwordHash String?
 
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  role        String   @default("OWNER") // OWNER | MANAGER | WAITER | KITCHEN
+  role String @default("OWNER") // OWNER | MANAGER | WAITER | KITCHEN
 
   lastLoginAt DateTime?
+}
+
+// ─── BUSINESS HOURS ───────────────────────────────────────────────────────────
+
+model BusinessHour {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  dayOfWeek Int // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  openTime  String // HH:mm (e.g. "08:00")
+  closeTime String // HH:mm (e.g. "17:00")
+
+  @@index([tenantId])
 }
 
 // ─── MENU ─────────────────────────────────────────────────────────────────────
 
 model Menu {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  name        String   @default("Carta Principal")
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
+  name      String  @default("Carta Principal")
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
 
-  categories  Category[]
+  categories Category[]
 }
 
 model Category {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  menuId      String
-  menu        Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  menuId String
+  menu   Menu   @relation(fields: [menuId], references: [id], onDelete: Cascade)
 
   name        String
   description String?
   imageUrl    String?
   emoji       String?
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
 
-  items       MenuItem[]
+  items MenuItem[]
 }
 
 model MenuItem {
-  id           String   @id @default(cuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  categoryId   String
-  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  name         String
-  description  String?
-  price        Float    // In COP (e.g., 15000.0)
-  imageUrl     String?  // Available on all plans
-  isAvailable  Boolean  @default(true)
+  name          String
+  description   String?
+  price         Float // In COP (e.g., 15000.0)
+  imageUrl      String? // Available on all plans
+  isAvailable   Boolean @default(true)
   isHighlighted Boolean @default(false)
-  sortOrder    Int      @default(0)
+  sortOrder     Int     @default(0)
 
   // Nutritional / tags (future)
-  tags         String?  // JSON array stored as string for SQLite compat
+  tags String? // JSON array stored as string for SQLite compat
 
   orderItems     OrderItem[]
   modifierGroups MenuItemModifierGroup[]
 }
 
 model MenuItemModifierGroup {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  menuItemId    String
-  menuItem      MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
 
-  name          String   // e.g. "Elige 1 Acompañamiento"
-  isRequired    Boolean  @default(false)
-  minSelections Int      @default(0)
-  maxSelections Int      @default(1)
-  sortOrder     Int      @default(0)
+  name          String // e.g. "Elige 1 Acompañamiento"
+  isRequired    Boolean @default(false)
+  minSelections Int     @default(0)
+  maxSelections Int     @default(1)
+  sortOrder     Int     @default(0)
 
-  options       MenuItemModifierOption[]
+  options MenuItemModifierOption[]
 }
 
 model MenuItemModifierOption {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  groupId       String
-  group         MenuItemModifierGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+  group   MenuItemModifierGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
-  name          String   // e.g. "Papas a la Francesa"
-  priceExtra    Float    @default(0) // Extra cost (COP)
-  isAvailable   Boolean  @default(true)
-  sortOrder     Int      @default(0)
+  name        String // e.g. "Papas a la Francesa"
+  priceExtra  Float   @default(0) // Extra cost (COP)
+  isAvailable Boolean @default(true)
+  sortOrder   Int     @default(0)
 }
 
 // ─── TABLE ────────────────────────────────────────────────────────────────────
 
 model Table {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  name        String   // e.g., "Mesa 1", "Terraza 3", "Barra"
-  qrToken     String   @unique @default(cuid()) // Stable token for QR (survives slug change)
-  capacity    Int?
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
+  name      String // e.g., "Mesa 1", "Terraza 3", "Barra"
+  qrToken   String  @unique @default(cuid()) // Stable token for QR (survives slug change)
+  capacity  Int?
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
 
-  orders      Order[]
+  orders Order[]
 }
 
 // ─── ORDER ────────────────────────────────────────────────────────────────────
 
 model Order {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   // Order type
-  type        String   @default("DINE_IN") // DINE_IN | TAKEOUT | DELIVERY
+  type String @default("DINE_IN") // DINE_IN | TAKEOUT | DELIVERY
 
   // For DINE_IN
-  tableId     String?
-  table       Table?   @relation(fields: [tableId], references: [id])
+  tableId String?
+  table   Table?  @relation(fields: [tableId], references: [id])
 
   // For TAKEOUT & DELIVERY
   customerName  String?
@@ -270,72 +288,72 @@ model Order {
   deliveryNotes   String?
 
   // Status
-  status      String   @default("PENDING") // PENDING | PREPARING | READY | DELIVERED | CANCELLED
+  status String @default("PENDING") // PENDING | PREPARING | READY | DELIVERED | CANCELLED
 
   // Financial snapshot
-  subtotal    Float    @default(0)
-  total       Float    @default(0)
+  subtotal Float @default(0)
+  total    Float @default(0)
 
   // Notes
-  notes       String?
+  notes String?
 
   // Order number (human-readable, per-tenant sequential)
   orderNumber Int
 
   // Items
-  items       OrderItem[]
+  items         OrderItem[]
   statusHistory OrderStatusHistory[]
 }
 
 model OrderItem {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
-  orderId     String
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
-  menuItemId  String
-  menuItem    MenuItem @relation(fields: [menuItemId], references: [id])
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
 
   // Snapshot at time of order (price may change later)
-  name        String
-  price       Float
-  quantity    Int      @default(1)
-  notes       String?  // Per-item notes ("sin cebolla", "bien cocido")
-  
+  name     String
+  price    Float
+  quantity Int     @default(1)
+  notes    String? // Per-item notes ("sin cebolla", "bien cocido")
+
   // JSON array of selected modifiers: [{ optionId: string, name: string, priceExtra: number, groupId: string, groupName: string }]
   modifiersJson String?
 
-  subtotal    Float    // (price + sum(priceExtra)) * quantity
+  subtotal Float // (price + sum(priceExtra)) * quantity
 }
 
 model OrderStatusHistory {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
-  orderId     String
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   fromStatus  String?
   toStatus    String
-  changedById String?  // Staff user ID who changed the status
+  changedById String? // Staff user ID who changed the status
   note        String?
 }
 
 // ─── STAFF ────────────────────────────────────────────────────────────────────
 
 model StaffMember {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  name        String
-  email       String
-  role        String   // OWNER | MANAGER | WAITER | KITCHEN
-  isActive    Boolean  @default(true)
+  name     String
+  email    String
+  role     String // OWNER | MANAGER | WAITER | KITCHEN
+  isActive Boolean @default(true)
 
   @@unique([tenantId, email])
 }
@@ -343,45 +361,45 @@ model StaffMember {
 // ─── ANALYTICS ────────────────────────────────────────────────────────────────
 
 model AnalyticsEvent {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  event       String   // "menu_view" | "item_view" | "order_started" | "order_completed" | etc.
-  data        String?  // JSON payload
-  sessionId   String?  // Anonymous session identifier
-  userAgent   String?
+  event     String // "menu_view" | "item_view" | "order_started" | "order_completed" | etc.
+  data      String? // JSON payload
+  sessionId String? // Anonymous session identifier
+  userAgent String?
 }
 
 // ─── SUBSCRIPTION ─────────────────────────────────────────────────────────────
 
 model Subscription {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  tenantId    String   @unique
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String @unique
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   // Plan reference (FK — source of truth)
-  planId      String
-  plan        Plan     @relation(fields: [planId], references: [id])
+  planId String
+  plan   Plan   @relation(fields: [planId], references: [id])
 
   // Status
-  status      String   @default("ACTIVE") // ACTIVE | CANCELLED | PAST_DUE | TRIAL | EXPIRED
+  status String @default("ACTIVE") // ACTIVE | CANCELLED | PAST_DUE | TRIAL | EXPIRED
 
   // Billing cycle
-  currentPeriodStart  DateTime?
-  currentPeriodEnd    DateTime?
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
 
   // Trial
   trialEndsAt DateTime?
 
   // Cancellation
-  cancelledAt   DateTime?
-  cancelReason  String?
+  cancelledAt  DateTime?
+  cancelReason String?
 
   // Payment provider (Wompi)
   wompiSubscriptionId String?
@@ -394,45 +412,44 @@ model Subscription {
 // ─── BILLING EVENT ────────────────────────────────────────────────────────────
 
 model BillingEvent {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
   subscriptionId String
   subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
   // Event type
-  type        String // PAYMENT_SUCCESS | PAYMENT_FAILED | PLAN_CHANGED | TRIAL_STARTED | TRIAL_ENDED | SUBSCRIPTION_CANCELLED | SUBSCRIPTION_RENEWED
+  type String // PAYMENT_SUCCESS | PAYMENT_FAILED | PLAN_CHANGED | TRIAL_STARTED | TRIAL_ENDED | SUBSCRIPTION_CANCELLED | SUBSCRIPTION_RENEWED
 
   // Financial
-  amount      Int?     // En COP (integer, e.g. 49900)
-  currency    String   @default("COP")
+  amount   Int? // En COP (integer, e.g. 49900)
+  currency String @default("COP")
 
   // Plan change tracking
-  fromPlanId  String?
-  toPlanId    String?
+  fromPlanId String?
+  toPlanId   String?
 
   // Provider reference
   wompiTransactionId String?
 
   // Metadata
-  metadata    String?  // JSON for extra data
-  note        String?
+  metadata String? // JSON for extra data
+  note     String?
 }
 
 // ─── TENANT FEATURE OVERRIDE ──────────────────────────────────────────────────
 
 model TenantFeatureOverride {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  feature     String   // "hasAI" | "maxTables" | etc.
-  value       String   // "true" | "50" — parsed by app code based on feature type
-  reason      String?  // "Promoción lanzamiento" | "Override manual"
-  expiresAt   DateTime?
+  feature   String // "hasAI" | "maxTables" | etc.
+  value     String // "true" | "50" — parsed by app code based on feature type
+  reason    String? // "Promoción lanzamiento" | "Override manual"
+  expiresAt DateTime?
 
   @@unique([tenantId, feature])
 }
-
