@@ -636,69 +636,39 @@
               box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
               border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
-  z-index: 1;
 }
 
-/* 360° Full Border Rainbow Glow Ring on Hover (Surrounds entire card) */
+/* Progressive Border Frame Load (Masked strictly to the outer 2px border outline) */
 .featureCardPro::before {
   content: '';
   position: absolute;
-  inset: -2px;
-  border-radius: 26px;
-  background: conic-gradient(from var(--border-angle, 0deg), #2563EB, #7C3AED, #0D9488, #2563EB);
-  z-index: 0;
+  inset: -1px;
+  border-radius: 24px;
+  padding: 2.5px;
+  background: linear-gradient(90deg, #2563EB, #7C3AED, #0D9488, #2563EB);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.4s ease;
-  animation: rotateBorderRing 3s linear infinite;
+  clip-path: polygon(0 100%, 0 100%, 0 100%, 0 100%);
+  transition: opacity 0.2s ease, clip-path 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .featureCardPro:hover::before {
   opacity: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
 
 .featureCardPro:hover {
   transform: translateY(-8px);
-  border-color: transparent;
+  border-color: rgba(37, 99, 235, 0.3);
   box-shadow: 
-    0 22px 50px -10px rgba(37, 99, 235, 0.25),
-    0 0 30px rgba(37, 99, 235, 0.2);
-}
-
-/* Gradual Card Fill Overlay Effect on Hover */
-.featureFillOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0%;
-  background: linear-gradient(180deg, rgba(37, 99, 235, 0.04) 0%, rgba(37, 99, 235, 0.15) 100%);
-  border-radius: 0 0 23px 23px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Glowing top edge laser line of the rising fill liquid */
-.featureFillOverlay::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #2563EB, #7C3AED, #0D9488);
-  box-shadow: 0 0 14px #2563EB, 0 0 8px #7C3AED;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: 2;
-}
-
-.featureCardPro:hover .featureFillOverlay {
-  animation: fillCardProgress 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  border-radius: 23px;
-}
-
-.featureCardPro:hover .featureFillOverlay::before {
-  opacity: 1;
+    0 22px 50px -10px rgba(37, 99, 235, 0.18),
+    0 0 25px rgba(37, 99, 235, 0.12);
 }
 
 .featureCardPro > * {

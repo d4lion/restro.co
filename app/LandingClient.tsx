@@ -173,23 +173,29 @@ export default function LandingClient() {
           y: () => {
             const cardRect = card1.getBoundingClientRect();
             const slotRect = slotMenu.getBoundingClientRect();
-            return (slotRect.top - cardRect.top) + (card1.style.transform ? parseFloat(gsap.getProperty(card1, "y") as string || "0") : 0);
+            const currentY = parseFloat(gsap.getProperty(card1, "y") as string || "0");
+            const cardDocTop = cardRect.top + window.scrollY - currentY;
+            const slotDocTop = slotRect.top + window.scrollY;
+            return slotDocTop - cardDocTop;
           },
           x: () => {
             const cardRect = card1.getBoundingClientRect();
             const slotRect = slotMenu.getBoundingClientRect();
-            return (slotRect.left - cardRect.left) + (card1.style.transform ? parseFloat(gsap.getProperty(card1, "x") as string || "0") : 0);
+            const currentX = parseFloat(gsap.getProperty(card1, "x") as string || "0");
+            const cardDocLeft = cardRect.left + window.scrollX - currentX;
+            const slotDocLeft = slotRect.left + window.scrollX;
+            return slotDocLeft - cardDocLeft;
           },
           rotateY: 0,
           rotateX: 0,
           rotateZ: 0,
           scale: 1,
-          ease: "none",
+          ease: "power1.out",
           scrollTrigger: {
             trigger: "#product-menu-section",
             start: "top 85%",
             end: "top 30%",
-            scrub: 1,
+            scrub: 0.8,
             invalidateOnRefresh: true,
           }
         });
@@ -201,23 +207,29 @@ export default function LandingClient() {
           y: () => {
             const cardRect = card2.getBoundingClientRect();
             const slotRect = slotKds.getBoundingClientRect();
-            return (slotRect.top - cardRect.top) + (card2.style.transform ? parseFloat(gsap.getProperty(card2, "y") as string || "0") : 0);
+            const currentY = parseFloat(gsap.getProperty(card2, "y") as string || "0");
+            const cardDocTop = cardRect.top + window.scrollY - currentY;
+            const slotDocTop = slotRect.top + window.scrollY;
+            return slotDocTop - cardDocTop;
           },
           x: () => {
             const cardRect = card2.getBoundingClientRect();
             const slotRect = slotKds.getBoundingClientRect();
-            return (slotRect.left - cardRect.left) + (card2.style.transform ? parseFloat(gsap.getProperty(card2, "x") as string || "0") : 0);
+            const currentX = parseFloat(gsap.getProperty(card2, "x") as string || "0");
+            const cardDocLeft = cardRect.left + window.scrollX - currentX;
+            const slotDocLeft = slotRect.left + window.scrollX;
+            return slotDocLeft - cardDocLeft;
           },
           rotateY: 0,
           rotateX: 0,
           rotateZ: 0,
           scale: 1,
-          ease: "none",
+          ease: "power1.out",
           scrollTrigger: {
             trigger: "#product-kds-section",
             start: "top 85%",
             end: "top 30%",
-            scrub: 1,
+            scrub: 0.8,
             invalidateOnRefresh: true,
           }
         });
@@ -229,23 +241,29 @@ export default function LandingClient() {
           y: () => {
             const cardRect = card3.getBoundingClientRect();
             const slotRect = slotIa.getBoundingClientRect();
-            return (slotRect.top - cardRect.top) + (card3.style.transform ? parseFloat(gsap.getProperty(card3, "y") as string || "0") : 0);
+            const currentY = parseFloat(gsap.getProperty(card3, "y") as string || "0");
+            const cardDocTop = cardRect.top + window.scrollY - currentY;
+            const slotDocTop = slotRect.top + window.scrollY;
+            return slotDocTop - cardDocTop;
           },
           x: () => {
             const cardRect = card3.getBoundingClientRect();
             const slotRect = slotIa.getBoundingClientRect();
-            return (slotRect.left - cardRect.left) + (card3.style.transform ? parseFloat(gsap.getProperty(card3, "x") as string || "0") : 0);
+            const currentX = parseFloat(gsap.getProperty(card3, "x") as string || "0");
+            const cardDocLeft = cardRect.left + window.scrollX - currentX;
+            const slotDocLeft = slotRect.left + window.scrollX;
+            return slotDocLeft - cardDocLeft;
           },
           rotateY: 0,
           rotateX: 0,
           rotateZ: 0,
           scale: 1,
-          ease: "none",
+          ease: "power1.out",
           scrollTrigger: {
             trigger: "#product-ia-section",
             start: "top 85%",
             end: "top 30%",
-            scrub: 1,
+            scrub: 0.8,
             invalidateOnRefresh: true,
           }
         });
@@ -558,7 +576,6 @@ export default function LandingClient() {
 
         <div className={`${styles.featuresGridInline} stagger-grid`}>
           <article className={styles.featureCardPro}>
-            <div className={styles.featureFillOverlay} />
             <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--blue']}`}>
               <QrCode size={32} strokeWidth={2.2} />
             </div>
@@ -567,7 +584,6 @@ export default function LandingClient() {
           </article>
 
           <article className={styles.featureCardPro}>
-            <div className={styles.featureFillOverlay} />
             <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--teal']}`}>
               <MonitorCheck size={32} strokeWidth={2.2} />
             </div>
@@ -576,7 +592,6 @@ export default function LandingClient() {
           </article>
 
           <article className={styles.featureCardPro}>
-            <div className={styles.featureFillOverlay} />
             <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--violet']}`}>
               <BrainCircuit size={32} strokeWidth={2.2} />
             </div>
@@ -585,7 +600,6 @@ export default function LandingClient() {
           </article>
 
           <article className={styles.featureCardPro}>
-            <div className={styles.featureFillOverlay} />
             <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--amber']}`}>
               <MessageSquare size={32} strokeWidth={2.2} />
             </div>
