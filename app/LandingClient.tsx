@@ -556,26 +556,41 @@ export default function LandingClient() {
           </div>
         </div>
 
-        <div className={`${styles.featuresGrid} stagger-grid`}>
-          <article className={styles.featureCard}>
-            <div className={`${styles.featureIconWrap} ${styles['featureIconWrap--blue']}`}><QrCode size={24} /></div>
-            <h3 className={styles.featureTitle}>Carta Digital QR</h3>
-            <p className={styles.featureDesc}>Mobile-first, sin apps, personalizada. Tus clientes escanean y navegan tu carta en segundos.</p>
+        <div className={`${styles.featuresGridInline} stagger-grid`}>
+          <article className={styles.featureCardPro}>
+            <div className={styles.featureFillOverlay} />
+            <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--blue']}`}>
+              <QrCode size={32} strokeWidth={2.2} />
+            </div>
+            <h3 className={styles.featureTitlePro}>Carta Digital QR</h3>
+            <p className={styles.featureDescPro}>Mobile-first, sin apps, personalizada. Tus clientes escanean y navegan tu carta en segundos.</p>
           </article>
-          <article className={styles.featureCard}>
-            <div className={`${styles.featureIconWrap} ${styles['featureIconWrap--teal']}`}><MonitorCheck size={24} /></div>
-            <h3 className={styles.featureTitle}>KDS — Cocina</h3>
-            <p className={styles.featureDesc}>Comandas en tiempo real a la pantalla de cocina. Cero errores, cero papel, cero demoras.</p>
+
+          <article className={styles.featureCardPro}>
+            <div className={styles.featureFillOverlay} />
+            <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--teal']}`}>
+              <MonitorCheck size={32} strokeWidth={2.2} />
+            </div>
+            <h3 className={styles.featureTitlePro}>KDS — Cocina</h3>
+            <p className={styles.featureDescPro}>Comandas en tiempo real a la pantalla de cocina. Cero errores, cero papel, cero demoras.</p>
           </article>
-          <article className={styles.featureCard}>
-            <div className={`${styles.featureIconWrap} ${styles['featureIconWrap--violet']}`}><BrainCircuit size={24} /></div>
-            <h3 className={styles.featureTitle}>Analítica con IA</h3>
-            <p className={styles.featureDesc}>Identifica platos estrella, predice horas pico y toma decisiones basadas en datos reales.</p>
+
+          <article className={styles.featureCardPro}>
+            <div className={styles.featureFillOverlay} />
+            <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--violet']}`}>
+              <BrainCircuit size={32} strokeWidth={2.2} />
+            </div>
+            <h3 className={styles.featureTitlePro}>Analítica con IA</h3>
+            <p className={styles.featureDescPro}>Identifica platos estrella, predice horas pico y toma decisiones basadas en datos reales.</p>
           </article>
-          <article className={styles.featureCard}>
-            <div className={`${styles.featureIconWrap} ${styles['featureIconWrap--amber']}`}><MessageSquare size={24} /></div>
-            <h3 className={styles.featureTitle}>Canal WhatsApp</h3>
-            <p className={styles.featureDesc}>Recibe pedidos directamente por WhatsApp sin intermediarios ni comisiones abusivas.</p>
+
+          <article className={styles.featureCardPro}>
+            <div className={styles.featureFillOverlay} />
+            <div className={`${styles.featureIconWrapPro} ${styles['featureIconWrap--amber']}`}>
+              <MessageSquare size={32} strokeWidth={2.2} />
+            </div>
+            <h3 className={styles.featureTitlePro}>Canal WhatsApp</h3>
+            <p className={styles.featureDescPro}>Recibe pedidos directamente por WhatsApp sin intermediarios ni comisiones abusivas.</p>
           </article>
         </div>
       </section>
