@@ -278,22 +278,217 @@
   color: #64748B;
 }
 
-/* ── MOCKUP HERO ── */
-.heroMockupWrap {
+/* ── MOCKUP HERO SHOWCASE (LULO BANK STYLE 3D FLOATING SCROLL) ── */
+.heroMockupSection {
   width: 100%;
-  max-width: 1100px;
-  margin: -40px auto 0;
-  padding: 0 32px 80px;
+  max-width: 1280px;
+  margin: -20px auto 0;
+  padding: 40px 32px 140px;
   position: relative;
   z-index: 2;
+  overflow: visible;
 }
 
-.heroMockup {
+.heroMockupContainer {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 50px;
+  align-items: center;
+  position: relative;
+  min-height: 560px;
+}
+
+@media (max-width: 992px) {
+  .heroMockupContainer {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    min-height: auto;
+  }
+}
+
+/* Left Text Side */
+.heroMockupTextSide {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  will-change: transform, opacity;
+  z-index: 5;
+}
+
+.showcaseTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2563EB;
+  width: fit-content;
+}
+
+.showcaseTitle {
+  font-family: var(--font-bebas), 'Inter', sans-serif;
+  font-size: clamp(2.2rem, 3.6vw, 3.6rem);
+  text-transform: uppercase;
+  color: #0F172A;
+  line-height: 1.05;
+  letter-spacing: 0.5px;
+}
+
+.showcaseDesc {
+  font-size: 17px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.luloFeatureList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  margin: 8px 0 16px;
+}
+
+.luloFeatureList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: 16px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.luloCheckIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: #2563EB;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.showcaseCTA {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Right Side 3D Floating Stack Wrapper (Lulo Bank style) */
+.luloStackWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 2200px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.luloStackContainer {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  height: 440px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+@media (max-width: 992px) {
+  .luloStackContainer {
+    height: 340px;
+    max-width: 100%;
+  }
+}
+
+.luloCard {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   border-radius: 20px;
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.1);
+  background: #FFFFFF;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 
+    0 30px 60px -15px rgba(15, 23, 42, 0.22), 
+    0 15px 30px -10px rgba(37, 99, 235, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  overflow: visible;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  transition: box-shadow 0.4s ease;
+}
+
+.luloCard1 { z-index: 3; }
+.luloCard2 { z-index: 2; }
+.luloCard3 { z-index: 1; }
+
+.luloCardImg {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
   display: block;
+}
+
+/* Floating Badges on Cards */
+.floatingBadge {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.2);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.floatingBadge strong {
+  display: block;
+  font-size: 13px;
+  color: #0F172A;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.floatingBadge small {
+  display: block;
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.badgeIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #EFF6FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.badgeTopLeft { top: -16px; left: -16px; }
+.badgeBottomRight { bottom: -16px; right: -16px; }
+.badgeTopRight { top: -16px; right: -16px; }
+
+@media (max-width: 640px) {
+  .badgeTopLeft { top: -10px; left: -10px; }
+  .badgeBottomRight { bottom: -10px; right: -10px; }
+  .badgeTopRight { top: -10px; right: -10px; }
 }
 
 /* ── LOGO BAR ── */
@@ -487,6 +682,14 @@
 
 .productMockupWrap {
   position: relative;
+  min-height: 420px;
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .productMockupWrap {
+    min-height: auto;
+  }
 }
 
 .productMockup {
@@ -494,6 +697,21 @@
   border-radius: 16px;
   border: 1px solid #E2E8F0;
   box-shadow: 0 20px 40px rgba(15,23,42,0.1);
+}
+
+.productMockupMobileOnly {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .productMockupMobileOnly {
+    display: block;
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+    margin-top: 24px;
+  }
 }
 
 /* ── STATS BAR ── */

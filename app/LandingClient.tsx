@@ -5,7 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { Check, ArrowRight, Sparkles, QrCode, MonitorCheck, BrainCircuit, MessageSquare } from "lucide-react";
+import { Check, ArrowRight, Sparkles, QrCode, MonitorCheck, BrainCircuit, MessageSquare, TrendingUp } from "lucide-react";
 import styles from "./page.module.css";
 
 if (typeof window !== "undefined") {
@@ -59,11 +59,6 @@ export default function LandingClient() {
       { opacity: 0, y: 20 }, 
       { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 
       "-=0.6"
-    )
-    .fromTo(`.${styles.heroMockupWrap}`,
-      { opacity: 0, y: 100 },
-      { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" },
-      "-=0.4"
     );
 
     // 2. Navbar blur on scroll
@@ -107,6 +102,224 @@ export default function LandingClient() {
           }
         }
       );
+    });
+
+    // 5. Lulo Bank Style 3D Floating Scroll Showcase Animation (Section 2)
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 993px)", () => {
+      const luloTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#hero-mockup-section",
+          start: "top 80%",
+          end: "top 30%", // Concluye temprano en el scroll para que el texto y las tarjetas queden 100% fijas y legibles!
+          scrub: 0.8,
+        }
+      });
+
+      luloTl
+        // Text enters from left to right and locks in place
+        .fromTo("#hero-mockup-text",
+          { x: -120, opacity: 0 },
+          { x: 0, opacity: 1, ease: "power2.out" }
+        )
+        // Move container with subtle front-facing 3D perspective
+        .fromTo("#lulo-stack-container",
+          { 
+            rotateY: 0, 
+            rotateX: 0, 
+            rotateZ: 0, 
+            scale: 1,
+          },
+          { 
+            rotateY: -5,  // Casi de frente para máxima legibilidad y presencia
+            rotateX: 5,   // Elevación 3D muy suave
+            rotateZ: -1.5,
+            scale: 0.92,
+            ease: "power1.out" 
+          },
+          "<"
+        )
+        // Fan out cards 1, 2, 3 facing forward towards the user
+        .fromTo("#lulo-card-1",
+          { y: 0, z: 0, rotateZ: 0 },
+          { y: -75, z: 40, rotateZ: -1, ease: "power1.out" },
+          "<"
+        )
+        .fromTo("#lulo-card-2",
+          { y: 0, z: 0, rotateZ: 0, opacity: 0.9 },
+          { y: 30, z: 0, x: 15, rotateZ: 1, opacity: 1, ease: "power1.out" },
+          "<"
+        )
+        .fromTo("#lulo-card-3",
+          { y: 0, z: 0, rotateZ: 0, opacity: 0.8 },
+          { y: 135, z: -40, x: 30, rotateZ: 2, opacity: 1, ease: "power1.out" },
+          "<"
+        );
+
+      // 2. Product deep dive traveling cards (Cards travel down from the top stack into their respective section slots!)
+      const card1 = document.getElementById("lulo-card-1");
+      const slotMenu = document.getElementById("mockup-slot-menu");
+
+      const card2 = document.getElementById("lulo-card-2");
+      const slotKds = document.getElementById("mockup-slot-kds");
+
+      const card3 = document.getElementById("lulo-card-3");
+      const slotIa = document.getElementById("mockup-slot-ia");
+
+      // Card 1 (Carta Digital QR) travels down to "Tu menú siempre actualizado"
+      if (card1 && slotMenu) {
+        gsap.to(card1, {
+          y: () => {
+            const cardRect = card1.getBoundingClientRect();
+            const slotRect = slotMenu.getBoundingClientRect();
+            return (slotRect.top - cardRect.top) + (card1.style.transform ? parseFloat(gsap.getProperty(card1, "y") as string || "0") : 0);
+          },
+          x: () => {
+            const cardRect = card1.getBoundingClientRect();
+            const slotRect = slotMenu.getBoundingClientRect();
+            return (slotRect.left - cardRect.left) + (card1.style.transform ? parseFloat(gsap.getProperty(card1, "x") as string || "0") : 0);
+          },
+          rotateY: 0,
+          rotateX: 0,
+          rotateZ: 0,
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#product-menu-section",
+            start: "top 85%",
+            end: "top 30%",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          }
+        });
+      }
+
+      // Card 2 (KDS Cocina) travels down to "Comandas directo a cocina"
+      if (card2 && slotKds) {
+        gsap.to(card2, {
+          y: () => {
+            const cardRect = card2.getBoundingClientRect();
+            const slotRect = slotKds.getBoundingClientRect();
+            return (slotRect.top - cardRect.top) + (card2.style.transform ? parseFloat(gsap.getProperty(card2, "y") as string || "0") : 0);
+          },
+          x: () => {
+            const cardRect = card2.getBoundingClientRect();
+            const slotRect = slotKds.getBoundingClientRect();
+            return (slotRect.left - cardRect.left) + (card2.style.transform ? parseFloat(gsap.getProperty(card2, "x") as string || "0") : 0);
+          },
+          rotateY: 0,
+          rotateX: 0,
+          rotateZ: 0,
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#product-kds-section",
+            start: "top 85%",
+            end: "top 30%",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          }
+        });
+      }
+
+      // Card 3 (Restro IA) travels down to "Crece con Inteligencia"
+      if (card3 && slotIa) {
+        gsap.to(card3, {
+          y: () => {
+            const cardRect = card3.getBoundingClientRect();
+            const slotRect = slotIa.getBoundingClientRect();
+            return (slotRect.top - cardRect.top) + (card3.style.transform ? parseFloat(gsap.getProperty(card3, "y") as string || "0") : 0);
+          },
+          x: () => {
+            const cardRect = card3.getBoundingClientRect();
+            const slotRect = slotIa.getBoundingClientRect();
+            return (slotRect.left - cardRect.left) + (card3.style.transform ? parseFloat(gsap.getProperty(card3, "x") as string || "0") : 0);
+          },
+          rotateY: 0,
+          rotateX: 0,
+          rotateZ: 0,
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#product-ia-section",
+            start: "top 85%",
+            end: "top 30%",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          }
+        });
+      }
+      // 3. Dynamic text animations coming from center/sides as traveling cards arrive
+      gsap.fromTo("#text-menu",
+        { x: -80, opacity: 0, scale: 0.96 },
+        {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#product-menu-section",
+            start: "top 85%",
+            end: "top 35%",
+            scrub: 1,
+          }
+        }
+      );
+
+      gsap.fromTo("#text-kds",
+        { x: 80, opacity: 0, scale: 0.96 },
+        {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#product-kds-section",
+            start: "top 85%",
+            end: "top 35%",
+            scrub: 1,
+          }
+        }
+      );
+
+      gsap.fromTo("#text-ia",
+        { x: -80, opacity: 0, scale: 0.96 },
+        {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#product-ia-section",
+            start: "top 85%",
+            end: "top 35%",
+            scrub: 1,
+          }
+        }
+      );
+    });
+
+    mm.add("(max-width: 992px)", () => {
+      const luloTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#hero-mockup-section",
+          start: "top 85%",
+          end: "top 40%",
+          scrub: 0.8,
+        }
+      });
+
+      luloTl
+        .fromTo("#hero-mockup-text",
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, ease: "none" }
+        )
+        .fromTo("#lulo-card-1",
+          { y: 30, opacity: 0.8 },
+          { y: 0, opacity: 1, ease: "none" },
+          "<"
+        );
     });
 
   }, { scope: containerRef });
@@ -173,10 +386,93 @@ export default function LandingClient() {
         </div>
       </header>
 
-      {/* ── MOCKUP HERO ── */}
-      <div className={styles.heroMockupWrap}>
-        <img src="/images/mockup-analytics-dark.png" alt="Dashboard" className={styles.heroMockup} />
-      </div>
+      {/* ── MOCKUP HERO SHOWCASE (LULO BANK STYLE 3D FLOATING SCROLL SECTION) ── */}
+      <section className={styles.heroMockupSection} id="hero-mockup-section">
+        <div className={styles.heroMockupContainer}>
+          
+          {/* Left Text Content (slides in from left to right) */}
+          <div className={styles.heroMockupTextSide} id="hero-mockup-text">
+            <div className={styles.showcaseTag}>
+              <Sparkles size={14} /> La Revolución de tu Restaurante
+            </div>
+            <h2 className={styles.showcaseTitle}>
+              Una plataforma integral que hace crecer tu negocio
+            </h2>
+            <p className={styles.showcaseDesc}>
+              Olvídate del desorden y las comandas en papel. Centraliza tu carta digital, la cocina y tus métricas con inteligencia artificial en un ecosistema flotante en tiempo real.
+            </p>
+
+            <ul className={styles.luloFeatureList}>
+              <li>
+                <span className={styles.luloCheckIcon}><Check size={14} strokeWidth={3.5} /></span>
+                <div><strong>Carta Digital QR mobile-first</strong> que tus clientes escanean al instante sin descargar nada.</div>
+              </li>
+              <li>
+                <span className={styles.luloCheckIcon}><Check size={14} strokeWidth={3.5} /></span>
+                <div><strong>Pantalla KDS en cocina</strong> para despacho sin errores ni demoras.</div>
+              </li>
+              <li>
+                <span className={styles.luloCheckIcon}><Check size={14} strokeWidth={3.5} /></span>
+                <div><strong>Restro IA analítico</strong> que predice tus horas pico y platos más rentables.</div>
+              </li>
+              <li>
+                <span className={styles.luloCheckIcon}><Check size={14} strokeWidth={3.5} /></span>
+                <div><strong>Cero comisiones abusivas</strong> por pedido en mesa o para llevar.</div>
+              </li>
+            </ul>
+
+            <div className={styles.showcaseCTA}>
+              <Link href="/register" className={styles.btnPrimaryLg}>
+                Probar Restro gratis <ArrowRight size={18} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Side 3D Floating Card Stack (Lulo Bank style) */}
+          <div className={styles.luloStackWrapper}>
+            <div className={styles.luloStackContainer} id="lulo-stack-container">
+              
+              {/* Card 1 (Top/Front): Main Analytics Dashboard */}
+              <div className={`${styles.luloCard} ${styles.luloCard1}`} id="lulo-card-1">
+                <img src="/images/mockup-analytics-dark.png" alt="Dashboard Restro" className={styles.luloCardImg} />
+                <div className={`${styles.floatingBadge} ${styles.badgeTopLeft}`}>
+                  <span className={styles.badgeIcon}><TrendingUp size={18} color="#2563EB" /></span>
+                  <div>
+                    <strong>+35% en Ventas</strong>
+                    <small>Optimización con IA</small>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2 (Middle): KDS Kitchen Screen */}
+              <div className={`${styles.luloCard} ${styles.luloCard2}`} id="lulo-card-2">
+                <img src="/images/mockup-kds.png" alt="KDS Cocina" className={styles.luloCardImg} />
+                <div className={`${styles.floatingBadge} ${styles.badgeBottomRight}`}>
+                  <span className={styles.badgeIcon}><MonitorCheck size={18} color="#0D9488" /></span>
+                  <div>
+                    <strong>KDS Cocina</strong>
+                    <small>0 demoras en comandas</small>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3 (Back/Bottom): Menu Digital QR */}
+              <div className={`${styles.luloCard} ${styles.luloCard3}`} id="lulo-card-3">
+                <img src="/images/mockup-menu-dark.png" alt="Carta Digital QR" className={styles.luloCardImg} />
+                <div className={`${styles.floatingBadge} ${styles.badgeTopRight}`}>
+                  <span className={styles.badgeIcon}><Sparkles size={18} color="#7C3AED" /></span>
+                  <div>
+                    <strong>Restro IA Activo</strong>
+                    <small>Patrones en tiempo real</small>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* ── LOGO BAR ── */}
       <section className={styles.logoBar}>
@@ -190,7 +486,67 @@ export default function LandingClient() {
         </div>
       </section>
 
-      {/* ── FEATURES GRID ── */}
+      {/* ── PRODUCT DEEP DIVE 1: MENU ── */}
+      <section className={styles.productSection} id="product-menu-section">
+        <div className={`${styles.productRow} reveal-up`}>
+          <div className={styles.productText} id="text-menu">
+            <span className={styles.sectionLabel}>Carta Digital QR</span>
+            <h2 className={styles.sectionTitle}>Tu menú siempre actualizado</h2>
+            <p className={styles.sectionSub}>Olvídate de las cartas de papel. Gestiona categorías, platos, precios e imágenes en tiempo real desde tu panel.</p>
+            <ul className={styles.productFeatureList}>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Carga imágenes para aumentar ventas hasta un 30%</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Actualiza precios y disponibilidad en segundos</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Personaliza con el logo y colores de tu marca</li>
+            </ul>
+            <div><Link href="/register" className={styles.btnPrimaryLg}>Crear mi carta gratis</Link></div>
+          </div>
+          <div className={styles.productMockupWrap} id="mockup-slot-menu">
+            <img src="/images/mockup-menu-dark.png" alt="Carta Digital" className={styles.productMockupMobileOnly} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT DEEP DIVE 2: KDS ── */}
+      <section className={`${styles.productSection} ${styles.productSectionAlt}`} id="product-kds-section">
+        <div className={`${styles.productRow} ${styles.productRowReverse} reveal-up`}>
+          <div className={styles.productText} id="text-kds">
+            <span className={styles.sectionLabel}>KDS — Cocina Digital</span>
+            <h2 className={styles.sectionTitle}>Comandas directo a cocina</h2>
+            <p className={styles.sectionSub}>Elimina errores y demoras. Cada comanda llega instantáneamente con detalles a tu equipo de cocina.</p>
+            <ul className={styles.productFeatureList}>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Vista en tiempo real de todos los pedidos activos</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Estados: Nuevo → En preparación → Listo</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Soporte para domicilio, llevar y en mesa</li>
+            </ul>
+            <div><Link href="/register" className={styles.btnPrimaryLg}>Probar KDS gratis</Link></div>
+          </div>
+          <div className={styles.productMockupWrap} id="mockup-slot-kds">
+            <img src="/images/mockup-kds.png" alt="KDS" className={styles.productMockupMobileOnly} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT DEEP DIVE 3: IA ── */}
+      <section className={styles.productSection} id="product-ia-section">
+        <div className={`${styles.productRow} reveal-up`}>
+          <div className={styles.productText} id="text-ia">
+            <span className={styles.sectionLabel}>Restro IA</span>
+            <h2 className={styles.sectionTitle}>Crece con Inteligencia</h2>
+            <p className={styles.sectionSub}>Deja que los datos trabajen por ti. Restro IA analiza tus ventas y operaciones para entregarte insights accionables.</p>
+            <ul className={styles.productFeatureList}>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Predicción de horas pico para optimizar tu staff</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Identificación automática de platos más rentables</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Sugerencias de combos para aumentar el ticket</li>
+            </ul>
+            <div><Link href="/register" className={styles.btnPrimaryLg}>Activar Restro IA</Link></div>
+          </div>
+          <div className={styles.productMockupWrap} id="mockup-slot-ia">
+            <img src="/images/mockup-analytics-dark.png" alt="IA Analytics" className={styles.productMockupMobileOnly} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── FEATURES GRID (CARACTERÍSTICAS AL FINAL DE LOS PRODUCTOS) ── */}
       <section className={styles.featuresSection} id="caracteristicas">
         <div className="reveal-up">
           <div className={styles.sectionHeader}>
@@ -221,66 +577,6 @@ export default function LandingClient() {
             <h3 className={styles.featureTitle}>Canal WhatsApp</h3>
             <p className={styles.featureDesc}>Recibe pedidos directamente por WhatsApp sin intermediarios ni comisiones abusivas.</p>
           </article>
-        </div>
-      </section>
-
-      {/* ── PRODUCT DEEP DIVE 1: MENU ── */}
-      <section className={styles.productSection}>
-        <div className={`${styles.productRow} reveal-up`}>
-          <div className={styles.productText}>
-            <span className={styles.sectionLabel}>Carta Digital QR</span>
-            <h2 className={styles.sectionTitle}>Tu menú siempre actualizado</h2>
-            <p className={styles.sectionSub}>Olvídate de las cartas de papel. Gestiona categorías, platos, precios e imágenes en tiempo real desde tu panel.</p>
-            <ul className={styles.productFeatureList}>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Carga imágenes para aumentar ventas hasta un 30%</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Actualiza precios y disponibilidad en segundos</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Personaliza con el logo y colores de tu marca</li>
-            </ul>
-            <div><Link href="/register" className={styles.btnPrimaryLg}>Crear mi carta gratis</Link></div>
-          </div>
-          <div className={styles.productMockupWrap}>
-            <img src="/images/mockup-menu-dark.png" alt="Carta Digital" className={styles.productMockup} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRODUCT DEEP DIVE 2: KDS ── */}
-      <section className={`${styles.productSection} ${styles.productSectionAlt}`}>
-        <div className={`${styles.productRow} ${styles.productRowReverse} reveal-up`}>
-          <div className={styles.productText}>
-            <span className={styles.sectionLabel}>KDS — Cocina Digital</span>
-            <h2 className={styles.sectionTitle}>Comandas directo a cocina</h2>
-            <p className={styles.sectionSub}>Elimina errores y demoras. Cada comanda llega instantáneamente con detalles a tu equipo de cocina.</p>
-            <ul className={styles.productFeatureList}>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Vista en tiempo real de todos los pedidos activos</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Estados: Nuevo → En preparación → Listo</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Soporte para domicilio, llevar y en mesa</li>
-            </ul>
-            <div><Link href="/register" className={styles.btnPrimaryLg}>Probar KDS gratis</Link></div>
-          </div>
-          <div className={styles.productMockupWrap}>
-            <img src="/images/mockup-kds.png" alt="KDS" className={styles.productMockup} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRODUCT DEEP DIVE 3: IA ── */}
-      <section className={styles.productSection}>
-        <div className={`${styles.productRow} reveal-up`}>
-          <div className={styles.productText}>
-            <span className={styles.sectionLabel}>Restro IA</span>
-            <h2 className={styles.sectionTitle}>Crece con Inteligencia</h2>
-            <p className={styles.sectionSub}>Deja que los datos trabajen por ti. Restro IA analiza tus ventas y operaciones para entregarte insights accionables.</p>
-            <ul className={styles.productFeatureList}>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Predicción de horas pico para optimizar tu staff</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Identificación automática de platos más rentables</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Sugerencias de combos para aumentar el ticket</li>
-            </ul>
-            <div><Link href="/register" className={styles.btnPrimaryLg}>Activar Restro IA</Link></div>
-          </div>
-          <div className={styles.productMockupWrap}>
-            <img src="/images/mockup-analytics-dark.png" alt="IA Analytics" className={styles.productMockup} />
-          </div>
         </div>
       </section>
 
