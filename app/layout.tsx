@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
+
+const bebas = localFont({
+  src: '../public/fonts/BebasNeue-Regular.ttf',
+  variable: '--font-bebas',
+  display: 'swap',
+});
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://restro.adamind.co";
 
@@ -98,7 +106,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" dir="ltr">
+    <html lang="es" dir="ltr" className={bebas.variable}>
       <head>
         {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
