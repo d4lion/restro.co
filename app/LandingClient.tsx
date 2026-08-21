@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Check, ArrowRight, Sparkles, QrCode, MonitorCheck, BrainCircuit, MessageSquare, TrendingUp } from "lucide-react";
 import styles from "./page.module.css";
+import Image from "next/image";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -349,7 +350,7 @@ export default function LandingClient() {
       <nav className={styles.nav}>
         <div className={styles.navInner}>
           <Link href="/" className={styles.navLogo}>
-            <img src="/images/logo/logo.png" alt="Restro logo" className={styles.navLogoIcon} />
+            <Image src="/images/logo/logo.png" alt="Restro logo" className={styles.navLogoIcon} />
             <span className={styles.navLogoText}>Restro</span>
           </Link>
           <ul className={styles.navLinks}>
@@ -452,7 +453,7 @@ export default function LandingClient() {
               
               {/* Card 1 (Top/Front): Main Analytics Dashboard */}
               <div className={`${styles.luloCard} ${styles.luloCard1}`} id="lulo-card-1">
-                <img src="/images/mockup-analytics-dark.png" alt="Dashboard Restro" className={styles.luloCardImg} />
+                <Image src="/images/mockup-analytics-dark.png" alt="Dashboard Restro" className={styles.luloCardImage} />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopLeft}`}>
                   <span className={styles.badgeIcon}><TrendingUp size={18} color="#2563EB" /></span>
                   <div>
@@ -464,7 +465,7 @@ export default function LandingClient() {
 
               {/* Card 2 (Middle): KDS Kitchen Screen */}
               <div className={`${styles.luloCard} ${styles.luloCard2}`} id="lulo-card-2">
-                <img src="/images/mockup-kds.png" alt="KDS Cocina" className={styles.luloCardImg} />
+                <Image src="/images/mockup-kds.png" alt="KDS Cocina" className={styles.luloCardImage} />
                 <div className={`${styles.floatingBadge} ${styles.badgeBottomRight}`}>
                   <span className={styles.badgeIcon}><MonitorCheck size={18} color="#0D9488" /></span>
                   <div>
@@ -476,7 +477,7 @@ export default function LandingClient() {
 
               {/* Card 3 (Back/Bottom): Menu Digital QR */}
               <div className={`${styles.luloCard} ${styles.luloCard3}`} id="lulo-card-3">
-                <img src="/images/mockup-menu-dark.png" alt="Carta Digital QR" className={styles.luloCardImg} />
+                <Image src="/images/mockup-menu-dark.png" alt="Carta Digital QR" className={styles.luloCardImage} />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopRight}`}>
                   <span className={styles.badgeIcon}><Sparkles size={18} color="#7C3AED" /></span>
                   <div>
@@ -519,7 +520,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Crear mi carta gratis</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-menu">
-            <img src="/images/mockup-menu-dark.png" alt="Carta Digital" className={styles.productMockupMobileOnly} />
+            <Image src="/images/mockup-menu-dark.png" alt="Carta Digital" className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -539,7 +540,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Probar KDS gratis</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-kds">
-            <img src="/images/mockup-kds.png" alt="KDS" className={styles.productMockupMobileOnly} />
+            <Image src="/images/mockup-kds.png" alt="KDS" className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -559,7 +560,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Activar Restro IA</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-ia">
-            <img src="/images/mockup-analytics-dark.png" alt="IA Analytics" className={styles.productMockupMobileOnly} />
+            <Image src="/images/mockup-analytics-dark.png" alt="IA Analytics" className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -721,7 +722,7 @@ export default function LandingClient() {
         <div className={styles.footerInner}>
           <div className={styles.footerBrand}>
             <div className={styles.footerLogo}>
-              <img src="/images/logo/logo.png" alt="Restro logo" width={32} height={32} style={{ borderRadius: 8 }} />
+              <Image src="/images/logo/logo.png" alt="Restro logo" width={32} height={32} style={{ borderRadius: 8 }} />
               <span className={styles.footerLogoText}>Restro</span>
             </div>
             <p className={styles.footerTagline}>
