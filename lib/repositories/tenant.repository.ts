@@ -6,6 +6,12 @@ const TENANT_INCLUDE = {
     include: { plan: true },
   },
   featureOverrides: true,
+  businessHours: {
+    orderBy: [
+      { dayOfWeek: 'asc' },
+      { openTime: 'asc' }
+    ]
+  },
 } as const;
 
 export const tenantRepository = {
@@ -144,6 +150,30 @@ export const tenantRepository = {
     return prisma.tenant.update({
       where: { id: tenantId },
       data: { whatsappWaitlistEmail: email },
+    });
+  },
+
+  async updateBusinessHours(
+    tenantId: string,
+    hours: Array<{ dayOfWeek: number; openTime: string; closeTime: string }>
+  ) {
+    return prisma.$transaction(async (tx) => {
+      // Delete existing
+      await tx.businessHour.deleteMany({
+        where: { tenantId },
+      });
+
+      // Insert new
+      if (hours.length > 0) {
+        await tx.businessHour.createMany({
+          data: hours.map((h) => ({
+            tenantId,
+            dayOfWeek: h.dayOfWeek,
+            openTime: h.openTime,
+            closeTime: h.closeTime,
+          })),
+        });
+      }
     });
   },
 };

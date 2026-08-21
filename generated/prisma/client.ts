@@ -57,6 +57,11 @@ export type Tenant = Prisma.TenantModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model BusinessHour
+ * 
+ */
+export type BusinessHour = Prisma.BusinessHourModel
+/**
  * Model Menu
  * 
  */

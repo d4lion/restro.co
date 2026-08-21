@@ -131,36 +131,12 @@
   object-fit: contain;
 }
 
-/* ── 24. Dashboard KPIs ─────────────────────────────────────── */
+/* ── Stats Grid ───────────────────────────────────────────────── */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
-}
-
-.statCard {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 24px;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 10px;
-  transition: border-color 150ms ease;
-}
-
-.statCard:hover {
-  border-color: #CBD5E1;
-}
-
-.statIconBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  flex-shrink: 0;
+  margin-bottom: 24px;
 }
 
 .statLabel {
@@ -183,6 +159,34 @@
   font-size: 12px;
   color: #64748B;
   margin-top: 4px;
+}
+
+/* ── Responsiveness ───────────────────────────────────────────── */
+.twoColumnLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+@media (max-width: 1024px) {
+  .heroBanner {
+    flex-direction: column;
+    padding: 32px 24px;
+  }
+  
+  .heroContent {
+    max-width: 100%;
+  }
+
+  .heroIllustrationBox {
+    margin-top: 24px;
+    height: 180px;
+  }
+
+  .twoColumnLayout {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Sections ───────────────────────────────────────────────── */

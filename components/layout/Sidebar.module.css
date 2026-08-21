@@ -227,6 +227,20 @@
   border: 1px solid #FEF3C7;
 }
 
+/* ── New badge ──────────────────────────────────────────────── */
+.newBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #FEF3C7;
+  color: #D97706;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 /* ── Footer ─────────────────────────────────────────────────── */
 .footer {
   padding: 12px 12px 4px;

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import { menuRepository } from "@/lib/repositories/menu.repository";
 import { PublicMenuClient } from "@/components/public/PublicMenuClient";
+import { isStoreOpenNow } from "@/lib/utils";
 import type { Metadata } from "next";
 
 interface Props {
@@ -72,6 +73,8 @@ export default async function PublicMenuPage({ params }: Props) {
       websiteUrl={tenant.websiteUrl ?? null}
       plan={tenant.subscription?.plan?.key ?? "STARTER"}
       categories={categories}
+      isOpen={isStoreOpenNow(tenant.businessHours, tenant.timezone)}
+      businessHours={tenant.businessHours}
     />
   );
 }

@@ -400,6 +400,7 @@ export const ModelName = {
   Plan: 'Plan',
   Tenant: 'Tenant',
   User: 'User',
+  BusinessHour: 'BusinessHour',
   Menu: 'Menu',
   Category: 'Category',
   MenuItem: 'MenuItem',
@@ -429,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "plan" | "tenant" | "user" | "menu" | "category" | "menuItem" | "menuItemModifierGroup" | "menuItemModifierOption" | "table" | "order" | "orderItem" | "orderStatusHistory" | "staffMember" | "analyticsEvent" | "subscription" | "billingEvent" | "tenantFeatureOverride"
+    modelProps: "plan" | "tenant" | "user" | "businessHour" | "menu" | "category" | "menuItem" | "menuItemModifierGroup" | "menuItemModifierOption" | "table" | "order" | "orderItem" | "orderStatusHistory" | "staffMember" | "analyticsEvent" | "subscription" | "billingEvent" | "tenantFeatureOverride"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -652,6 +653,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    BusinessHour: {
+      payload: Prisma.$BusinessHourPayload<ExtArgs>
+      fields: Prisma.BusinessHourFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BusinessHourFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BusinessHourFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>
+        }
+        findFirst: {
+          args: Prisma.BusinessHourFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BusinessHourFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>
+        }
+        findMany: {
+          args: Prisma.BusinessHourFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>[]
+        }
+        create: {
+          args: Prisma.BusinessHourCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>
+        }
+        createMany: {
+          args: Prisma.BusinessHourCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BusinessHourCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>[]
+        }
+        delete: {
+          args: Prisma.BusinessHourDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>
+        }
+        update: {
+          args: Prisma.BusinessHourUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>
+        }
+        deleteMany: {
+          args: Prisma.BusinessHourDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BusinessHourUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BusinessHourUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>[]
+        }
+        upsert: {
+          args: Prisma.BusinessHourUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessHourPayload>
+        }
+        aggregate: {
+          args: Prisma.BusinessHourAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBusinessHour>
+        }
+        groupBy: {
+          args: Prisma.BusinessHourGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BusinessHourGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BusinessHourCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BusinessHourCountAggregateOutputType> | number
         }
       }
     }
@@ -1809,6 +1884,19 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const BusinessHourScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  tenantId: 'tenantId',
+  dayOfWeek: 'dayOfWeek',
+  openTime: 'openTime',
+  closeTime: 'closeTime'
+} as const
+
+export type BusinessHourScalarFieldEnum = (typeof BusinessHourScalarFieldEnum)[keyof typeof BusinessHourScalarFieldEnum]
+
+
 export const MenuScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -2272,6 +2360,7 @@ export type GlobalOmitConfig = {
   plan?: Prisma.PlanOmit
   tenant?: Prisma.TenantOmit
   user?: Prisma.UserOmit
+  businessHour?: Prisma.BusinessHourOmit
   menu?: Prisma.MenuOmit
   category?: Prisma.CategoryOmit
   menuItem?: Prisma.MenuItemOmit
