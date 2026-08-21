@@ -15,6 +15,8 @@ import {
   ExternalLink,
   Wrench,
   Zap,
+  CalendarDays,
+  Package,
 } from "lucide-react";
 import {
   Tooltip,
@@ -43,11 +45,32 @@ const BuildingBadge = () => (
   </Tooltip>
 );
 
+const NewBadge = () => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span className={styles.newBadge}>NUEVO!</span>
+    </TooltipTrigger>
+    <TooltipContent side="top">Módulo recién integrado</TooltipContent>
+  </Tooltip>
+);
+
 const navItems: NavItem[] = [
   { href: "/overview",  label: "Resumen",      icon: <LayoutDashboard size={18} strokeWidth={1.8} /> },
   { href: "/menu",      label: "Carta Digital", icon: <BookOpen        size={18} strokeWidth={1.8} /> },
   { href: "/orders",    label: "Pedidos",      icon: <ClipboardList   size={18} strokeWidth={1.8} /> },
   { href: "/tables",    label: "Mesas & QRs",  icon: <LayoutGrid      size={18} strokeWidth={1.8} /> },
+  {
+    href: "/reservations",
+    label: "Reservas",
+    icon: <CalendarDays size={18} strokeWidth={1.8} />,
+    badge: <NewBadge />,
+  },
+  {
+    href: "/inventory",
+    label: "Inventario",
+    icon: <Package size={18} strokeWidth={1.8} />,
+    badge: <NewBadge />,
+  },
   { href: "/analytics", label: "Analítica IA", icon: <BarChart3       size={18} strokeWidth={1.8} /> },
   {
     href: "/whatsapp",
