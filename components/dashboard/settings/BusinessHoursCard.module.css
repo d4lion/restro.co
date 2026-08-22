@@ -1,0 +1,498 @@
+/* ─── Interactive Calendar Business Hours Card Styles ───────────────── */
+
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.cardSub {
+  font-size: 13.5px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cancelBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #64748B;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.cancelBtn:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #F8FAFC;
+  color: #94A3B8;
+  border-color: #E2E8F0;
+}
+
+.saveBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #2563EB;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  transition: all 150ms ease;
+}
+
+.saveBtn:hover {
+  background: #1D4ED8;
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Calendar Wrapper ────────────────────────────────────────────────── */
+.calendarContainer {
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #FFFFFF;
+  position: relative;
+}
+
+/* Day Headers Row */
+.headerRow {
+  display: flex;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.timeHeaderColumn {
+  width: 54px;
+  flex-shrink: 0;
+  border-right: 1px solid #E2E8F0;
+  background: #F1F5F9;
+}
+
+.daysHeaderGrid {
+  display: flex;
+  flex: 1;
+}
+
+.dayHeaderCell {
+  flex: 1;
+  min-width: 90px;
+  padding: 10px 6px;
+  border-right: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  transition: background 150ms ease;
+}
+
+.dayHeaderCell:last-child {
+  border-right: none;
+}
+
+.dayHeaderCellClosed {
+  background: #F1F5F9;
+  opacity: 0.75;
+}
+
+.dayLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1E293B;
+  text-transform: capitalize;
+}
+
+.dayLabelClosed {
+  color: #94A3B8;
+}
+
+.dayHeaderTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 4px;
+}
+
+/* Mini Switch Toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #CBD5E1;
+  transition: .2s;
+  border-radius: 18px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .2s;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.switch input:checked + .slider {
+  background-color: #2563EB;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(14px);
+}
+
+/* Copy Button in Header */
+.copyBtn {
+  background: none;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms ease;
+}
+
+.copyBtn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+/* ── Copy Schedule Popover Card ── */
+.copyPopover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 190px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: popIn 150ms ease-out forwards;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translate(-50%, -4px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.copyPopoverTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 6px;
+}
+
+.copyOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #334155;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 150ms ease;
+}
+
+.copyOption:hover {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+/* ── Calendar Body & Hours Grid ── */
+.bodyScroll {
+  display: flex;
+  height: 576px; /* 24 hours * 24px per hour */
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Time Scale Labels Column */
+.timeColumn {
+  width: 54px;
+  flex-shrink: 0;
+  border-right: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  position: relative;
+}
+
+.timeLabel {
+  height: 24px;
+  position: relative;
+}
+
+.timeText {
+  position: absolute;
+  top: -7px;
+  right: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #94A3B8;
+  line-height: 1;
+}
+
+/* Day Columns Grid */
+.daysGrid {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.gridLines {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gridLine {
+  height: 24px;
+  border-bottom: 1px solid #E2E8F0;
+  opacity: 0.5;
+  width: 100%;
+}
+
+.dayColumn {
+  flex: 1;
+  min-width: 90px;
+  border-right: 1px solid #E2E8F0;
+  position: relative;
+  cursor: crosshair;
+  background-color: #FFFFFF;
+  transition: background 150ms ease;
+}
+
+.dayColumn:last-child {
+  border-right: none;
+}
+
+.dayColumnClosed {
+  background-color: #F8FAFC;
+  background-image: repeating-linear-gradient(45deg, #F1F5F9, #F1F5F9 6px, #F8FAFC 6px, #F8FAFC 12px);
+  cursor: not-allowed;
+}
+
+.closedLabel {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: #94A3B8;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #CBD5E1;
+  pointer-events: none;
+}
+
+/* ── Interactive Time Block (Blue Card) ── */
+.timeBlock {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  background: #2563EB;
+  border-radius: 6px;
+  color: #FFFFFF;
+  padding: 2px 4px;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  transition: box-shadow 150ms ease, background 150ms ease;
+  touch-action: none;
+  overflow: hidden;
+}
+
+.timeBlock:active {
+  cursor: grabbing;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.timeBlockDragging {
+  opacity: 0.9;
+  z-index: 20;
+}
+
+/* Resize Handles */
+.resizeHandleTop,
+.resizeHandleBottom {
+  position: absolute;
+  left: 0; right: 0;
+  height: 6px;
+  cursor: ns-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+}
+
+.resizeHandleTop {
+  top: 0;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.resizeHandleBottom {
+  bottom: 0;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.resizeBar {
+  width: 18px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+  transition: background 150ms ease, width 150ms ease;
+}
+
+.resizeHandleTop:hover .resizeBar,
+.resizeHandleBottom:hover .resizeBar {
+  background: #FFFFFF;
+  width: 26px;
+}
+
+/* Delete Button on Block */
+.deleteBlockBtn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 150ms ease, background 150ms ease;
+  z-index: 12;
+}
+
+.deleteBlockBtn:hover {
+  opacity: 1;
+  background: #DC2626;
+}
+
+.blockTimeText {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.1;
+  text-align: center;
+  pointer-events: none;
+}
+
+.blockDurationText {
+  font-size: 9px;
+  font-weight: 500;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Bottom Action Bar */
+.saveBar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

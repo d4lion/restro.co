@@ -3,8 +3,7 @@ import { redirect } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import type { PlanKey, PlanRecord } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
-import { LocalDataCard } from "@/components/dashboard/settings/LocalDataCard";
-import { CommercialProfileCard } from "@/components/dashboard/settings/CommercialProfileCard";
+import { StoreHeaderPreviewCard } from "@/components/dashboard/settings/StoreHeaderPreviewCard";
 import { OrderSettingsCard } from "@/components/dashboard/settings/OrderSettingsCard";
 import { BusinessHoursCard } from "@/components/dashboard/settings/BusinessHoursCard";
 import { LogoutCard } from "@/components/dashboard/settings/LogoutCard";
@@ -35,27 +34,26 @@ export default async function SettingsPage() {
         </div>
       </div>
 
-      {/* ── Commercial Profile — client component with edit mode ── */}
-      <CommercialProfileCard
-        tenantId={tenant.id}
-        name={tenant.name}
-        logoUrl={tenant.logoUrl ?? null}
-        coverUrl={tenant.coverUrl ?? null}
-        brandColor={tenant.brandColor ?? "#0066FF"}
-        instagramUrl={tenant.instagramUrl ?? null}
-        facebookUrl={tenant.facebookUrl ?? null}
-        tiktokUrl={tenant.tiktokUrl ?? null}
-        websiteUrl={tenant.websiteUrl ?? null}
-      />
-
-      {/* ── Local Data — client component with edit mode ── */}
-      <LocalDataCard
+      {/* ── Facebook-Style Store Front Header Live Preview ── */}
+      <StoreHeaderPreviewCard
         tenantId={tenant.id}
         name={tenant.name}
         description={tenant.description ?? null}
         phone={tenant.phone ?? null}
         address={tenant.address ?? null}
         city={tenant.city ?? null}
+        logoUrl={tenant.logoUrl ?? null}
+        coverUrl={tenant.coverUrl ?? null}
+        brandColor={tenant.brandColor ?? "#FF6B35"}
+        instagramUrl={tenant.instagramUrl ?? null}
+        facebookUrl={tenant.facebookUrl ?? null}
+        tiktokUrl={tenant.tiktokUrl ?? null}
+        websiteUrl={tenant.websiteUrl ?? null}
+        businessHours={tenant.businessHours.map((h) => ({
+          dayOfWeek: h.dayOfWeek,
+          openTime: h.openTime,
+          closeTime: h.closeTime,
+        }))}
       />
 
       {/* ── Order Settings ───────────────────────────────────── */}
