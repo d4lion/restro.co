@@ -36,6 +36,10 @@ export const tenantRepository = {
     userEmail: string;
     userName: string;
     passwordHash?: string;
+    country?: string;
+    phone?: string;
+    onboarding?: boolean;
+    monthlyOrders?: string;
   }) {
     return prisma.$transaction(async (tx) => {
       // Find the STARTER plan
@@ -52,6 +56,10 @@ export const tenantRepository = {
         data: {
           name: data.name,
           slug: data.slug,
+          country: data.country || "CO",
+          phone: data.phone,
+          onboarding: data.onboarding ?? false,
+          monthlyOrders: data.monthlyOrders,
         },
       });
 
@@ -93,6 +101,9 @@ export const tenantRepository = {
     phone: string;
     address: string;
     city: string;
+    country: string;
+    onboarding: boolean;
+    monthlyOrders: string;
     brandColor: string;
     accentColor: string;
     allowDineIn: boolean;

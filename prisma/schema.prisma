@@ -76,7 +76,9 @@ model Tenant {
   phone       String?
   address     String?
   city        String?
-  country     String  @default("CO")
+  country       String  @default("CO")
+  onboarding    Boolean @default(false)
+  monthlyOrders String?
 
   // Social Links
   instagramUrl String?
