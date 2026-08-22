@@ -1,54 +1,53 @@
-/* ─── REGISTER PAGE — Split Card Layout (Capgo Style) ────────────────────── */
+/* ─── REGISTER PAGE — Split Card Layout (Design.md Compliant) ────────────────────── */
 
 .page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 16px;
-  background-color: #0F172A;
+  padding: 32px 20px;
+  background-color: #F8FAFC;
   background-image: 
-    radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 85% 85%, rgba(15, 118, 110, 0.12) 0%, transparent 45%),
-    linear-gradient(135deg, rgba(255,255,255,0.02) 25%, transparent 25%),
-    linear-gradient(225deg, rgba(255,255,255,0.02) 25%, transparent 25%);
+    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(13, 148, 136, 0.04) 0%, transparent 40%);
   position: relative;
-  overflow: hidden;
+  font-family: 'Inter', sans-serif;
 }
 
 .container {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 980px;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
 /* ── Dual Column Split Card ─────────────────────────────────────────────── */
 .card {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.15fr 0.85fr;
   background: #FFFFFF;
-  border-radius: 16px;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 50px -15px rgba(15, 23, 42, 0.12);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .card {
     grid-template-columns: 1fr;
   }
 }
 
-/* ── Left Column: Form Area ─────────────────────────────────────────────── */
+/* ── Left Column: Registration Form ─────────────────────────────────────── */
 .leftCol {
-  padding: 40px 48px;
+  padding: 44px 52px;
   display: flex;
   flex-direction: column;
   background: #FFFFFF;
 }
 
-@media (max-width: 540px) {
+@media (max-width: 640px) {
   .leftCol {
     padding: 32px 24px;
   }
@@ -60,87 +59,65 @@
 
 .title {
   font-family: 'Inter', sans-serif;
-  font-size: 30px;
-  font-weight: 800;
+  font-size: 26px;
+  font-weight: 700;
   color: #0F172A;
-  letter-spacing: -0.03em;
-  margin-bottom: 6px;
-  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  line-height: 1.25;
 }
 
 .subtitle {
   font-size: 14px;
   color: #64748B;
+  line-height: 1.5;
 }
 
-.link {
+.subtitleHighlight {
   color: #2563EB;
   font-weight: 600;
-  text-decoration: none;
-  transition: color 150ms ease;
 }
 
-.link:hover {
-  color: #1D4ED8;
-}
-
-.form {
+/* Google OAuth Button */
+.googleBtn {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.gridRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
   gap: 12px;
+  width: 100%;
+  height: 44px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  text-decoration: none;
 }
 
-@media (max-width: 480px) {
-  .gridRow {
-    grid-template-columns: 1fr;
-  }
+.googleBtn:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
-.errorAlert {
-  padding: 10px 14px;
-  background: #FEE2E2;
-  border: 1px solid #FCA5A5;
-  border-radius: 6px;
-  color: #DC2626;
-  font-size: 13px;
+.googleIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
-.submitBtn {
-  margin-top: 8px;
-  height: 48px;
-  background: #0F172A !important;
-  color: #FFFFFF !important;
-  border-color: #0F172A !important;
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  border-radius: 8px !important;
-  transition: background 150ms ease !important;
-}
-
-.submitBtn:hover:not(:disabled) {
-  background: #1E293B !important;
-}
-
-.termsText {
-  font-size: 12px;
-  color: #94A3B8;
-  text-align: center;
-  margin-top: 4px;
-}
-
+/* Divider */
 .divider {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 20px 0 16px;
+  margin: 20px 0;
   color: #94A3B8;
   font-size: 13px;
+  font-weight: 500;
 }
 
 .divider::before,
@@ -151,106 +128,309 @@
 }
 
 .divider span {
-  padding: 0 12px;
+  padding: 0 14px;
 }
 
-.supportBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 40px;
-  width: 100%;
-  border: 1px solid #CBD5E1;
-  background: #FFFFFF;
-  border-radius: 8px;
-  color: #334155;
+/* Form Structure */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gridRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 580px) {
+  .gridRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Custom Select Field */
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
   font-size: 14px;
   font-weight: 600;
-  text-decoration: none;
-  transition: background 150ms ease;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.supportBtn:hover {
+.optionalTag {
+  font-size: 12px;
+  font-weight: 400;
+  color: #94A3B8;
+}
+
+.selectInput {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0F172A;
+  background-color: #FFFFFF;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+
+.selectInput:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Phone Input Group */
+.phoneGroup {
+  display: flex;
+  align-items: center;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  background: #FFFFFF;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.phoneGroup:focus-within {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.phoneCountryRadixWrapper {
+  flex-shrink: 0;
+  border-right: 1px solid #E2E8F0;
   background: #F8FAFC;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+
+.radixSelectTrigger {
+  height: 42px !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 8px 0 12px !important;
+  border-radius: 0 !important;
+}
+
+.radixSelectTrigger:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.phoneInput {
+  flex: 1;
+  height: 42px;
+  padding: 0 12px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #0F172A;
+  background: transparent;
+}
+
+/* Password Toggle Icon */
+.eyeBtn {
+  background: none;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 150ms ease;
+}
+
+.eyeBtn:hover {
   color: #0F172A;
 }
 
-/* ── Right Column: Dark Testimonial Panel ────────────────────────────────── */
-.rightCol {
-  background: #1E293B;
-  padding: 48px;
+/* Terms Checkbox */
+.termsRow {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-  color: #FFFFFF;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 4px;
 }
 
-@media (max-width: 860px) {
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563EB;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.termsLabel {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.termsLink {
+  color: #2563EB;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.termsLink:hover {
+  text-decoration: underline;
+}
+
+/* Primary Submit Button (Design.md compliant) */
+.submitBtn {
+  margin-top: 8px;
+  height: 48px !important;
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+  border-color: #2563EB !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+  transition: background 150ms ease, transform 150ms ease !important;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #1D4ED8 !important;
+  border-color: #1D4ED8 !important;
+  transform: translateY(-1px);
+}
+
+.errorAlert {
+  padding: 12px 16px;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  border-radius: 8px;
+  color: #DC2626;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.footerLoginRow {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #64748B;
+}
+
+.loginLink {
+  color: #2563EB;
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.loginLink:hover {
+  color: #1D4ED8;
+  text-decoration: underline;
+}
+
+/* ── Right Column: Masterpiece Artwork Panel ───────────────────────────── */
+.rightCol {
+  position: relative;
+  background-color: #0F172A;
+  background-image: url('/images/backgrounds/register/register-art.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 44px 36px;
+  overflow: hidden;
+}
+
+@media (max-width: 960px) {
   .rightCol {
     display: none;
   }
 }
 
-.quoteContent {
-  margin-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
+/* Dark Gradient Overlay */
+.artOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg, 
+    rgba(15, 23, 42, 0.15) 0%, 
+    rgba(15, 23, 42, 0.75) 55%, 
+    rgba(15, 23, 42, 0.95) 100%
+  );
+  z-index: 1;
 }
 
-.quoteText {
-  font-family: 'Inter', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.35;
-  color: #F8FAFC;
-  letter-spacing: -0.02em;
+.artContent {
+  position: relative;
+  z-index: 2;
+  color: #FFFFFF;
 }
 
-.quoteHighlight {
-  background: rgba(37, 99, 235, 0.35);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.testimonialAuthor {
-  display: flex;
+.artBadge {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 40px;
-}
-
-.authorAvatar {
-  width: 48px;
-  height: 48px;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 9999px;
-  background: linear-gradient(135deg, #2563EB, #0F766E);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 24px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.artFeatureList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.artFeatureItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  line-height: 1.4;
+}
+
+.artCheckIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #16A34A;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 18px;
-  color: #FFFFFF;
   flex-shrink: 0;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.authorInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.authorName {
-  font-size: 15px;
-  font-weight: 700;
-  color: #FFFFFF;
-}
-
-.authorTitle {
-  font-size: 13px;
-  color: #94A3B8;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.4);
 }

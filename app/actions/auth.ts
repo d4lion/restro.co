@@ -39,6 +39,9 @@ export async function registerAction(
   const password = formData.get("password") as string;
   const restaurantName = formData.get("restaurantName") as string;
   const slug = formData.get("slug") as string;
+  const country = (formData.get("country") as string) || "CO";
+  const whatsapp = formData.get("whatsapp") as string;
+  const monthlyOrders = (formData.get("monthlyOrders") as string) || "none";
 
   // Validate
   const errors: Record<string, string[]> = {};
@@ -90,6 +93,10 @@ export async function registerAction(
       userName: name.trim(),
       name: restaurantName.trim(),
       slug: slug.toLowerCase().trim(),
+      country,
+      phone: whatsapp,
+      onboarding: false,
+      monthlyOrders,
     });
 
     // Try signing in immediately (works if email confirmation is disabled or auto-confirmed)

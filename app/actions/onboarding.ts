@@ -21,6 +21,7 @@ export async function saveOnboardingAction(data: {
   try {
     // 1. Update Tenant Settings
     await tenantRepository.updateSettings(session.tenantId, {
+      onboarding: true,
       ...(data.restaurantName ? { name: data.restaurantName } : {}),
       ...(data.slogan ? { description: data.slogan } : {}),
       ...(data.phone ? { phone: data.phone } : {}),

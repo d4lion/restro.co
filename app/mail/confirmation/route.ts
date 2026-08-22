@@ -4,7 +4,6 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") ?? "/onboarding";
 
   if (code) {
     const supabase = await createClient();
@@ -12,13 +11,13 @@ export async function GET(request: NextRequest) {
 
     if (!error) {
       // Successfully authenticated via email confirmation link!
-      // Redirect to onboarding with session cookies active.
-      return NextResponse.redirect(new URL(next, request.url));
+      // Redirect to the visual confirmation success page with verified=true flag.
+      return NextResponse.redirect(new URL("/mail/confirmed?verified=true", request.url));
     }
 
     console.error("Exchange code for session error:", error);
   }
 
-  // If code is invalid or missing, redirect to login with error
+  // If code is invalid or missing, redirect strictly to login with error
   return NextResponse.redirect(new URL("/login?error=invalid_confirmation_code", request.url));
 }

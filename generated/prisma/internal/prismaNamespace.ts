@@ -1848,6 +1848,8 @@ export const TenantScalarFieldEnum = {
   address: 'address',
   city: 'city',
   country: 'country',
+  onboarding: 'onboarding',
+  monthlyOrders: 'monthlyOrders',
   instagramUrl: 'instagramUrl',
   facebookUrl: 'facebookUrl',
   tiktokUrl: 'tiktokUrl',

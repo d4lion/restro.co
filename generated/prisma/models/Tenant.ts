@@ -37,6 +37,8 @@ export type TenantMinAggregateOutputType = {
   address: string | null
   city: string | null
   country: string | null
+  onboarding: boolean | null
+  monthlyOrders: string | null
   instagramUrl: string | null
   facebookUrl: string | null
   tiktokUrl: string | null
@@ -68,6 +70,8 @@ export type TenantMaxAggregateOutputType = {
   address: string | null
   city: string | null
   country: string | null
+  onboarding: boolean | null
+  monthlyOrders: string | null
   instagramUrl: string | null
   facebookUrl: string | null
   tiktokUrl: string | null
@@ -99,6 +103,8 @@ export type TenantCountAggregateOutputType = {
   address: number
   city: number
   country: number
+  onboarding: number
+  monthlyOrders: number
   instagramUrl: number
   facebookUrl: number
   tiktokUrl: number
@@ -132,6 +138,8 @@ export type TenantMinAggregateInputType = {
   address?: true
   city?: true
   country?: true
+  onboarding?: true
+  monthlyOrders?: true
   instagramUrl?: true
   facebookUrl?: true
   tiktokUrl?: true
@@ -163,6 +171,8 @@ export type TenantMaxAggregateInputType = {
   address?: true
   city?: true
   country?: true
+  onboarding?: true
+  monthlyOrders?: true
   instagramUrl?: true
   facebookUrl?: true
   tiktokUrl?: true
@@ -194,6 +204,8 @@ export type TenantCountAggregateInputType = {
   address?: true
   city?: true
   country?: true
+  onboarding?: true
+  monthlyOrders?: true
   instagramUrl?: true
   facebookUrl?: true
   tiktokUrl?: true
@@ -298,6 +310,8 @@ export type TenantGroupByOutputType = {
   address: string | null
   city: string | null
   country: string
+  onboarding: boolean
+  monthlyOrders: string | null
   instagramUrl: string | null
   facebookUrl: string | null
   tiktokUrl: string | null
@@ -350,6 +364,8 @@ export type TenantWhereInput = {
   address?: Prisma.StringNullableFilter<"Tenant"> | string | null
   city?: Prisma.StringNullableFilter<"Tenant"> | string | null
   country?: Prisma.StringFilter<"Tenant"> | string
+  onboarding?: Prisma.BoolFilter<"Tenant"> | boolean
+  monthlyOrders?: Prisma.StringNullableFilter<"Tenant"> | string | null
   instagramUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   facebookUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   tiktokUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
@@ -390,6 +406,8 @@ export type TenantOrderByWithRelationInput = {
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   country?: Prisma.SortOrder
+  onboarding?: Prisma.SortOrder
+  monthlyOrders?: Prisma.SortOrderInput | Prisma.SortOrder
   instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   facebookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   tiktokUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -433,6 +451,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringNullableFilter<"Tenant"> | string | null
   city?: Prisma.StringNullableFilter<"Tenant"> | string | null
   country?: Prisma.StringFilter<"Tenant"> | string
+  onboarding?: Prisma.BoolFilter<"Tenant"> | boolean
+  monthlyOrders?: Prisma.StringNullableFilter<"Tenant"> | string | null
   instagramUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   facebookUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   tiktokUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
@@ -473,6 +493,8 @@ export type TenantOrderByWithAggregationInput = {
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   country?: Prisma.SortOrder
+  onboarding?: Prisma.SortOrder
+  monthlyOrders?: Prisma.SortOrderInput | Prisma.SortOrder
   instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   facebookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   tiktokUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -510,6 +532,8 @@ export type TenantScalarWhereWithAggregatesInput = {
   address?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   city?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   country?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  onboarding?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  monthlyOrders?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   instagramUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   facebookUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   tiktokUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
@@ -541,6 +565,8 @@ export type TenantCreateInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -581,6 +607,8 @@ export type TenantUncheckedCreateInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -621,6 +649,8 @@ export type TenantUpdateInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -661,6 +691,8 @@ export type TenantUncheckedUpdateInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -701,6 +733,8 @@ export type TenantCreateManyInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -732,6 +766,8 @@ export type TenantUpdateManyMutationInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -763,6 +799,8 @@ export type TenantUncheckedUpdateManyInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -794,6 +832,8 @@ export type TenantCountOrderByAggregateInput = {
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  onboarding?: Prisma.SortOrder
+  monthlyOrders?: Prisma.SortOrder
   instagramUrl?: Prisma.SortOrder
   facebookUrl?: Prisma.SortOrder
   tiktokUrl?: Prisma.SortOrder
@@ -825,6 +865,8 @@ export type TenantMaxOrderByAggregateInput = {
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  onboarding?: Prisma.SortOrder
+  monthlyOrders?: Prisma.SortOrder
   instagramUrl?: Prisma.SortOrder
   facebookUrl?: Prisma.SortOrder
   tiktokUrl?: Prisma.SortOrder
@@ -856,6 +898,8 @@ export type TenantMinOrderByAggregateInput = {
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  onboarding?: Prisma.SortOrder
+  monthlyOrders?: Prisma.SortOrder
   instagramUrl?: Prisma.SortOrder
   facebookUrl?: Prisma.SortOrder
   tiktokUrl?: Prisma.SortOrder
@@ -1022,6 +1066,8 @@ export type TenantCreateWithoutUsersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1061,6 +1107,8 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1116,6 +1164,8 @@ export type TenantUpdateWithoutUsersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1155,6 +1205,8 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1194,6 +1246,8 @@ export type TenantCreateWithoutBusinessHoursInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1233,6 +1287,8 @@ export type TenantUncheckedCreateWithoutBusinessHoursInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1288,6 +1344,8 @@ export type TenantUpdateWithoutBusinessHoursInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1327,6 +1385,8 @@ export type TenantUncheckedUpdateWithoutBusinessHoursInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1366,6 +1426,8 @@ export type TenantCreateWithoutMenusInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1405,6 +1467,8 @@ export type TenantUncheckedCreateWithoutMenusInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1460,6 +1524,8 @@ export type TenantUpdateWithoutMenusInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1499,6 +1565,8 @@ export type TenantUncheckedUpdateWithoutMenusInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1538,6 +1606,8 @@ export type TenantCreateWithoutTablesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1577,6 +1647,8 @@ export type TenantUncheckedCreateWithoutTablesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1632,6 +1704,8 @@ export type TenantUpdateWithoutTablesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1671,6 +1745,8 @@ export type TenantUncheckedUpdateWithoutTablesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1710,6 +1786,8 @@ export type TenantCreateWithoutOrdersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1749,6 +1827,8 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1804,6 +1884,8 @@ export type TenantUpdateWithoutOrdersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1843,6 +1925,8 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1882,6 +1966,8 @@ export type TenantCreateWithoutStaffInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1921,6 +2007,8 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -1976,6 +2064,8 @@ export type TenantUpdateWithoutStaffInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2015,6 +2105,8 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2054,6 +2146,8 @@ export type TenantCreateWithoutAnalyticsEventsInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -2093,6 +2187,8 @@ export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -2148,6 +2244,8 @@ export type TenantUpdateWithoutAnalyticsEventsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2187,6 +2285,8 @@ export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2226,6 +2326,8 @@ export type TenantCreateWithoutSubscriptionInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -2265,6 +2367,8 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -2320,6 +2424,8 @@ export type TenantUpdateWithoutSubscriptionInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2359,6 +2465,8 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2398,6 +2506,8 @@ export type TenantCreateWithoutFeatureOverridesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -2437,6 +2547,8 @@ export type TenantUncheckedCreateWithoutFeatureOverridesInput = {
   address?: string | null
   city?: string | null
   country?: string
+  onboarding?: boolean
+  monthlyOrders?: string | null
   instagramUrl?: string | null
   facebookUrl?: string | null
   tiktokUrl?: string | null
@@ -2492,6 +2604,8 @@ export type TenantUpdateWithoutFeatureOverridesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2531,6 +2645,8 @@ export type TenantUncheckedUpdateWithoutFeatureOverridesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  onboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  monthlyOrders?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tiktokUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2664,6 +2780,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   address?: boolean
   city?: boolean
   country?: boolean
+  onboarding?: boolean
+  monthlyOrders?: boolean
   instagramUrl?: boolean
   facebookUrl?: boolean
   tiktokUrl?: boolean
@@ -2705,6 +2823,8 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   address?: boolean
   city?: boolean
   country?: boolean
+  onboarding?: boolean
+  monthlyOrders?: boolean
   instagramUrl?: boolean
   facebookUrl?: boolean
   tiktokUrl?: boolean
@@ -2736,6 +2856,8 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   address?: boolean
   city?: boolean
   country?: boolean
+  onboarding?: boolean
+  monthlyOrders?: boolean
   instagramUrl?: boolean
   facebookUrl?: boolean
   tiktokUrl?: boolean
@@ -2767,6 +2889,8 @@ export type TenantSelectScalar = {
   address?: boolean
   city?: boolean
   country?: boolean
+  onboarding?: boolean
+  monthlyOrders?: boolean
   instagramUrl?: boolean
   facebookUrl?: boolean
   tiktokUrl?: boolean
@@ -2785,7 +2909,7 @@ export type TenantSelectScalar = {
   whatsappWaitlistEmail?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "instagramUrl" | "facebookUrl" | "tiktokUrl" | "websiteUrl" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "isActive" | "timezone" | "currency" | "language" | "allowDineIn" | "allowTakeout" | "allowDelivery" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "onboarding" | "monthlyOrders" | "instagramUrl" | "facebookUrl" | "tiktokUrl" | "websiteUrl" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "isActive" | "timezone" | "currency" | "language" | "allowDineIn" | "allowTakeout" | "allowDelivery" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   menus?: boolean | Prisma.Tenant$menusArgs<ExtArgs>
   tables?: boolean | Prisma.Tenant$tablesArgs<ExtArgs>
@@ -2827,6 +2951,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     address: string | null
     city: string | null
     country: string
+    onboarding: boolean
+    monthlyOrders: string | null
     instagramUrl: string | null
     facebookUrl: string | null
     tiktokUrl: string | null
@@ -3287,6 +3413,8 @@ export interface TenantFieldRefs {
   readonly address: Prisma.FieldRef<"Tenant", 'String'>
   readonly city: Prisma.FieldRef<"Tenant", 'String'>
   readonly country: Prisma.FieldRef<"Tenant", 'String'>
+  readonly onboarding: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly monthlyOrders: Prisma.FieldRef<"Tenant", 'String'>
   readonly instagramUrl: Prisma.FieldRef<"Tenant", 'String'>
   readonly facebookUrl: Prisma.FieldRef<"Tenant", 'String'>
   readonly tiktokUrl: Prisma.FieldRef<"Tenant", 'String'>
