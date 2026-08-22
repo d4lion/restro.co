@@ -248,10 +248,17 @@ export function StoreHeaderPreviewCard({
           )}
           <span>{draft.coverUrl ? "Cambiar Portada" : "Subir Portada"}</span>
         </button>
+      </div>
 
-        {/* ── 2. Avatar Logo Overlapping Cover ──────────────────────── */}
+      {/* ── 2. Store Front Header Body ─────────────────────────────── */}
+      <div className={styles.bodyContent}>
+        {/* ── Avatar Logo Overlapping Cover with Hover Upload Action ── */}
         <div className={styles.avatarWrapper}>
-          <div className={styles.avatarBox}>
+          <div
+            className={styles.avatarBox}
+            onClick={() => logoInputRef.current?.click()}
+            title="Haz clic para subir un logo nuevo"
+          >
             {draft.logoUrl ? (
               <img src={draft.logoUrl} alt={draft.name} className={styles.avatarImg} />
             ) : (
@@ -262,6 +269,18 @@ export function StoreHeaderPreviewCard({
                 {draft.name.charAt(0).toUpperCase()}
               </div>
             )}
+
+            {/* Hover Action Overlay */}
+            <div className={styles.avatarHoverOverlay}>
+              {isUploadingLogo ? (
+                <Loader2 size={20} className={styles.spin} />
+              ) : (
+                <>
+                  <Camera size={18} />
+                  <span>Cambiar</span>
+                </>
+              )}
+            </div>
           </div>
           <button
             type="button"
@@ -273,10 +292,7 @@ export function StoreHeaderPreviewCard({
             {isUploadingLogo ? <Loader2 size={13} className={styles.spin} /> : <Camera size={13} />}
           </button>
         </div>
-      </div>
 
-      {/* ── 3. Store Front Header Body ─────────────────────────────── */}
-      <div className={styles.bodyContent}>
         <div className={styles.headerMetaRow}>
           <div className={styles.titleArea}>
             <div className={styles.nameRow}>
