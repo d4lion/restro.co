@@ -111,21 +111,60 @@ export function StoreHeaderPreviewCard({
     formData.append("file", file);
 
     const res = await uploadImageAction(formData, type);
-    setUploading(false);
 
     if (res.publicUrl) {
+      const updatedUrl = res.publicUrl;
+      const newLogoUrl = type === "logos" ? updatedUrl : draft.logoUrl;
+      const newCoverUrl = type === "covers" ? updatedUrl : draft.coverUrl;
+
+      // Update draft state immediately for UI
       setDraft((prev) => ({
         ...prev,
-        [type === "logos" ? "logoUrl" : "coverUrl"]: res.publicUrl,
+        [type === "logos" ? "logoUrl" : "coverUrl"]: updatedUrl,
       }));
-      toast.success(
-        type === "logos"
-          ? "Logo subido correctamente. Haz clic en Guardar Cambios para persisitir."
-          : "Portada subida correctamente. Haz clic en Guardar Cambios para persisitir."
-      );
+
+      // AUTO-SAVE to DB immediately if outside modal
+      if (!isEditing) {
+        const fdProfile = new FormData();
+        fdProfile.append("logoUrl", newLogoUrl);
+        fdProfile.append("coverUrl", newCoverUrl);
+        fdProfile.append("brandColor", draft.brandColor);
+        fdProfile.append("instagramUrl", draft.instagramUrl);
+        fdProfile.append("facebookUrl", draft.facebookUrl);
+        fdProfile.append("tiktokUrl", draft.tiktokUrl);
+        fdProfile.append("websiteUrl", draft.websiteUrl);
+
+        const saveRes = await updateCommercialProfileAction(fdProfile);
+        setUploading(false);
+
+        if (saveRes.success) {
+          setSavedState((prev) => ({
+            ...prev,
+            [type === "logos" ? "logoUrl" : "coverUrl"]: updatedUrl,
+          }));
+          toast.success(
+            type === "logos"
+              ? "¡Logo actualizado correctamente!"
+              : "¡Portada actualizada correctamente!"
+          );
+        } else {
+          toast.error(saveRes.message || "No se pudo actualizar la imagen en la base de datos");
+        }
+      } else {
+        setUploading(false);
+        toast.success(
+          type === "logos"
+            ? "Logo cargado. Guarda los cambios para aplicar."
+            : "Portada cargada. Guarda los cambios para aplicar."
+        );
+      }
     } else {
+      setUploading(false);
       toast.error(res.error || "No se pudo subir la imagen");
     }
+
+    // Reset input value so re-selecting triggers onChange
+    e.target.value = "";
   }
 
   function handleSaveAll(e: React.FormEvent) {
