@@ -28,10 +28,10 @@ export async function updateLocalDataAction(
 
   await tenantRepository.updateSettings(session.tenantId, {
     name: name.trim(),
-    description: description ? description.trim() : undefined,
-    phone: phone ? phone.trim() : undefined,
-    address: address ? address.trim() : undefined,
-    city: city ? city.trim() : undefined,
+    description: description?.trim() || null,
+    phone: phone?.trim() || null,
+    address: address?.trim() || null,
+    city: city?.trim() || null,
   });
 
   revalidatePath("/settings");
@@ -55,13 +55,13 @@ export async function updateCommercialProfileAction(
   const websiteUrl = formData.get("websiteUrl") as string;
 
   await tenantRepository.updateSettings(session.tenantId, {
-    logoUrl: logoUrl ? logoUrl.trim() : undefined,
-    coverUrl: coverUrl ? coverUrl.trim() : undefined,
-    brandColor: brandColor ? brandColor.trim() : undefined,
-    instagramUrl: instagramUrl ? instagramUrl.trim() : undefined,
-    facebookUrl: facebookUrl ? facebookUrl.trim() : undefined,
-    tiktokUrl: tiktokUrl ? tiktokUrl.trim() : undefined,
-    websiteUrl: websiteUrl ? websiteUrl.trim() : undefined,
+    logoUrl: logoUrl?.trim() || null,
+    coverUrl: coverUrl?.trim() || null,
+    brandColor: brandColor?.trim() || "#FF6B35",
+    instagramUrl: instagramUrl?.trim() || null,
+    facebookUrl: facebookUrl?.trim() || null,
+    tiktokUrl: tiktokUrl?.trim() || null,
+    websiteUrl: websiteUrl?.trim() || null,
   });
 
   revalidatePath("/settings");

@@ -95,24 +95,24 @@ export const tenantRepository = {
 
   async updateSettings(tenantId: string, data: Partial<{
     name: string;
-    description: string;
-    logoUrl: string;
-    coverUrl: string;
-    phone: string;
-    address: string;
-    city: string;
+    description: string | null;
+    logoUrl: string | null;
+    coverUrl: string | null;
+    phone: string | null;
+    address: string | null;
+    city: string | null;
     country: string;
     onboarding: boolean;
-    monthlyOrders: string;
+    monthlyOrders: string | null;
     brandColor: string;
     accentColor: string;
     allowDineIn: boolean;
     allowTakeout: boolean;
     allowDelivery: boolean;
-    instagramUrl: string;
-    facebookUrl: string;
-    tiktokUrl: string;
-    websiteUrl: string;
+    instagramUrl: string | null;
+    facebookUrl: string | null;
+    tiktokUrl: string | null;
+    websiteUrl: string | null;
   }>) {
     return prisma.tenant.update({
       where: { id: tenantId },

@@ -1,4 +1,4 @@
-/* ─── Store Front Profile Preview Card (Facebook Style) ──────────── */
+/* ─── Store Front Profile Card (In-Place Direct Edit Edition) ──────────── */
 
 .card {
   background: #FFFFFF;
@@ -11,7 +11,31 @@
   position: relative;
 }
 
-/* ── Banner Cover Hero ── */
+/* ── Live Preview Area ── */
+.previewContainer {
+  position: relative;
+  background: #FAFAFA;
+}
+
+.previewBadge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* ── Banner Cover Hero ── */
 .coverContainer {
   position: relative;
@@ -177,12 +201,11 @@
   opacity: 1;
 }
 
-/* Hidden File Inputs */
 .hiddenInput {
   display: none;
 }
 
-/* ── Store Body Content ── */
+/* ── Store Body Content & In-Place Direct Editing ── */
 .bodyContent {
   padding: 0 32px 28px 32px;
   position: relative;
@@ -210,6 +233,39 @@
   flex-wrap: wrap;
 }
 
+/* Interactive Name & In-Place Input */
+.interactiveName {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border: 1px dashed transparent;
+}
+
+.interactiveName:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+.hoverPencilIcon {
+  color: #2563EB;
+  opacity: 0;
+  transition: opacity 150ms ease, transform 150ms ease;
+  flex-shrink: 0;
+}
+
+.interactiveName:hover .hoverPencilIcon,
+.interactiveDesc:hover .hoverPencilIcon,
+.interactivePill:hover .hoverPencilIcon,
+.socialBtn:hover .hoverPencilIcon,
+.colorBadge:hover .hoverPencilIcon {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 .storeName {
   font-size: 24px;
   font-weight: 800;
@@ -218,6 +274,22 @@
   line-height: 1.2;
 }
 
+.inPlaceNameInput {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0F172A;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 2px solid #2563EB;
+  outline: none;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  font-family: inherit;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Color Badge & Popover */
 .colorBadge {
   display: inline-flex;
   align-items: center;
@@ -229,6 +301,95 @@
   color: #FFFFFF;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   font-family: monospace;
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.colorBadge:hover {
+  transform: translateY(-1px);
+}
+
+.colorPopover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn 150ms ease-out;
+}
+
+.colorPopoverTitle {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.colorPresetsGrid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.colorSwatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.colorSwatch:hover {
+  transform: scale(1.1);
+}
+
+.colorSwatchActive {
+  border-color: #0F172A !important;
+  transform: scale(1.1);
+}
+
+.customColorPicker {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #E2E8F0;
+}
+
+.customColorInput {
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Interactive Description Field */
+.interactiveDesc {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  width: fit-content;
+  border: 1px dashed transparent;
+}
+
+.interactiveDesc:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
 }
 
 .description {
@@ -236,32 +397,25 @@
   color: #64748B;
   line-height: 1.5;
   max-width: 720px;
+  margin: 0;
 }
 
-.editProfileBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid #CBD5E1;
-  background: #FFFFFF;
-  color: #0F172A;
+.inPlaceDescInput {
   font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-  transition: all 150ms ease;
-  flex-shrink: 0;
+  color: #0F172A;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 2px solid #2563EB;
+  outline: none;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  font-family: inherit;
+  width: 100%;
+  max-width: 600px;
+  resize: vertical;
 }
 
-.editProfileBtn:hover {
-  background: #F8FAFC;
-  border-color: #94A3B8;
-  transform: translateY(-1px);
-}
-
-/* ── Badges Grid / Info Row ── */
+/* ── Badges Grid / Info Row In-Place Edit ── */
 .pillsRow {
   display: flex;
   align-items: center;
@@ -269,7 +423,7 @@
   flex-wrap: wrap;
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #F1F5F9;
+  border-top: 1px solid #E2E8F0;
 }
 
 .pill {
@@ -278,11 +432,94 @@
   gap: 6px;
   padding: 6px 12px;
   border-radius: 8px;
-  background: #F8FAFC;
+  background: #FFFFFF;
   border: 1px solid #E2E8F0;
   font-size: 13px;
   font-weight: 500;
   color: #334155;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.interactivePill {
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.interactivePill:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+.pillEditing {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  background: #FFFFFF !important;
+}
+
+.pillEditingAddress {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  background: #FFFFFF !important;
+  min-width: 280px;
+}
+
+.pillEditingCity {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  background: #FFFFFF !important;
+  min-width: 200px;
+}
+
+.fieldTagLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748B;
+  white-space: nowrap;
+}
+
+.inPlacePillInput {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F172A;
+  background: transparent;
+  width: 140px;
+}
+
+.inPlacePillInputLarge {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F172A;
+  background: transparent;
+  width: 240px;
+}
+
+.inPlacePillInputMedium {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F172A;
+  background: transparent;
+  width: 160px;
+}
+
+.inPlacePillInputShort {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F172A;
+  background: transparent;
+  width: 90px;
+}
+
+.pillDivider {
+  color: #94A3B8;
 }
 
 .pillIcon {
@@ -303,34 +540,158 @@
   font-weight: 600;
 }
 
-/* ── Social Icons Bar ── */
+/* ── Social Icons Bar (4 Always Visible Slots) ── */
+.socialBarHeader {
+  margin-top: 18px;
+}
+
+.socialBarLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
 .socialBar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
 }
 
 .socialBtn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 7px 14px;
   border-radius: 8px;
-  background: #F1F5F9;
-  color: #475569;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
-  text-decoration: none;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border: 1px solid transparent;
+}
+
+.socialBtnConfigured {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #1D4ED8;
+}
+
+.socialBtnConfigured:hover {
+  background: #DBEAFE;
+  border-color: #93C5FD;
+}
+
+.socialBtnEmpty {
+  background: #FFFFFF;
+  border: 1px dashed #CBD5E1;
+  color: #94A3B8;
+}
+
+.socialBtnEmpty:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  color: #334155;
+}
+
+/* ── Save Action Bar ─────────────────────────────────────────────────── */
+.saveActionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  flex-wrap: wrap;
+}
+
+.saveStatusInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unsavedBadge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #D97706;
+  background: #FEF3C7;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.savedBadge {
+  font-size: 13px;
+  font-weight: 500;
+  color: #166534;
+  background: #DCFCE7;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.saveActionButtons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resetBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #475569;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 150ms ease;
 }
 
-.socialBtn:hover {
-  background: #E2E8F0;
+.resetBtn:hover {
+  background: #F1F5F9;
   color: #0F172A;
 }
 
-/* ── Unified Edit Modal ──────────────────────────────────────────────── */
+.saveBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  background: #2563EB;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  transition: all 150ms ease;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ── Dedicated Social Link Modal ─────────────────────────────────────── */
 .modalBackdrop {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -353,12 +714,11 @@
   background: #FFFFFF;
   border-radius: 20px;
   width: 100%;
-  max-width: 680px;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-width: 480px;
   box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   animation: slideUp 200ms ease-out forwards;
 }
 
@@ -371,16 +731,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px;
+  padding: 18px 24px;
   border-bottom: 1px solid #E2E8F0;
-  position: sticky;
-  top: 0;
   background: #FFFFFF;
-  z-index: 10;
+}
+
+.modalTitleIcon {
+  color: #2563EB;
 }
 
 .modalTitle {
-  font-size: 18px;
+  font-size: 16.5px;
   font-weight: 700;
   color: #0F172A;
 }
@@ -407,145 +768,102 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
 }
 
-.sectionGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.sectionTitle {
-  font-size: 14px;
-  font-weight: 700;
-  color: #334155;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid #F1F5F9;
-  padding-bottom: 8px;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-@media (max-width: 640px) {
-  .formGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.fieldGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.fieldLabel {
-  font-size: 13px;
+.modalLabel {
+  font-size: 13.5px;
   font-weight: 600;
   color: #334155;
 }
 
-/* Color Presets */
-.colorPresetsRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+.modalInput {
+  font-size: 14px;
+  color: #0F172A;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #CBD5E1;
+  outline: none;
+  background: #FFFFFF;
+  transition: all 150ms ease;
+  width: 100%;
 }
 
-.colorSwatch {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 150ms ease, border-color 150ms ease;
+.modalInput:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.colorSwatch:hover {
-  transform: scale(1.1);
-}
-
-.colorSwatchActive {
-  border-color: #0F172A !important;
-  transform: scale(1.1);
-}
-
-.customColorPicker {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 2px solid #E2E8F0;
-}
-
-.customColorInput {
-  position: absolute;
-  top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  cursor: pointer;
-  border: none;
+.modalHint {
+  font-size: 12.5px;
+  color: #64748B;
+  line-height: 1.4;
+  margin: 0;
 }
 
 .modalFooter {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
+  justify-content: space-between;
   padding: 16px 24px;
   border-top: 1px solid #E2E8F0;
-  position: sticky;
-  bottom: 0;
-  background: #FFFFFF;
-  z-index: 10;
+  background: #F8FAFC;
+}
+
+.modalDeleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #FCA5A5;
+  background: #FEF2F2;
+  color: #B91C1C;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.modalDeleteBtn:hover {
+  background: #FEE2E2;
 }
 
 .modalCancelBtn {
-  padding: 10px 18px;
-  border-radius: 10px;
+  padding: 9px 16px;
+  border-radius: 9px;
   border: 1px solid #CBD5E1;
   background: #FFFFFF;
   color: #64748B;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
   transition: all 150ms ease;
 }
 
 .modalCancelBtn:hover {
-  background: #F8FAFC;
+  background: #F1F5F9;
   color: #0F172A;
 }
 
 .modalSaveBtn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
-  border-radius: 10px;
+  gap: 6px;
+  padding: 9px 20px;
+  border-radius: 9px;
   border: none;
   background: #2563EB;
   color: #FFFFFF;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
   transition: all 150ms ease;
 }
 
 .modalSaveBtn:hover {
   background: #1D4ED8;
-}
-
-.modalSaveBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .spin {
