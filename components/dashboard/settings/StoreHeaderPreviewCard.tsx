@@ -68,6 +68,9 @@ export function StoreHeaderPreviewCard({
 
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
+  const [logoSuccessRing, setLogoSuccessRing] = useState(false);
+  const [coverSuccessRing, setCoverSuccessRing] = useState(false);
+
   const logoInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
@@ -142,6 +145,15 @@ export function StoreHeaderPreviewCard({
             ...prev,
             [type === "logos" ? "logoUrl" : "coverUrl"]: updatedUrl,
           }));
+
+          if (type === "logos") {
+            setLogoSuccessRing(true);
+            setTimeout(() => setLogoSuccessRing(false), 2500);
+          } else {
+            setCoverSuccessRing(true);
+            setTimeout(() => setCoverSuccessRing(false), 2500);
+          }
+
           toast.success(
             type === "logos"
               ? "¡Logo actualizado correctamente!"
@@ -273,12 +285,28 @@ export function StoreHeaderPreviewCard({
         onClick={() => coverInputRef.current?.click()}
         title="Haz clic para cambiar la portada"
       >
+        {/* Top Blue Animated Progress Bar */}
+        {(isUploadingCover || coverSuccessRing) && (
+          <div
+            className={`${styles.coverProgressBar} ${
+              coverSuccessRing ? styles.coverProgressBarDone : ""
+            }`}
+          />
+        )}
+
         <div className={styles.coverOverlay} />
 
         {/* Hover Action Overlay on Cover Banner */}
-        <div className={styles.coverHoverOverlay}>
+        <div
+          className={`${styles.coverHoverOverlay} ${
+            isUploadingCover ? styles.coverHoverOverlayActive : ""
+          }`}
+        >
           {isUploadingCover ? (
-            <Loader2 size={24} className={styles.spin} />
+            <>
+              <Loader2 size={28} className={styles.spin} />
+              <span>Subiendo portada...</span>
+            </>
           ) : (
             <>
               <Camera size={22} />
@@ -293,7 +321,9 @@ export function StoreHeaderPreviewCard({
         {/* ── Avatar Logo Overlapping Cover with Hover Upload Action ── */}
         <div className={styles.avatarWrapper}>
           <div
-            className={styles.avatarBox}
+            className={`${styles.avatarBox} ${
+              isUploadingLogo ? styles.avatarBoxUploading : ""
+            } ${logoSuccessRing ? styles.avatarBoxSuccess : ""}`}
             onClick={() => logoInputRef.current?.click()}
             title="Haz clic para subir un logo nuevo"
           >
@@ -309,9 +339,16 @@ export function StoreHeaderPreviewCard({
             )}
 
             {/* Hover Action Overlay */}
-            <div className={styles.avatarHoverOverlay}>
+            <div
+              className={`${styles.avatarHoverOverlay} ${
+                isUploadingLogo ? styles.avatarHoverOverlayActive : ""
+              }`}
+            >
               {isUploadingLogo ? (
-                <Loader2 size={20} className={styles.spin} />
+                <>
+                  <Loader2 size={22} className={styles.spin} />
+                  <span style={{ fontSize: "10px", marginTop: "2px" }}>Subiendo...</span>
+                </>
               ) : (
                 <>
                   <Camera size={18} />
