@@ -231,23 +231,22 @@ export function StoreHeaderPreviewCard({
             ? `url(${draft.coverUrl})`
             : `linear-gradient(135deg, ${draft.brandColor} 0%, #0F172A 100%)`,
         }}
+        onClick={() => coverInputRef.current?.click()}
+        title="Haz clic para cambiar la portada"
       >
         <div className={styles.coverOverlay} />
 
-        {/* Change Cover Floating Action */}
-        <button
-          type="button"
-          className={styles.coverUploadBtn}
-          onClick={() => coverInputRef.current?.click()}
-          disabled={isUploadingCover}
-        >
+        {/* Hover Action Overlay on Cover Banner */}
+        <div className={styles.coverHoverOverlay}>
           {isUploadingCover ? (
-            <Loader2 size={15} className={styles.spin} />
+            <Loader2 size={24} className={styles.spin} />
           ) : (
-            <Camera size={15} />
+            <>
+              <Camera size={22} />
+              <span>{draft.coverUrl ? "Cambiar Portada" : "Subir Portada"}</span>
+            </>
           )}
-          <span>{draft.coverUrl ? "Cambiar Portada" : "Subir Portada"}</span>
-        </button>
+        </div>
       </div>
 
       {/* ── 2. Store Front Header Body ─────────────────────────────── */}
@@ -282,15 +281,6 @@ export function StoreHeaderPreviewCard({
               )}
             </div>
           </div>
-          <button
-            type="button"
-            className={styles.avatarUploadBtn}
-            onClick={() => logoInputRef.current?.click()}
-            disabled={isUploadingLogo}
-            title="Cambiar Logo"
-          >
-            {isUploadingLogo ? <Loader2 size={13} className={styles.spin} /> : <Camera size={13} />}
-          </button>
         </div>
 
         <div className={styles.headerMetaRow}>
