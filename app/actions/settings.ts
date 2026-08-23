@@ -91,7 +91,11 @@ export async function logoutAction(): Promise<void> {
 export async function updateOrderSettingsAction(
   allowDineIn: boolean,
   allowTakeout: boolean,
-  allowDelivery: boolean
+  allowDelivery: boolean,
+  isMenuOnly: boolean = false,
+  requireTableQrForDineIn: boolean = true,
+  allowWhatsAppOrdering: boolean = false,
+  whatsappNumber: string | null = null
 ): Promise<SettingsActionResult> {
   const session = await getSession();
   if (!session) return { success: false, message: "Sesión expirada" };
@@ -100,6 +104,10 @@ export async function updateOrderSettingsAction(
     allowDineIn,
     allowTakeout,
     allowDelivery,
+    isMenuOnly,
+    requireTableQrForDineIn,
+    allowWhatsAppOrdering,
+    whatsappNumber: whatsappNumber?.trim() || null,
   });
 
   const tenant = await tenantRepository.findById(session.tenantId);

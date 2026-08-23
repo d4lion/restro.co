@@ -147,6 +147,10 @@ export const TenantScalarFieldEnum = {
   allowDineIn: 'allowDineIn',
   allowTakeout: 'allowTakeout',
   allowDelivery: 'allowDelivery',
+  isMenuOnly: 'isMenuOnly',
+  requireTableQrForDineIn: 'requireTableQrForDineIn',
+  allowWhatsAppOrdering: 'allowWhatsAppOrdering',
+  whatsappNumber: 'whatsappNumber',
   whatsappWaitlistEmail: 'whatsappWaitlistEmail'
 } as const
 
@@ -287,6 +291,9 @@ export const OrderScalarFieldEnum = {
   subtotal: 'subtotal',
   total: 'total',
   notes: 'notes',
+  isPriority: 'isPriority',
+  targetPrepTimeMinutes: 'targetPrepTimeMinutes',
+  incidentNote: 'incidentNote',
   orderNumber: 'orderNumber'
 } as const
 
@@ -302,6 +309,8 @@ export const OrderItemScalarFieldEnum = {
   price: 'price',
   quantity: 'quantity',
   notes: 'notes',
+  status: 'status',
+  station: 'station',
   modifiersJson: 'modifiersJson',
   subtotal: 'subtotal'
 } as const

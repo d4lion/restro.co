@@ -1,0 +1,875 @@
+/* Restro — Gestión de Comandas (Light Mode Default + Full Width + Flawless Modo Cocina Dark) */
+
+.kdsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  height: calc(100vh - 72px);
+  max-height: calc(100vh - 72px);
+  gap: 12px;
+  background-color: #F8FAFC; /* neutral-50 */
+  color: #0F172A; /* neutral-900 */
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0; /* neutral-200 */
+  font-family: var(--font-display), "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Modo Cocina (Oscuro / Fullscreen Complete Overrides) */
+.fullscreenMode {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  border: none !important;
+  padding: 16px 20px !important;
+  background-color: #020617 !important; /* neutral-950 */
+  color: #F8FAFC !important;
+}
+
+.fullscreenMode .topBar {
+  border-bottom-color: #334155 !important;
+}
+
+.fullscreenMode .kdsTitle {
+  color: #FFFFFF !important;
+}
+
+.fullscreenMode .aiBanner {
+  background: #1E3A8A !important;
+  border-color: #3B82F6 !important;
+  color: #EFF6FF !important;
+}
+
+.fullscreenMode .metricBadge {
+  background: #1E293B !important;
+  border-color: #334155 !important;
+}
+
+.fullscreenMode .metricLabel {
+  color: #94A3B8 !important;
+}
+
+.fullscreenMode .metricValue {
+  color: #60A5FA !important;
+}
+
+.fullscreenMode .metricValueGreen {
+  color: #4ADE80 !important;
+}
+
+.fullscreenMode .stationSelect,
+.fullscreenMode .filterSelect,
+.fullscreenMode .searchInput,
+.fullscreenMode .btnActionTop {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border-color: #334155 !important;
+}
+
+.fullscreenMode .btnActionTop:hover {
+  background: #334155 !important;
+  color: #60A5FA !important;
+}
+
+.fullscreenMode .kdsColumn {
+  background: #131F37 !important;
+  border-color: #334155 !important;
+}
+
+.fullscreenMode .colHeaderPending {
+  background: #334155 !important;
+  color: #F8FAFC !important;
+}
+
+.fullscreenMode .colHeaderPreparing {
+  background: #0284C7 !important;
+  color: #FFFFFF !important;
+}
+
+.fullscreenMode .colHeaderReady {
+  background: #059669 !important;
+  color: #FFFFFF !important;
+}
+
+.fullscreenMode .columnCountBadge {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #FFFFFF !important;
+}
+
+.fullscreenMode .cardsScrollArea::-webkit-scrollbar-track {
+  background: #0F172A !important;
+}
+
+.fullscreenMode .cardsScrollArea::-webkit-scrollbar-thumb {
+  background: #334155 !important;
+}
+
+.fullscreenMode .emptyColumnState {
+  color: #64748B !important;
+}
+
+/* CARDS DARK MODE OVERRIDES */
+.fullscreenMode .orderCard {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border-color: #334155 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.fullscreenMode .orderCardPriority {
+  background: #24221A !important;
+  border-color: #D97706 !important;
+}
+
+.fullscreenMode .orderCardOverdue {
+  background: #28171B !important;
+  border-color: #DC2626 !important;
+}
+
+.fullscreenMode .cardHeaderBanner {
+  background: #0F172A !important;
+  border-bottom-color: #334155 !important;
+}
+
+.fullscreenMode .orderNumberTitle {
+  color: #FFFFFF !important;
+}
+
+.fullscreenMode .slaSection {
+  background: transparent !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.fullscreenMode .slaBarContainer {
+  background: #334155 !important;
+}
+
+.fullscreenMode .cardBody {
+  background: transparent !important;
+  color: #F8FAFC !important;
+}
+
+.fullscreenMode .itemQty {
+  color: #60A5FA !important;
+}
+
+.fullscreenMode .itemTitle {
+  color: #F8FAFC !important;
+}
+
+.fullscreenMode .modifierPill {
+  color: #93C5FD !important;
+  background: #1E3A8A !important;
+  border-color: rgba(147, 197, 253, 0.2) !important;
+}
+
+.fullscreenMode .notesPill {
+  color: #FDBA74 !important;
+  background: #7C2D12 !important;
+  border-color: rgba(253, 186, 116, 0.2) !important;
+}
+
+.fullscreenMode .cardFooter {
+  background: transparent !important;
+}
+
+.fullscreenMode .subBtn {
+  color: #94A3B8 !important;
+}
+
+.fullscreenMode .subBtn:hover {
+  background: #334155 !important;
+  color: #FFFFFF !important;
+}
+
+.fullscreenMode .subBtnDanger:hover {
+  background: #7F1D1D !important;
+  color: #FCA5A5 !important;
+}
+
+.fullscreenMode .traceabilityDrawer {
+  background: #0F172A !important;
+  color: #F8FAFC !important;
+  border-left-color: #334155 !important;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+.fullscreenMode .drawerHeader {
+  background: #1E293B !important;
+  border-bottom-color: #334155 !important;
+}
+
+.fullscreenMode .timelineList {
+  border-left-color: #334155 !important;
+}
+
+.fullscreenMode .timelineEventText {
+  color: #F8FAFC !important;
+}
+
+/* ── Top Header Control Bar ────────────────────────────── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E2E8F0;
+  flex-wrap: wrap;
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kdsTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.2px;
+}
+
+/* Adamind IA Alert Banner */
+.aiBanner {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1E40AF;
+}
+
+.aiBadge {
+  background: #2563EB;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.4px;
+}
+
+/* Metrics Badges */
+.metricsGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.metricBadge {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 72px;
+}
+
+.metricLabel {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.metricValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2563EB;
+}
+
+.metricValueGreen {
+  color: #16A34A;
+}
+
+/* Actions & Controls */
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stationSelect, .filterSelect {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.stationSelect:hover, .filterSelect:hover {
+  border-color: #2563EB;
+}
+
+.searchInput {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.85rem;
+  width: 150px;
+  outline: none;
+}
+
+.searchInput:focus {
+  border-color: #2563EB;
+}
+
+.btnActionTop {
+  background: #FFFFFF;
+  color: #334155;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btnActionTop:hover {
+  background: #F8FAFC;
+  color: #2563EB;
+}
+
+.btnKitchenMode {
+  background: #2563EB;
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+}
+
+.btnKitchenMode:hover {
+  background: #1D4ED8;
+}
+
+/* ── Main Workspace: Fixed 3 Columns Grid ────────────────── */
+.mainWorkspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.columnsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Individual Column Container */
+.kdsColumn {
+  display: flex;
+  flex-direction: column;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Column Header */
+.columnHeader {
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.colHeaderPending {
+  background: #E2E8F0;
+  color: #1E293B;
+}
+
+.colHeaderPreparing {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+
+.colHeaderReady {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.columnCountBadge {
+  background: rgba(0, 0, 0, 0.08);
+  color: currentColor;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* Cards Vertical Scroll Area */
+.cardsScrollArea {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.cardsScrollArea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cardsScrollArea::-webkit-scrollbar-track {
+  background: #E2E8F0;
+  border-radius: 4px;
+}
+
+.cardsScrollArea::-webkit-scrollbar-thumb {
+  background: #94A3B8;
+  border-radius: 4px;
+}
+
+.emptyColumnState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 12px;
+  color: #64748B;
+  text-align: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* ── KDS ORDER CARD (Larger, Spacious Design) ─────────────── */
+.orderCard {
+  background: #FFFFFF;
+  color: #0F172A;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
+}
+
+.orderCard:hover {
+  border-color: #2563EB;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
+}
+
+/* Priority Card Border */
+.orderCardPriority {
+  border-color: #D97706 !important;
+  background: #FFFBEB !important;
+}
+
+/* Overdue Alert Border */
+.orderCardOverdue {
+  border-color: #DC2626 !important;
+  background: #FEF2F2 !important;
+}
+
+/* Card Header Banner */
+.cardHeaderBanner {
+  padding: 10px 14px;
+  background: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.orderNumberTitle {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.3px;
+}
+
+/* Destination Badge Pill */
+.destinationPill {
+  font-size: 0.775rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.pillDineIn {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.pillTakeout {
+  background: #CCFBF1;
+  color: #0F766E;
+}
+
+.pillDelivery {
+  background: #F3E8FF;
+  color: #6B21A8;
+}
+
+/* SLA Section & Slim Bar */
+.slaSection {
+  padding: 8px 14px;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.timerElapsed {
+  font-family: monospace;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.timerNormal {
+  color: #16A34A;
+}
+
+.timerWarning {
+  color: #D97706;
+}
+
+.timerOverdue {
+  color: #DC2626;
+}
+
+.slaBarContainer {
+  height: 5px;
+  background: #E2E8F0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slaBarFill {
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.slaBarFillNormal {
+  background: #16A34A;
+}
+
+.slaBarFillWarning {
+  background: #D97706;
+}
+
+.slaBarFillOverdue {
+  background: #DC2626;
+}
+
+/* Card Body */
+.cardBody {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.priorityBanner {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.775rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.incidentBanner {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.775rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Items List */
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.itemStatusIcon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.statusPending {
+  color: #94A3B8;
+}
+
+.statusPreparing {
+  color: #0284C7;
+}
+
+.statusReady {
+  color: #16A34A;
+}
+
+.itemQty {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #2563EB;
+}
+
+.itemTitle {
+  font-weight: 700;
+  color: #0F172A;
+  font-size: 0.95rem;
+}
+
+.modifiersBox {
+  margin-left: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.modifierPill {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #1E40AF;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.notesPill {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #9A3412;
+  background: #FFEDD5;
+  border: 1px solid #FED7AA;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* Card Action Footer */
+.cardFooter {
+  padding: 8px 14px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bigActionBtn {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.925rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.15s ease;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.btnStart {
+  background: #0284C7;
+  color: #FFFFFF;
+}
+
+.btnStart:hover {
+  background: #0369A1;
+}
+
+.btnReady {
+  background: #16A34A;
+  color: #FFFFFF;
+}
+
+.btnReady:hover {
+  background: #15803D;
+}
+
+.btnDeliver {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+.btnDeliver:hover {
+  background: #1D4ED8;
+}
+
+/* Sub-actions */
+.subActionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.775rem;
+}
+
+.subBtn {
+  background: transparent;
+  border: none;
+  color: #64748B;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.subBtn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.subBtnDanger:hover {
+  background: #FEF2F2;
+  color: #DC2626;
+}
+
+/* ── TRACEABILITY & HISTORY DRAWER ───────────────────────── */
+.traceabilityDrawer {
+  width: 420px;
+  background: #FFFFFF;
+  color: #0F172A;
+  border-radius: 10px;
+  border-left: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: -10px 0 30px rgba(15, 23, 42, 0.08);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 90;
+}
+
+.drawerHeader {
+  padding: 14px 18px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawerTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.drawerBody {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timelineList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-left: 10px;
+  border-left: 2px solid #CBD5E1;
+  padding-left: 16px;
+}
+
+.timelineItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timelineDot {
+  position: absolute;
+  left: -22px;
+  top: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #2563EB;
+}
+
+.timelineTime {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748B;
+  font-family: monospace;
+}
+
+.timelineEventText {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0F172A;
+}

@@ -54,6 +54,10 @@ export type TenantMinAggregateOutputType = {
   allowDineIn: boolean | null
   allowTakeout: boolean | null
   allowDelivery: boolean | null
+  isMenuOnly: boolean | null
+  requireTableQrForDineIn: boolean | null
+  allowWhatsAppOrdering: boolean | null
+  whatsappNumber: string | null
   whatsappWaitlistEmail: string | null
 }
 
@@ -87,6 +91,10 @@ export type TenantMaxAggregateOutputType = {
   allowDineIn: boolean | null
   allowTakeout: boolean | null
   allowDelivery: boolean | null
+  isMenuOnly: boolean | null
+  requireTableQrForDineIn: boolean | null
+  allowWhatsAppOrdering: boolean | null
+  whatsappNumber: string | null
   whatsappWaitlistEmail: string | null
 }
 
@@ -120,6 +128,10 @@ export type TenantCountAggregateOutputType = {
   allowDineIn: number
   allowTakeout: number
   allowDelivery: number
+  isMenuOnly: number
+  requireTableQrForDineIn: number
+  allowWhatsAppOrdering: number
+  whatsappNumber: number
   whatsappWaitlistEmail: number
   _all: number
 }
@@ -155,6 +167,10 @@ export type TenantMinAggregateInputType = {
   allowDineIn?: true
   allowTakeout?: true
   allowDelivery?: true
+  isMenuOnly?: true
+  requireTableQrForDineIn?: true
+  allowWhatsAppOrdering?: true
+  whatsappNumber?: true
   whatsappWaitlistEmail?: true
 }
 
@@ -188,6 +204,10 @@ export type TenantMaxAggregateInputType = {
   allowDineIn?: true
   allowTakeout?: true
   allowDelivery?: true
+  isMenuOnly?: true
+  requireTableQrForDineIn?: true
+  allowWhatsAppOrdering?: true
+  whatsappNumber?: true
   whatsappWaitlistEmail?: true
 }
 
@@ -221,6 +241,10 @@ export type TenantCountAggregateInputType = {
   allowDineIn?: true
   allowTakeout?: true
   allowDelivery?: true
+  isMenuOnly?: true
+  requireTableQrForDineIn?: true
+  allowWhatsAppOrdering?: true
+  whatsappNumber?: true
   whatsappWaitlistEmail?: true
   _all?: true
 }
@@ -327,6 +351,10 @@ export type TenantGroupByOutputType = {
   allowDineIn: boolean
   allowTakeout: boolean
   allowDelivery: boolean
+  isMenuOnly: boolean
+  requireTableQrForDineIn: boolean
+  allowWhatsAppOrdering: boolean
+  whatsappNumber: string | null
   whatsappWaitlistEmail: string | null
   _count: TenantCountAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
@@ -381,6 +409,10 @@ export type TenantWhereInput = {
   allowDineIn?: Prisma.BoolFilter<"Tenant"> | boolean
   allowTakeout?: Prisma.BoolFilter<"Tenant"> | boolean
   allowDelivery?: Prisma.BoolFilter<"Tenant"> | boolean
+  isMenuOnly?: Prisma.BoolFilter<"Tenant"> | boolean
+  requireTableQrForDineIn?: Prisma.BoolFilter<"Tenant"> | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFilter<"Tenant"> | boolean
+  whatsappNumber?: Prisma.StringNullableFilter<"Tenant"> | string | null
   whatsappWaitlistEmail?: Prisma.StringNullableFilter<"Tenant"> | string | null
   menus?: Prisma.MenuListRelationFilter
   tables?: Prisma.TableListRelationFilter
@@ -423,6 +455,10 @@ export type TenantOrderByWithRelationInput = {
   allowDineIn?: Prisma.SortOrder
   allowTakeout?: Prisma.SortOrder
   allowDelivery?: Prisma.SortOrder
+  isMenuOnly?: Prisma.SortOrder
+  requireTableQrForDineIn?: Prisma.SortOrder
+  allowWhatsAppOrdering?: Prisma.SortOrder
+  whatsappNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   menus?: Prisma.MenuOrderByRelationAggregateInput
   tables?: Prisma.TableOrderByRelationAggregateInput
@@ -468,6 +504,10 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   allowDineIn?: Prisma.BoolFilter<"Tenant"> | boolean
   allowTakeout?: Prisma.BoolFilter<"Tenant"> | boolean
   allowDelivery?: Prisma.BoolFilter<"Tenant"> | boolean
+  isMenuOnly?: Prisma.BoolFilter<"Tenant"> | boolean
+  requireTableQrForDineIn?: Prisma.BoolFilter<"Tenant"> | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFilter<"Tenant"> | boolean
+  whatsappNumber?: Prisma.StringNullableFilter<"Tenant"> | string | null
   whatsappWaitlistEmail?: Prisma.StringNullableFilter<"Tenant"> | string | null
   menus?: Prisma.MenuListRelationFilter
   tables?: Prisma.TableListRelationFilter
@@ -510,6 +550,10 @@ export type TenantOrderByWithAggregationInput = {
   allowDineIn?: Prisma.SortOrder
   allowTakeout?: Prisma.SortOrder
   allowDelivery?: Prisma.SortOrder
+  isMenuOnly?: Prisma.SortOrder
+  requireTableQrForDineIn?: Prisma.SortOrder
+  allowWhatsAppOrdering?: Prisma.SortOrder
+  whatsappNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
@@ -549,6 +593,10 @@ export type TenantScalarWhereWithAggregatesInput = {
   allowDineIn?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   allowTakeout?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   allowDelivery?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  isMenuOnly?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  requireTableQrForDineIn?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  allowWhatsAppOrdering?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  whatsappNumber?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   whatsappWaitlistEmail?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
 }
 
@@ -582,6 +630,10 @@ export type TenantCreateInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -624,6 +676,10 @@ export type TenantUncheckedCreateInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -666,6 +722,10 @@ export type TenantUpdateInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -708,6 +768,10 @@ export type TenantUncheckedUpdateInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -750,6 +814,10 @@ export type TenantCreateManyInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
 }
 
@@ -783,6 +851,10 @@ export type TenantUpdateManyMutationInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -816,6 +888,10 @@ export type TenantUncheckedUpdateManyInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -849,6 +925,10 @@ export type TenantCountOrderByAggregateInput = {
   allowDineIn?: Prisma.SortOrder
   allowTakeout?: Prisma.SortOrder
   allowDelivery?: Prisma.SortOrder
+  isMenuOnly?: Prisma.SortOrder
+  requireTableQrForDineIn?: Prisma.SortOrder
+  allowWhatsAppOrdering?: Prisma.SortOrder
+  whatsappNumber?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrder
 }
 
@@ -882,6 +962,10 @@ export type TenantMaxOrderByAggregateInput = {
   allowDineIn?: Prisma.SortOrder
   allowTakeout?: Prisma.SortOrder
   allowDelivery?: Prisma.SortOrder
+  isMenuOnly?: Prisma.SortOrder
+  requireTableQrForDineIn?: Prisma.SortOrder
+  allowWhatsAppOrdering?: Prisma.SortOrder
+  whatsappNumber?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrder
 }
 
@@ -915,6 +999,10 @@ export type TenantMinOrderByAggregateInput = {
   allowDineIn?: Prisma.SortOrder
   allowTakeout?: Prisma.SortOrder
   allowDelivery?: Prisma.SortOrder
+  isMenuOnly?: Prisma.SortOrder
+  requireTableQrForDineIn?: Prisma.SortOrder
+  allowWhatsAppOrdering?: Prisma.SortOrder
+  whatsappNumber?: Prisma.SortOrder
   whatsappWaitlistEmail?: Prisma.SortOrder
 }
 
@@ -1083,6 +1171,10 @@ export type TenantCreateWithoutUsersInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1124,6 +1216,10 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1181,6 +1277,10 @@ export type TenantUpdateWithoutUsersInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1222,6 +1322,10 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -1263,6 +1367,10 @@ export type TenantCreateWithoutBusinessHoursInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1304,6 +1412,10 @@ export type TenantUncheckedCreateWithoutBusinessHoursInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1361,6 +1473,10 @@ export type TenantUpdateWithoutBusinessHoursInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1402,6 +1518,10 @@ export type TenantUncheckedUpdateWithoutBusinessHoursInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -1443,6 +1563,10 @@ export type TenantCreateWithoutMenusInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
@@ -1484,6 +1608,10 @@ export type TenantUncheckedCreateWithoutMenusInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
@@ -1541,6 +1669,10 @@ export type TenantUpdateWithoutMenusInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
@@ -1582,6 +1714,10 @@ export type TenantUncheckedUpdateWithoutMenusInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
@@ -1623,6 +1759,10 @@ export type TenantCreateWithoutTablesInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
@@ -1664,6 +1804,10 @@ export type TenantUncheckedCreateWithoutTablesInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
@@ -1721,6 +1865,10 @@ export type TenantUpdateWithoutTablesInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
@@ -1762,6 +1910,10 @@ export type TenantUncheckedUpdateWithoutTablesInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
@@ -1803,6 +1955,10 @@ export type TenantCreateWithoutOrdersInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -1844,6 +2000,10 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -1901,6 +2061,10 @@ export type TenantUpdateWithoutOrdersInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -1942,6 +2106,10 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -1983,6 +2151,10 @@ export type TenantCreateWithoutStaffInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -2024,6 +2196,10 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -2081,6 +2257,10 @@ export type TenantUpdateWithoutStaffInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -2122,6 +2302,10 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -2163,6 +2347,10 @@ export type TenantCreateWithoutAnalyticsEventsInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -2204,6 +2392,10 @@ export type TenantUncheckedCreateWithoutAnalyticsEventsInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -2261,6 +2453,10 @@ export type TenantUpdateWithoutAnalyticsEventsInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -2302,6 +2498,10 @@ export type TenantUncheckedUpdateWithoutAnalyticsEventsInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -2343,6 +2543,10 @@ export type TenantCreateWithoutSubscriptionInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -2384,6 +2588,10 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -2441,6 +2649,10 @@ export type TenantUpdateWithoutSubscriptionInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -2482,6 +2694,10 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -2523,6 +2739,10 @@ export type TenantCreateWithoutFeatureOverridesInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableCreateNestedManyWithoutTenantInput
@@ -2564,6 +2784,10 @@ export type TenantUncheckedCreateWithoutFeatureOverridesInput = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: string | null
   whatsappWaitlistEmail?: string | null
   menus?: Prisma.MenuUncheckedCreateNestedManyWithoutTenantInput
   tables?: Prisma.TableUncheckedCreateNestedManyWithoutTenantInput
@@ -2621,6 +2845,10 @@ export type TenantUpdateWithoutFeatureOverridesInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUpdateManyWithoutTenantNestedInput
@@ -2662,6 +2890,10 @@ export type TenantUncheckedUpdateWithoutFeatureOverridesInput = {
   allowDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowTakeout?: Prisma.BoolFieldUpdateOperationsInput | boolean
   allowDelivery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMenuOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requireTableQrForDineIn?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowWhatsAppOrdering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappWaitlistEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menus?: Prisma.MenuUncheckedUpdateManyWithoutTenantNestedInput
   tables?: Prisma.TableUncheckedUpdateManyWithoutTenantNestedInput
@@ -2797,6 +3029,10 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: boolean
   whatsappWaitlistEmail?: boolean
   menus?: boolean | Prisma.Tenant$menusArgs<ExtArgs>
   tables?: boolean | Prisma.Tenant$tablesArgs<ExtArgs>
@@ -2840,6 +3076,10 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: boolean
   whatsappWaitlistEmail?: boolean
 }, ExtArgs["result"]["tenant"]>
 
@@ -2873,6 +3113,10 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: boolean
   whatsappWaitlistEmail?: boolean
 }, ExtArgs["result"]["tenant"]>
 
@@ -2906,10 +3150,14 @@ export type TenantSelectScalar = {
   allowDineIn?: boolean
   allowTakeout?: boolean
   allowDelivery?: boolean
+  isMenuOnly?: boolean
+  requireTableQrForDineIn?: boolean
+  allowWhatsAppOrdering?: boolean
+  whatsappNumber?: boolean
   whatsappWaitlistEmail?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "onboarding" | "monthlyOrders" | "instagramUrl" | "facebookUrl" | "tiktokUrl" | "websiteUrl" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "isActive" | "timezone" | "currency" | "language" | "allowDineIn" | "allowTakeout" | "allowDelivery" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "phone" | "address" | "city" | "country" | "onboarding" | "monthlyOrders" | "instagramUrl" | "facebookUrl" | "tiktokUrl" | "websiteUrl" | "brandColor" | "accentColor" | "slugLockedAt" | "slugChangedAt" | "isActive" | "timezone" | "currency" | "language" | "allowDineIn" | "allowTakeout" | "allowDelivery" | "isMenuOnly" | "requireTableQrForDineIn" | "allowWhatsAppOrdering" | "whatsappNumber" | "whatsappWaitlistEmail", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   menus?: boolean | Prisma.Tenant$menusArgs<ExtArgs>
   tables?: boolean | Prisma.Tenant$tablesArgs<ExtArgs>
@@ -2968,6 +3216,10 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     allowDineIn: boolean
     allowTakeout: boolean
     allowDelivery: boolean
+    isMenuOnly: boolean
+    requireTableQrForDineIn: boolean
+    allowWhatsAppOrdering: boolean
+    whatsappNumber: string | null
     whatsappWaitlistEmail: string | null
   }, ExtArgs["result"]["tenant"]>
   composites: {}
@@ -3430,6 +3682,10 @@ export interface TenantFieldRefs {
   readonly allowDineIn: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly allowTakeout: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly allowDelivery: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly isMenuOnly: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly requireTableQrForDineIn: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly allowWhatsAppOrdering: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly whatsappNumber: Prisma.FieldRef<"Tenant", 'String'>
   readonly whatsappWaitlistEmail: Prisma.FieldRef<"Tenant", 'String'>
 }
     

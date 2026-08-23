@@ -46,3 +46,19 @@ export async function deleteTableAction(tableId: string) {
   revalidatePath("/tables");
   return { success: true, message: "Mesa eliminada" };
 }
+
+export async function bulkDeleteTablesAction(tableIds: string[]) {
+  const session = await getSession();
+  if (!session) return { success: false, message: "Sesión expirada" };
+  if (!tableIds || tableIds.length === 0) {
+    return { success: false, message: "No se seleccionaron mesas para eliminar" };
+  }
+
+  const result = await tableRepository.deleteMany(tableIds, session.tenantId);
+
+  revalidatePath("/tables");
+  return {
+    success: true,
+    message: `${result.count} mesa(s) eliminada(s) correctamente`,
+  };
+}

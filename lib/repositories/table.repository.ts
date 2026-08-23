@@ -48,6 +48,15 @@ export const tableRepository = {
     return prisma.table.delete({ where: { id: tableId } });
   },
 
+  async deleteMany(tableIds: string[], tenantId: string) {
+    return prisma.table.deleteMany({
+      where: {
+        id: { in: tableIds },
+        tenantId,
+      },
+    });
+  },
+
   // Get all tables with their active order count for the dashboard grid
   async getTablesWithStatus(tenantId: string) {
     const tables = await prisma.table.findMany({

@@ -29,12 +29,14 @@ export type AggregateOrder = {
 export type OrderAvgAggregateOutputType = {
   subtotal: number | null
   total: number | null
+  targetPrepTimeMinutes: number | null
   orderNumber: number | null
 }
 
 export type OrderSumAggregateOutputType = {
   subtotal: number | null
   total: number | null
+  targetPrepTimeMinutes: number | null
   orderNumber: number | null
 }
 
@@ -53,6 +55,9 @@ export type OrderMinAggregateOutputType = {
   subtotal: number | null
   total: number | null
   notes: string | null
+  isPriority: boolean | null
+  targetPrepTimeMinutes: number | null
+  incidentNote: string | null
   orderNumber: number | null
 }
 
@@ -71,6 +76,9 @@ export type OrderMaxAggregateOutputType = {
   subtotal: number | null
   total: number | null
   notes: string | null
+  isPriority: boolean | null
+  targetPrepTimeMinutes: number | null
+  incidentNote: string | null
   orderNumber: number | null
 }
 
@@ -89,6 +97,9 @@ export type OrderCountAggregateOutputType = {
   subtotal: number
   total: number
   notes: number
+  isPriority: number
+  targetPrepTimeMinutes: number
+  incidentNote: number
   orderNumber: number
   _all: number
 }
@@ -97,12 +108,14 @@ export type OrderCountAggregateOutputType = {
 export type OrderAvgAggregateInputType = {
   subtotal?: true
   total?: true
+  targetPrepTimeMinutes?: true
   orderNumber?: true
 }
 
 export type OrderSumAggregateInputType = {
   subtotal?: true
   total?: true
+  targetPrepTimeMinutes?: true
   orderNumber?: true
 }
 
@@ -121,6 +134,9 @@ export type OrderMinAggregateInputType = {
   subtotal?: true
   total?: true
   notes?: true
+  isPriority?: true
+  targetPrepTimeMinutes?: true
+  incidentNote?: true
   orderNumber?: true
 }
 
@@ -139,6 +155,9 @@ export type OrderMaxAggregateInputType = {
   subtotal?: true
   total?: true
   notes?: true
+  isPriority?: true
+  targetPrepTimeMinutes?: true
+  incidentNote?: true
   orderNumber?: true
 }
 
@@ -157,6 +176,9 @@ export type OrderCountAggregateInputType = {
   subtotal?: true
   total?: true
   notes?: true
+  isPriority?: true
+  targetPrepTimeMinutes?: true
+  incidentNote?: true
   orderNumber?: true
   _all?: true
 }
@@ -262,6 +284,9 @@ export type OrderGroupByOutputType = {
   subtotal: number
   total: number
   notes: string | null
+  isPriority: boolean
+  targetPrepTimeMinutes: number
+  incidentNote: string | null
   orderNumber: number
   _count: OrderCountAggregateOutputType | null
   _avg: OrderAvgAggregateOutputType | null
@@ -303,6 +328,9 @@ export type OrderWhereInput = {
   subtotal?: Prisma.FloatFilter<"Order"> | number
   total?: Prisma.FloatFilter<"Order"> | number
   notes?: Prisma.StringNullableFilter<"Order"> | string | null
+  isPriority?: Prisma.BoolFilter<"Order"> | boolean
+  targetPrepTimeMinutes?: Prisma.IntFilter<"Order"> | number
+  incidentNote?: Prisma.StringNullableFilter<"Order"> | string | null
   orderNumber?: Prisma.IntFilter<"Order"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
@@ -325,6 +353,9 @@ export type OrderOrderByWithRelationInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPriority?: Prisma.SortOrder
+  targetPrepTimeMinutes?: Prisma.SortOrder
+  incidentNote?: Prisma.SortOrderInput | Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   table?: Prisma.TableOrderByWithRelationInput
@@ -350,6 +381,9 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   subtotal?: Prisma.FloatFilter<"Order"> | number
   total?: Prisma.FloatFilter<"Order"> | number
   notes?: Prisma.StringNullableFilter<"Order"> | string | null
+  isPriority?: Prisma.BoolFilter<"Order"> | boolean
+  targetPrepTimeMinutes?: Prisma.IntFilter<"Order"> | number
+  incidentNote?: Prisma.StringNullableFilter<"Order"> | string | null
   orderNumber?: Prisma.IntFilter<"Order"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
@@ -372,6 +406,9 @@ export type OrderOrderByWithAggregationInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPriority?: Prisma.SortOrder
+  targetPrepTimeMinutes?: Prisma.SortOrder
+  incidentNote?: Prisma.SortOrderInput | Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
   _avg?: Prisma.OrderAvgOrderByAggregateInput
@@ -398,6 +435,9 @@ export type OrderScalarWhereWithAggregatesInput = {
   subtotal?: Prisma.FloatWithAggregatesFilter<"Order"> | number
   total?: Prisma.FloatWithAggregatesFilter<"Order"> | number
   notes?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  isPriority?: Prisma.BoolWithAggregatesFilter<"Order"> | boolean
+  targetPrepTimeMinutes?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  incidentNote?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   orderNumber?: Prisma.IntWithAggregatesFilter<"Order"> | number
 }
 
@@ -414,6 +454,9 @@ export type OrderCreateInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
@@ -436,6 +479,9 @@ export type OrderUncheckedCreateInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
@@ -454,6 +500,9 @@ export type OrderUpdateInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
@@ -476,6 +525,9 @@ export type OrderUncheckedUpdateInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
@@ -496,6 +548,9 @@ export type OrderCreateManyInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
 }
 
@@ -512,6 +567,9 @@ export type OrderUpdateManyMutationInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -530,6 +588,9 @@ export type OrderUncheckedUpdateManyInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -558,12 +619,16 @@ export type OrderCountOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  isPriority?: Prisma.SortOrder
+  targetPrepTimeMinutes?: Prisma.SortOrder
+  incidentNote?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
 export type OrderAvgOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  targetPrepTimeMinutes?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -582,6 +647,9 @@ export type OrderMaxOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  isPriority?: Prisma.SortOrder
+  targetPrepTimeMinutes?: Prisma.SortOrder
+  incidentNote?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -600,12 +668,16 @@ export type OrderMinOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  isPriority?: Prisma.SortOrder
+  targetPrepTimeMinutes?: Prisma.SortOrder
+  incidentNote?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
 export type OrderSumOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  targetPrepTimeMinutes?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -739,6 +811,9 @@ export type OrderCreateWithoutTenantInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
@@ -759,6 +834,9 @@ export type OrderUncheckedCreateWithoutTenantInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
@@ -808,6 +886,9 @@ export type OrderScalarWhereInput = {
   subtotal?: Prisma.FloatFilter<"Order"> | number
   total?: Prisma.FloatFilter<"Order"> | number
   notes?: Prisma.StringNullableFilter<"Order"> | string | null
+  isPriority?: Prisma.BoolFilter<"Order"> | boolean
+  targetPrepTimeMinutes?: Prisma.IntFilter<"Order"> | number
+  incidentNote?: Prisma.StringNullableFilter<"Order"> | string | null
   orderNumber?: Prisma.IntFilter<"Order"> | number
 }
 
@@ -824,6 +905,9 @@ export type OrderCreateWithoutTableInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
@@ -844,6 +928,9 @@ export type OrderUncheckedCreateWithoutTableInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
@@ -888,6 +975,9 @@ export type OrderCreateWithoutItemsInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
@@ -909,6 +999,9 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -942,6 +1035,9 @@ export type OrderUpdateWithoutItemsInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
@@ -963,6 +1059,9 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -980,6 +1079,9 @@ export type OrderCreateWithoutStatusHistoryInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
@@ -1001,6 +1103,9 @@ export type OrderUncheckedCreateWithoutStatusHistoryInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -1034,6 +1139,9 @@ export type OrderUpdateWithoutStatusHistoryInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
@@ -1055,6 +1163,9 @@ export type OrderUncheckedUpdateWithoutStatusHistoryInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -1073,6 +1184,9 @@ export type OrderCreateManyTenantInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
 }
 
@@ -1089,6 +1203,9 @@ export type OrderUpdateWithoutTenantInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
@@ -1109,6 +1226,9 @@ export type OrderUncheckedUpdateWithoutTenantInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
@@ -1128,6 +1248,9 @@ export type OrderUncheckedUpdateManyWithoutTenantInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -1145,6 +1268,9 @@ export type OrderCreateManyTableInput = {
   subtotal?: number
   total?: number
   notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
   orderNumber: number
 }
 
@@ -1161,6 +1287,9 @@ export type OrderUpdateWithoutTableInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
@@ -1181,6 +1310,9 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
@@ -1200,6 +1332,9 @@ export type OrderUncheckedUpdateManyWithoutTableInput = {
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -1258,6 +1393,9 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   subtotal?: boolean
   total?: boolean
   notes?: boolean
+  isPriority?: boolean
+  targetPrepTimeMinutes?: boolean
+  incidentNote?: boolean
   orderNumber?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
@@ -1281,6 +1419,9 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   subtotal?: boolean
   total?: boolean
   notes?: boolean
+  isPriority?: boolean
+  targetPrepTimeMinutes?: boolean
+  incidentNote?: boolean
   orderNumber?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
@@ -1301,6 +1442,9 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   subtotal?: boolean
   total?: boolean
   notes?: boolean
+  isPriority?: boolean
+  targetPrepTimeMinutes?: boolean
+  incidentNote?: boolean
   orderNumber?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
@@ -1321,10 +1465,13 @@ export type OrderSelectScalar = {
   subtotal?: boolean
   total?: boolean
   notes?: boolean
+  isPriority?: boolean
+  targetPrepTimeMinutes?: boolean
+  incidentNote?: boolean
   orderNumber?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "tenantId" | "type" | "tableId" | "customerName" | "customerPhone" | "deliveryAddress" | "deliveryNotes" | "status" | "subtotal" | "total" | "notes" | "orderNumber", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "tenantId" | "type" | "tableId" | "customerName" | "customerPhone" | "deliveryAddress" | "deliveryNotes" | "status" | "subtotal" | "total" | "notes" | "isPriority" | "targetPrepTimeMinutes" | "incidentNote" | "orderNumber", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
@@ -1364,6 +1511,9 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     subtotal: number
     total: number
     notes: string | null
+    isPriority: boolean
+    targetPrepTimeMinutes: number
+    incidentNote: string | null
     orderNumber: number
   }, ExtArgs["result"]["order"]>
   composites: {}
@@ -1806,6 +1956,9 @@ export interface OrderFieldRefs {
   readonly subtotal: Prisma.FieldRef<"Order", 'Float'>
   readonly total: Prisma.FieldRef<"Order", 'Float'>
   readonly notes: Prisma.FieldRef<"Order", 'String'>
+  readonly isPriority: Prisma.FieldRef<"Order", 'Boolean'>
+  readonly targetPrepTimeMinutes: Prisma.FieldRef<"Order", 'Int'>
+  readonly incidentNote: Prisma.FieldRef<"Order", 'String'>
   readonly orderNumber: Prisma.FieldRef<"Order", 'Int'>
 }
     

@@ -109,6 +109,10 @@ export const tenantRepository = {
     allowDineIn: boolean;
     allowTakeout: boolean;
     allowDelivery: boolean;
+    isMenuOnly: boolean;
+    requireTableQrForDineIn: boolean;
+    allowWhatsAppOrdering: boolean;
+    whatsappNumber: string | null;
     instagramUrl: string | null;
     facebookUrl: string | null;
     tiktokUrl: string | null;
