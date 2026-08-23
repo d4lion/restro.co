@@ -453,7 +453,7 @@ export default function LandingClient() {
               
               {/* Card 1 (Top/Front): Main Analytics Dashboard */}
               <div className={`${styles.luloCard} ${styles.luloCard1}`} id="lulo-card-1">
-                <Image src="/images/mockup-analytics-dark.png" alt="Dashboard Restro" width={800} height={500} className={styles.luloCardImg} priority />
+                <Image src="/images/backgrounds/landing/mockup-analytics-dark.png" alt="Dashboard Restro" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopLeft}`}>
                   <span className={styles.badgeIcon}><TrendingUp size={18} color="#2563EB" /></span>
                   <div>
@@ -465,7 +465,7 @@ export default function LandingClient() {
 
               {/* Card 2 (Middle): KDS Kitchen Screen */}
               <div className={`${styles.luloCard} ${styles.luloCard2}`} id="lulo-card-2">
-                <Image src="/images/mockup-kds.png" alt="KDS Cocina" width={800} height={500} className={styles.luloCardImg} priority />
+                <Image src="/images/backgrounds/landing/mockup-kds.png" alt="KDS Cocina" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeBottomRight}`}>
                   <span className={styles.badgeIcon}><MonitorCheck size={18} color="#0D9488" /></span>
                   <div>
@@ -477,7 +477,7 @@ export default function LandingClient() {
 
               {/* Card 3 (Back/Bottom): Menu Digital QR */}
               <div className={`${styles.luloCard} ${styles.luloCard3}`} id="lulo-card-3">
-                <Image src="/images/mockup-menu-dark.png" alt="Carta Digital QR" width={800} height={500} className={styles.luloCardImg} priority />
+                <Image src="/images/backgrounds/landing/mockup-menu-dark.png" alt="Carta Digital QR" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopRight}`}>
                   <span className={styles.badgeIcon}><Sparkles size={18} color="#7C3AED" /></span>
                   <div>

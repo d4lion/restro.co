@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   BookOpen,
@@ -93,12 +93,19 @@ export function Sidebar({
   plan = "STARTER",
 }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [pendingPath, setPendingPath] = useState<string | null>(null);
 
   useEffect(() => {
     setPendingPath(null);
   }, [pathname]);
+
+  useEffect(() => {
+    // Eagerly prefetch the most critical dashboard routes (Resumen & Carta Digital)
+    router.prefetch("/overview");
+    router.prefetch("/menu");
+  }, [router]);
 
   const planLabel =
     plan === "RESTRO_IA" ? "Restro IA" : plan === "BUSINESS" ? "Business" : "Starter";
@@ -161,6 +168,10 @@ export function Sidebar({
             const link = (
               <Link
                 href={item.href}
+                prefetch={true}
+                onMouseEnter={() => router.prefetch(item.href)}
+                onTouchStart={() => router.prefetch(item.href)}
+                onFocus={() => router.prefetch(item.href)}
                 onClick={() => {
                   if (pathname !== item.href) {
                     setPendingPath(item.href);

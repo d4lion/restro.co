@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   BookOpen,
@@ -22,11 +22,18 @@ const navItems = [
 
 export function MobileDashboardNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [pendingPath, setPendingPath] = useState<string | null>(null);
 
   useEffect(() => {
     setPendingPath(null);
   }, [pathname]);
+
+  useEffect(() => {
+    // Eagerly prefetch the most critical dashboard routes (Resumen & Carta) on mobile
+    router.prefetch("/overview");
+    router.prefetch("/menu");
+  }, [router]);
 
   return (
     <>
@@ -46,6 +53,10 @@ export function MobileDashboardNav() {
           <Link
             key={href}
             href={href}
+            prefetch={true}
+            onMouseEnter={() => router.prefetch(href)}
+            onTouchStart={() => router.prefetch(href)}
+            onFocus={() => router.prefetch(href)}
             onClick={() => {
               if (pathname !== href) {
                 setPendingPath(href);
