@@ -101,9 +101,13 @@ model Tenant {
   language String  @default("es")
 
   // Ordering Capabilities
-  allowDineIn   Boolean @default(true)
-  allowTakeout  Boolean @default(false)
-  allowDelivery Boolean @default(false)
+  allowDineIn            Boolean @default(true)
+  allowTakeout           Boolean @default(false)
+  allowDelivery          Boolean @default(false)
+  isMenuOnly             Boolean @default(false)
+  requireTableQrForDineIn Boolean @default(true)
+  allowWhatsAppOrdering  Boolean @default(false)
+  whatsappNumber         String?
 
   // WhatsApp waitlist
   whatsappWaitlistEmail String?
@@ -299,6 +303,11 @@ model Order {
   // Notes
   notes String?
 
+  // SLA & Priority
+  isPriority            Boolean @default(false)
+  targetPrepTimeMinutes Int     @default(12)
+  incidentNote          String?
+
   // Order number (human-readable, per-tenant sequential)
   orderNumber Int
 
@@ -322,6 +331,8 @@ model OrderItem {
   price    Float
   quantity Int     @default(1)
   notes    String? // Per-item notes ("sin cebolla", "bien cocido")
+  status   String  @default("PENDING") // PENDING | PREPARING | READY
+  station  String? // Cocina | Parrilla | Fritura | Bebidas | Postres | Despacho
 
   // JSON array of selected modifiers: [{ optionId: string, name: string, priceExtra: number, groupId: string, groupName: string }]
   modifiersJson String?

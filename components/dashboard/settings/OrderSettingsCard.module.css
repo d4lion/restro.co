@@ -30,10 +30,17 @@
   line-height: 1.5;
 }
 
+.specialSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .optionsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
+  transition: opacity 0.2s ease;
 }
 
 .optionCard {
@@ -86,7 +93,6 @@
   line-height: 1.4;
 }
 
-/* Custom Checkbox switch style if needed, or simply let the card click toggle it */
 .checkbox {
   width: 18px;
   height: 18px;
@@ -105,6 +111,30 @@
   color: white;
 }
 
+/* Advanced Rules Grid */
+.advancedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+  transition: opacity 0.2s ease;
+}
+
+.subRuleCard {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.subRuleCardActive {
+  background: #F0FDF4;
+  border-color: #22C55E;
+}
+
 .saveBtn {
   display: inline-flex;
   align-items: center;
@@ -119,7 +149,6 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
-  align-self: flex-end;
 }
 
 .saveBtn:hover {

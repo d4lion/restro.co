@@ -10,6 +10,9 @@ export interface OrderRepository {
   findById(orderId: string): Promise<OrderWithItems | null>;
   updateStatus(orderId: string, status: OrderStatus, changedById?: string): Promise<void>;
   getTableSession(tableId: string): Promise<TableSession>;
+  togglePriority(orderId: string, isPriority?: boolean): Promise<any>;
+  reportIncident(orderId: string, incidentNote: string): Promise<any>;
+  updateItemStatus(itemId: string, status: string): Promise<any>;
 }
 
 async function getNextOrderNumber(tenantId: string): Promise<number> {
@@ -29,16 +32,32 @@ function mapOrderToDto(order: any): OrderWithItems {
     status: order.status,
     createdAt: order.createdAt,
     customerName: order.customerName,
+    customerPhone: order.customerPhone ?? null,
+    deliveryAddress: order.deliveryAddress ?? null,
+    deliveryNotes: order.deliveryNotes ?? null,
     tableId: order.tableId ?? null,
+    isPriority: order.isPriority ?? false,
+    targetPrepTimeMinutes: order.targetPrepTimeMinutes ?? 12,
+    incidentNote: order.incidentNote ?? null,
     items: order.items.map((item: any) => ({
       id: item.id,
       name: item.name,
       price: item.price,
       quantity: item.quantity,
       notes: item.notes,
+      status: item.status ?? "PENDING",
+      station: item.station ?? null,
       modifiersJson: item.modifiersJson,
       subtotal: item.subtotal,
     })),
+    statusHistory: order.statusHistory?.map((h: any) => ({
+      id: h.id,
+      fromStatus: h.fromStatus ?? null,
+      toStatus: h.toStatus,
+      createdAt: h.createdAt,
+      changedById: h.changedById ?? null,
+      note: h.note ?? null,
+    })) || [],
     total: order.total,
     notes: order.notes,
   };
@@ -49,6 +68,9 @@ const orderInclude = {
     include: { menuItem: { select: { name: true } } },
   },
   table: { select: { name: true } },
+  statusHistory: {
+    orderBy: { createdAt: "asc" as const },
+  },
 };
 
 export const orderRepository: OrderRepository = {
@@ -82,19 +104,59 @@ export const orderRepository: OrderRepository = {
       };
     });
 
+    // Strict & Secure Table Validation (Matches ONLY unguessable id or qrToken CUIDs to prevent enumeration attacks like ?table=1, ?table=2)
+    let validatedTableId: string | null = null;
+    let customerName = data.customerName ?? null;
+
+    if (data.tableId) {
+      const cleanParam = data.tableId.trim();
+
+      const tableRecord = await prisma.table.findFirst({
+        where: {
+          tenantId: data.tenantId,
+          OR: [
+            { id: cleanParam },
+            { qrToken: cleanParam },
+          ],
+        },
+        select: { id: true, name: true },
+      });
+
+      if (tableRecord) {
+        validatedTableId = tableRecord.id;
+        if (!customerName || customerName === "Cliente Local") {
+          customerName = tableRecord.name;
+        } else if (!customerName.includes(tableRecord.name)) {
+          customerName = `${tableRecord.name} — ${customerName}`;
+        }
+      }
+    }
+
+    // Verify tenant requireTableQrForDineIn policy
+    if (data.type === "DINE_IN" && !validatedTableId) {
+      const tenantSetting = await prisma.tenant.findUnique({
+        where: { id: data.tenantId },
+        select: { requireTableQrForDineIn: true },
+      });
+
+      if (tenantSetting?.requireTableQrForDineIn) {
+        throw new Error("Por seguridad, debes escanear el código QR único de tu mesa para realizar pedidos en el local.");
+      }
+    }
+
     const order = await prisma.order.create({
       data: {
         tenantId: data.tenantId,
         type: data.type,
-        tableId: data.tableId ?? null,
-        customerName: data.customerName ?? null,
+        tableId: validatedTableId,
+        customerName: customerName,
         customerPhone: data.customerPhone ?? null,
         deliveryAddress: data.deliveryAddress ?? null,
         deliveryNotes: data.deliveryNotes ?? null,
         notes: data.notes ?? null,
         orderNumber,
         subtotal,
-        total: subtotal, // Add taxes/discounts logic here later
+        total: subtotal,
         status: "PENDING",
         items: { create: orderItems },
         statusHistory: {
@@ -103,6 +165,14 @@ export const orderRepository: OrderRepository = {
       },
       select: { id: true, orderNumber: true },
     });
+
+    // Mark table as active/occupied in DB for POS/Meseros/KDS
+    if (validatedTableId) {
+      await prisma.table.update({
+        where: { id: validatedTableId },
+        data: { isActive: true },
+      });
+    }
 
     return order;
   },
@@ -206,5 +276,41 @@ export const orderRepository: OrderRepository = {
       totalAccumulated,
       sessionOpenedAt: activeOrders[0]?.createdAt ?? null,
     };
+  },
+
+  async togglePriority(orderId: string, isPriority?: boolean) {
+    const current = await prisma.order.findUnique({
+      where: { id: orderId },
+      select: { isPriority: true },
+    });
+    const nextPriority = typeof isPriority === "boolean" ? isPriority : !current?.isPriority;
+
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { isPriority: nextPriority },
+    });
+  },
+
+  async reportIncident(orderId: string, incidentNote: string) {
+    return prisma.$transaction([
+      prisma.order.update({
+        where: { id: orderId },
+        data: { incidentNote },
+      }),
+      prisma.orderStatusHistory.create({
+        data: {
+          orderId,
+          toStatus: "INCIDENT",
+          note: incidentNote,
+        },
+      }),
+    ]);
+  },
+
+  async updateItemStatus(itemId: string, status: string) {
+    return prisma.orderItem.update({
+      where: { id: itemId },
+      data: { status },
+    });
   },
 };

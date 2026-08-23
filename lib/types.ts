@@ -145,7 +145,7 @@ export const PLAN_LIMITS = {
 
 export const ORDER_TYPES = {
   DINE_IN: { label: "En el local", description: "Pedido en mesa" },
-  TAKEOUT: { label: "Para llevar", description: "Retirar en el local" },
+  TAKEOUT: { label: "Para recoger", description: "Retirar en el local" },
   DELIVERY: { label: "Domicilio", description: "Entrega a domicilio" },
 } as const;
 
@@ -240,16 +240,32 @@ export interface OrderWithItems {
   status: OrderStatus;
   createdAt: Date;
   customerName: string | null;
+  customerPhone?: string | null;
+  deliveryAddress?: string | null;
+  deliveryNotes?: string | null;
   tableId: string | null;
+  isPriority?: boolean;
+  targetPrepTimeMinutes?: number;
+  incidentNote?: string | null;
   items: {
     id: string;
     name: string;
     price: number;
     quantity: number;
     notes: string | null;
+    status?: string;
+    station?: string | null;
     modifiersJson: string | null;
     subtotal: number;
   }[];
+  statusHistory?: Array<{
+    id: string;
+    fromStatus: string | null;
+    toStatus: string;
+    createdAt: Date;
+    changedById?: string | null;
+    note?: string | null;
+  }>;
   total: number;
   notes: string | null;
 }

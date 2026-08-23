@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -8,6 +8,7 @@ import {
   createTableAction,
   updateTableAction,
   deleteTableAction,
+  bulkDeleteTablesAction,
 } from "@/app/actions/tables";
 import {
   QrCode,
@@ -18,9 +19,10 @@ import {
   Copy,
   Plus,
   Users,
-  Check,
   X,
   Loader2,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 import { toast } from "sonner";
 import styles from "./TableManagerClient.module.css";
@@ -47,6 +49,10 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [editingTable, setEditingTable] = useState<TableItem | null>(null);
 
+  // Multi-selection state
+  const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+
   // Edit form inputs
   const [editName, setEditName] = useState("");
   const [editCapacity, setEditCapacity] = useState("4");
@@ -58,11 +64,11 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
   const [addCapacity, setAddCapacity] = useState("4");
   const [isCreating, setIsCreating] = useState(false);
 
-  // Generate QR Code data URL when a table is selected for QR view
+  // Generate QR Code data URL using table.id / table.qrToken
   useEffect(() => {
     if (selectedTableForQr) {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-      const fullQrUrl = `${baseUrl}/${tenantSlug}?mesa=${encodeURIComponent(selectedTableForQr.name)}`;
+      const fullQrUrl = `${baseUrl}/${tenantSlug}?tableId=${encodeURIComponent(selectedTableForQr.id)}`;
 
       QRCode.toDataURL(fullQrUrl, {
         width: 400,
@@ -78,6 +84,39 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
       setQrDataUrl("");
     }
   }, [selectedTableForQr, tenantSlug]);
+
+  // Toggle table selection
+  const toggleSelectTable = (tableId: string) => {
+    setSelectedTableIds((prev) =>
+      prev.includes(tableId) ? prev.filter((id) => id !== tableId) : [...prev, tableId]
+    );
+  };
+
+  // Toggle Select All
+  const toggleSelectAll = () => {
+    if (selectedTableIds.length === tables.length) {
+      setSelectedTableIds([]);
+    } else {
+      setSelectedTableIds(tables.map((t) => t.id));
+    }
+  };
+
+  // Bulk Delete Selected Tables
+  const handleBulkDelete = async () => {
+    if (selectedTableIds.length === 0) return;
+    if (!confirm(`¿Estás seguro de eliminar las ${selectedTableIds.length} mesas seleccionadas?`)) return;
+
+    setIsBulkDeleting(true);
+    const res = await bulkDeleteTablesAction(selectedTableIds);
+    setIsBulkDeleting(false);
+
+    if (res.success) {
+      toast.success(res.message);
+      setSelectedTableIds([]);
+    } else {
+      toast.error(res.message);
+    }
+  };
 
   // Open Edit Modal
   function handleOpenEdit(table: TableItem) {
@@ -108,7 +147,7 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
     }
   }
 
-  // Handle Delete Table
+  // Handle Delete Single Table
   async function handleDeleteTable() {
     if (!editingTable) return;
     if (!confirm(`¿Estás seguro de eliminar la mesa "${editingTable.name}"?`)) return;
@@ -158,11 +197,11 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
     toast.success("Imagen de código QR descargada");
   }
 
-  // Copy QR Link
+  // Copy QR Link using tableId
   function handleCopyLink() {
     if (!selectedTableForQr) return;
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const fullQrUrl = `${baseUrl}/${tenantSlug}?mesa=${encodeURIComponent(selectedTableForQr.name)}`;
+    const fullQrUrl = `${baseUrl}/${tenantSlug}?tableId=${encodeURIComponent(selectedTableForQr.id)}`;
     navigator.clipboard.writeText(fullQrUrl);
     toast.success("Enlace copiado al portapapeles");
   }
@@ -180,7 +219,7 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
           </div>
           <div>
             <h2 className={styles.addTitle}>Agregar Nueva Mesa</h2>
-            <p className={styles.addSubtitle}>Crea una mesa para tu local y genera su código QR al instante.</p>
+            <p className={styles.addSubtitle}>Crea una mesa para tu local y genera su código QR auténtico al instante.</p>
           </div>
         </div>
 
@@ -208,28 +247,78 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
         </form>
       </div>
 
-      {/* ── Tables Section Title ──────────────────────────────────── */}
-      <div className={styles.sectionHeader}>
+      {/* ── Section Header & Bulk Action Controls ────────────────── */}
+      <div className={styles.sectionHeader} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
         <h2 className={styles.sectionTitle}>
           Mesas del Local <span className={styles.countBadge}>{tables.length}</span>
         </h2>
+
+        {tables.length > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <button
+              type="button"
+              onClick={toggleSelectAll}
+              style={{
+                background: "transparent",
+                border: "1px solid #CBD5E1",
+                padding: "6px 12px",
+                borderRadius: 6,
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                color: "#334155",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              {selectedTableIds.length === tables.length ? (
+                <CheckSquare size={16} color="#2563EB" />
+              ) : (
+                <Square size={16} />
+              )}
+              {selectedTableIds.length === tables.length ? "Desmarcar Todas" : "Seleccionar Todas"}
+            </button>
+
+            {selectedTableIds.length > 0 && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleBulkDelete}
+                loading={isBulkDeleting}
+                style={{ color: "#DC2626", borderColor: "#FECACA", background: "#FEF2F2" }}
+              >
+                <Trash2 size={16} /> Eliminar Seleccionadas ({selectedTableIds.length})
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* ── Larger Recuadro Tables Grid ───────────────────────────── */}
+      {/* ── Tables Grid with Checkboxes ───────────────────────────── */}
       <div className={styles.tablesGrid}>
         {tables.map((table) => {
           const isOccupied = table.activeOrderCount > 0;
+          const isSelected = selectedTableIds.includes(table.id);
           const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-          const tableUrl = `${baseUrl}/${tenantSlug}?mesa=${encodeURIComponent(table.name)}`;
+          const tableUrl = `${baseUrl}/${tenantSlug}?tableId=${encodeURIComponent(table.id)}`;
 
           return (
             <div
               key={table.id}
-              className={`${styles.tableCard} ${isOccupied ? styles["tableCard--active"] : ""} ${!table.isActive ? styles["tableCard--disabled"] : ""}`}
+              className={`${styles.tableCard} ${isOccupied ? styles["tableCard--active"] : ""} ${!table.isActive ? styles["tableCard--disabled"] : ""} ${isSelected ? styles.tableCardSelected : ""}`}
+              style={{ border: isSelected ? "2px solid #2563EB" : undefined }}
             >
-              {/* Header Badges */}
+              {/* Header Badges + Multi-select Checkbox */}
               <div className={styles.tableCardHeader}>
-                <div className={styles.badgeGroup}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => toggleSelectTable(table.id)}
+                    style={{ width: 18, height: 18, cursor: "pointer" }}
+                  />
                   <span
                     className={`${styles.statusBadge} ${
                       !table.isActive
@@ -242,6 +331,7 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
                     {!table.isActive ? "INACTIVA" : isOccupied ? "OCUPADA" : "LIBRE"}
                   </span>
                 </div>
+
                 <div className={styles.capacityBadge}>
                   <Users size={14} /> {table.capacity || 4} pers.
                 </div>
@@ -325,7 +415,7 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
                   <Copy size={16} /> Copiar Link
                 </Button>
                 <a
-                  href={`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/${tenantSlug}?mesa=${encodeURIComponent(selectedTableForQr.name)}`}
+                  href={`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/restaurant/${tenantSlug}?tableId=${encodeURIComponent(selectedTableForQr.id)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ flex: 1, textDecoration: "none" }}

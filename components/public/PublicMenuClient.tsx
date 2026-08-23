@@ -49,6 +49,13 @@ interface PublicMenuClientProps {
   categories: Category[];
   isOpen?: boolean;
   businessHours?: Array<{ dayOfWeek: number; openTime: string; closeTime: string }>;
+  isMenuOnly?: boolean;
+  allowDineIn?: boolean;
+  requireTableQrForDineIn?: boolean;
+  allowTakeout?: boolean;
+  allowDelivery?: boolean;
+  allowWhatsAppOrdering?: boolean;
+  whatsappNumber?: string | null;
 }
 
 const IconSearch = () => (
@@ -178,6 +185,13 @@ export function PublicMenuClient({
   categories,
   isOpen = true,
   businessHours = [],
+  isMenuOnly = false,
+  allowDineIn = true,
+  requireTableQrForDineIn = true,
+  allowTakeout = false,
+  allowDelivery = false,
+  allowWhatsAppOrdering = false,
+  whatsappNumber = null,
 }: PublicMenuClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -224,7 +238,8 @@ export function PublicMenuClient({
     quantity: number,
     selections: Record<string, string[]>
   ) => {
-    // Calculate subtotal
+    if (isMenuOnly) return;
+
     let unitPrice = item.price;
     if (item.modifierGroups) {
       item.modifierGroups.forEach((g) => {
@@ -254,16 +269,14 @@ export function PublicMenuClient({
   ) => {
     setActiveCategory(catId);
 
-    // Scroll category tab button into view inside horizontal navbar
     e.currentTarget.scrollIntoView({
       behavior: "smooth",
       inline: "center",
       block: "nearest",
     });
 
-    if (catId === "ALL") return; // Let it render all and user can scroll down naturally
+    if (catId === "ALL") return;
 
-    // Scroll category section into view below sticky navbar
     setTimeout(() => {
       const sectionEl = document.getElementById(`cat-sec-${catId}`);
       if (sectionEl) {
@@ -282,17 +295,21 @@ export function PublicMenuClient({
     <div className={styles.lightWrapper}>
       {/* Top Announcement Bar */}
       <div className={styles.topAnnounceBar} style={{ backgroundColor: brandColor, color: buttonTextColor }}>
-        <span className={styles.announceText}>¡Gana puntos y recompensas!</span>
-        <div className={styles.topActionsGroup}>
-          <button
-            type="button"
-            className={styles.topCartBtn}
-            onClick={() => setIsCartOpen(true)}
-            style={{ backgroundColor: buttonTextColor, color: brandColor }}
-          >
-            Ver mi pedido {totalCartCount > 0 ? `(${totalCartCount})` : ""} ›
-          </button>
-        </div>
+        <span className={styles.announceText}>
+          {isMenuOnly ? "Carta Digital Informativa — Consulta nuestros productos" : "¡Gana puntos y recompensas!"}
+        </span>
+        {!isMenuOnly && (
+          <div className={styles.topActionsGroup}>
+            <button
+              type="button"
+              className={styles.topCartBtn}
+              onClick={() => setIsCartOpen(true)}
+              style={{ backgroundColor: buttonTextColor, color: brandColor }}
+            >
+              Ver mi pedido {totalCartCount > 0 ? `(${totalCartCount})` : ""} ›
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Banner Section */}
@@ -423,8 +440,6 @@ export function PublicMenuClient({
         </div>
       </div>
 
-
-
       {/* Search Input Bar */}
       <div className={styles.searchBarContainer}>
         <div className={styles.searchBox}>
@@ -480,9 +495,7 @@ export function PublicMenuClient({
         </nav>
       </div>
 
-
-
-      {/* Menu Categories & High Visibility Product Grid */}
+      {/* Menu Categories & Product Grid */}
       <div className={styles.categoriesContent}>
         {displayedCategories.length === 0 ? (
           <div className={styles.noResults}>
@@ -501,10 +514,14 @@ export function PublicMenuClient({
                 <p className={styles.categorySectionDesc}>{category.description}</p>
               )}
 
-              {/* Responsive PC & Mobile Grid - New Layout */}
               <div className={styles.productsGrid}>
                 {category.items.map((item) => (
-                  <div key={item.id} className={styles.productCard} onClick={() => setSelectedProduct(item as ConfiguratorItem)}>
+                  <div
+                    key={item.id}
+                    className={styles.productCard}
+                    onClick={() => !isMenuOnly && setSelectedProduct(item as ConfiguratorItem)}
+                    style={{ cursor: isMenuOnly ? "default" : "pointer" }}
+                  >
                     <div className={styles.productTopImage}>
                       {item.imageUrl ? (
                         <img
@@ -530,23 +547,25 @@ export function PublicMenuClient({
                           {formatCOP(item.price)}
                         </span>
                         
-                        <button
-                          type="button"
-                          className={styles.productAddBtn}
-                          aria-label={`Agregar ${item.name}`}
-                          title="Agregar al pedido"
-                          style={{ backgroundColor: brandColor, color: buttonTextColor }}
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={buttonTextColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                          </svg>
-                          {cart.filter((c) => c.menuItem.id === item.id).reduce((a, b) => a + b.quantity, 0) > 0 ? (
-                            <span className={styles.cartCountBadge} style={{ backgroundColor: buttonTextColor, color: brandColor }}>
-                              {cart.filter((c) => c.menuItem.id === item.id).reduce((a, b) => a + b.quantity, 0)}
-                            </span>
-                          ) : null}
-                        </button>
+                        {!isMenuOnly && (
+                          <button
+                            type="button"
+                            className={styles.productAddBtn}
+                            aria-label={`Agregar ${item.name}`}
+                            title="Agregar al pedido"
+                            style={{ backgroundColor: brandColor, color: buttonTextColor }}
+                          >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={buttonTextColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                              <line x1="12" y1="5" x2="12" y2="19" />
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            {cart.filter((c) => c.menuItem.id === item.id).reduce((a, b) => a + b.quantity, 0) > 0 ? (
+                              <span className={styles.cartCountBadge} style={{ backgroundColor: buttonTextColor, color: brandColor }}>
+                                {cart.filter((c) => c.menuItem.id === item.id).reduce((a, b) => a + b.quantity, 0)}
+                              </span>
+                            ) : null}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -557,8 +576,7 @@ export function PublicMenuClient({
         )}
       </div>
 
-
-      {/* Subtle & Discrete Free Tier Footer */}
+      {/* Free Tier Footer */}
       {isFreeTier ? (
         <footer className={styles.freeTierFooterDiscrete}>
           <div className={styles.freeTierDiscreteRow}>
@@ -614,28 +632,38 @@ export function PublicMenuClient({
       )}
 
       {/* Item Configurator Modal */}
-      <ItemConfiguratorModal
-        item={selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-        onAddToCart={handleAddToCart}
-        brandColor={brandColor}
-        buttonTextColor={buttonTextColor}
-      />
+      {!isMenuOnly && (
+        <ItemConfiguratorModal
+          item={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onAddToCart={handleAddToCart}
+          brandColor={brandColor}
+          buttonTextColor={buttonTextColor}
+        />
+      )}
 
       {/* Cart Drawer */}
-      <CartDrawer
-        tenantId={tenantId}
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        cart={cart}
-        setCart={setCart}
-        brandColor={brandColor}
-        buttonTextColor={buttonTextColor}
-        isStoreOpen={isOpen}
-      />
+      {!isMenuOnly && (
+        <CartDrawer
+          tenantId={tenantId}
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          cart={cart}
+          setCart={setCart}
+          brandColor={brandColor}
+          buttonTextColor={buttonTextColor}
+          isStoreOpen={isOpen}
+          allowDineIn={allowDineIn}
+          requireTableQrForDineIn={requireTableQrForDineIn}
+          allowTakeout={allowTakeout}
+          allowDelivery={allowDelivery}
+          allowWhatsAppOrdering={allowWhatsAppOrdering}
+          whatsappNumber={whatsappNumber}
+        />
+      )}
 
       {/* Floating Sticky Cart Banner */}
-      {totalCartCount > 0 && (
+      {!isMenuOnly && totalCartCount > 0 && (
         <div 
           className={styles.stickyCartBanner} 
           style={{ backgroundColor: brandColor, color: buttonTextColor }}

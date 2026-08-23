@@ -61,6 +61,10 @@ export default async function SettingsPage() {
         allowDineIn={tenant.allowDineIn}
         allowTakeout={tenant.allowTakeout}
         allowDelivery={tenant.allowDelivery}
+        isMenuOnly={tenant.isMenuOnly}
+        requireTableQrForDineIn={tenant.requireTableQrForDineIn}
+        allowWhatsAppOrdering={tenant.allowWhatsAppOrdering}
+        whatsappNumber={tenant.whatsappNumber}
       />
 
       {/* ── Business Hours ────────────────────────────────────── */}

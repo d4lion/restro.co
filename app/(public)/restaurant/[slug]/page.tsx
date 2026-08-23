@@ -74,6 +74,13 @@ export default async function PublicMenuPage({ params }: Props) {
       categories={categories}
       isOpen={isStoreOpenNow(tenant.businessHours, tenant.timezone)}
       businessHours={tenant.businessHours}
+      isMenuOnly={tenant.isMenuOnly}
+      allowDineIn={tenant.allowDineIn}
+      requireTableQrForDineIn={tenant.requireTableQrForDineIn}
+      allowTakeout={tenant.allowTakeout}
+      allowDelivery={tenant.allowDelivery}
+      allowWhatsAppOrdering={tenant.allowWhatsAppOrdering}
+      whatsappNumber={tenant.whatsappNumber ?? tenant.phone ?? null}
     />
   );
 }
