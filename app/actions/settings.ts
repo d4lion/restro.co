@@ -2,6 +2,7 @@
 
 import { getSession, deleteSession } from "@/lib/session";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
+import { revalidateTenantCache, revalidateMenuCache } from "@/lib/cache";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -34,6 +35,12 @@ export async function updateLocalDataAction(
     city: city?.trim() || null,
   });
 
+  const tenant = await tenantRepository.findById(session.tenantId);
+  if (tenant?.slug) {
+    revalidateTenantCache(tenant.slug);
+    revalidateMenuCache(session.tenantId, tenant.slug);
+  }
+
   revalidatePath("/settings");
   revalidatePath("/overview");
 
@@ -64,9 +71,14 @@ export async function updateCommercialProfileAction(
     websiteUrl: websiteUrl?.trim() || null,
   });
 
+  const tenant = await tenantRepository.findById(session.tenantId);
+  if (tenant?.slug) {
+    revalidateTenantCache(tenant.slug);
+    revalidateMenuCache(session.tenantId, tenant.slug);
+  }
+
   revalidatePath("/settings");
   revalidatePath("/overview");
-  revalidatePath("/restaurant/[slug]", "page");
 
   return { success: true, message: "¡Perfil comercial actualizado correctamente!" };
 }
@@ -90,6 +102,12 @@ export async function updateOrderSettingsAction(
     allowDelivery,
   });
 
+  const tenant = await tenantRepository.findById(session.tenantId);
+  if (tenant?.slug) {
+    revalidateTenantCache(tenant.slug);
+    revalidateMenuCache(session.tenantId, tenant.slug);
+  }
+
   revalidatePath("/settings");
   revalidatePath("/overview");
 
@@ -104,6 +122,13 @@ export async function updateBusinessHoursAction(
 
   try {
     await tenantRepository.updateBusinessHours(session.tenantId, hours);
+
+    const tenant = await tenantRepository.findById(session.tenantId);
+    if (tenant?.slug) {
+      revalidateTenantCache(tenant.slug);
+      revalidateMenuCache(session.tenantId, tenant.slug);
+    }
+
     revalidatePath("/settings");
     revalidatePath("/overview");
     return { success: true, message: "Horarios de atención actualizados" };

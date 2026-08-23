@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-import { tenantRepository } from "@/lib/repositories/tenant.repository";
-import { menuRepository } from "@/lib/repositories/menu.repository";
+import { getCachedTenantBySlug, getCachedPublicMenu } from "@/lib/repositories/cached-data";
 import { PublicMenuClient } from "@/components/public/PublicMenuClient";
 import { isStoreOpenNow } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -11,7 +10,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const tenant = await tenantRepository.findBySlug(slug);
+  const tenant = await getCachedTenantBySlug(slug);
   if (!tenant) return { title: "Restaurante no encontrado" };
   return {
     title: `${tenant.name} — Carta Digital`,
@@ -21,10 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PublicMenuPage({ params }: Props) {
   const { slug } = await params;
-  const tenant = await tenantRepository.findBySlug(slug);
+  const tenant = await getCachedTenantBySlug(slug);
   if (!tenant || !tenant.isActive) notFound();
 
-  const menu = await menuRepository.getPublicMenu(tenant.id);
+  const menu = await getCachedPublicMenu(tenant.id);
 
   // Sanitize Prisma objects into plain JSON primitives to prevent React hydration failures
   const categories =
