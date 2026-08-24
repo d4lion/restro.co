@@ -8,7 +8,7 @@ export interface OrderRepository {
   findByTable(tableId: string): Promise<OrderWithItems[]>;
   findActiveByTenant(tenantId: string): Promise<OrderWithItems[]>;
   findById(orderId: string): Promise<OrderWithItems | null>;
-  updateStatus(orderId: string, status: OrderStatus, changedById?: string): Promise<void>;
+  updateStatus(orderId: string, status: OrderStatus, changedById?: string, cancellationReason?: string): Promise<void>;
   batchUpdateStatus(items: Array<{ orderId: string; status: OrderStatus }>, changedById?: string): Promise<void>;
   getTableSession(tableId: string): Promise<TableSession>;
   togglePriority(orderId: string, isPriority?: boolean): Promise<any>;
@@ -321,7 +321,7 @@ export const orderRepository: OrderRepository = {
     return mapOrderToDto(order);
   },
 
-  async updateStatus(orderId, status, changedById) {
+  async updateStatus(orderId, status, changedById, cancellationReason) {
     const current = await prisma.order.findUnique({
       where: { id: orderId },
       select: {
@@ -358,6 +358,9 @@ export const orderRepository: OrderRepository = {
       }
     } else if (status === "CANCELLED") {
       updateData.cancelledAt = now;
+      if (cancellationReason) {
+        updateData.cancellationReason = cancellationReason;
+      }
     }
 
     // Flag SLA breach if target prep time was exceeded
@@ -399,6 +402,7 @@ export const orderRepository: OrderRepository = {
           fromStatus: current?.status ?? null,
           toStatus: status,
           changedById: changedById ?? null,
+          note: cancellationReason ?? null,
         },
       }),
     ]);

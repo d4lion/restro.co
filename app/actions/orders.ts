@@ -39,7 +39,8 @@ export async function createPublicOrderAction(
 
 export async function updateOrderStatusAction(
   orderId: string,
-  nextStatus: OrderStatus
+  nextStatus: OrderStatus,
+  cancellationReason?: string
 ): Promise<OrderActionResult> {
   try {
     const session = await getSession();
@@ -55,7 +56,7 @@ export async function updateOrderStatusAction(
     });
     const previousStatus = currentOrder?.status as OrderStatus | undefined;
 
-    await orderRepository.updateStatus(orderId, nextStatus, session.userId);
+    await orderRepository.updateStatus(orderId, nextStatus, session.userId, cancellationReason);
 
     revalidatePath("/orders");
     revalidatePath("/overview");
