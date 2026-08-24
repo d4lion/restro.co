@@ -2,21 +2,38 @@
 
 import React, { useState } from "react";
 import type { OrderWithItems } from "@/lib/types";
-import { X, History, CheckCircle, Clock, AlertTriangle, RotateCcw } from "lucide-react";
+import { X, History, CheckCircle, Clock, AlertTriangle, RotateCcw, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 import styles from "./KdsDashboard.module.css";
 
 interface KdsTraceabilityDrawerProps {
   orders: OrderWithItems[];
   onClose: () => void;
   onReopenOrder: (orderId: string) => void;
+  onRefresh?: () => Promise<void>;
 }
 
 export function KdsTraceabilityDrawer({
   orders,
   onClose,
   onReopenOrder,
+  onRefresh,
 }: KdsTraceabilityDrawerProps) {
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (!onRefresh || isRefreshing) return;
+    setIsRefreshing(true);
+    try {
+      await onRefresh();
+      toast.success("Trazabilidad e historial actualizados");
+    } catch {
+      toast.error("Error al actualizar la trazabilidad");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const formatCOP = (n: number) =>
     new Intl.NumberFormat("es-CO", {
@@ -43,15 +60,29 @@ export function KdsTraceabilityDrawer({
       <div className={styles.drawerHeader}>
         <div className={styles.drawerTitle} style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <History size={20} color="#38BDF8" />
-          Trazabilidad e Historial del Día
+          Trazabilidad del Día
         </div>
-        <button
-          className={styles.closeDrawerBtn}
-          onClick={onClose}
-          aria-label="Cerrar panel"
-        >
-          <X size={20} />
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {onRefresh && (
+            <button
+              className={styles.btnRefreshDrawer}
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              title="Actualizar trazabilidad desde servidor"
+            >
+              <RefreshCw size={14} className={isRefreshing ? styles.spinning : ""} />
+              <span>{isRefreshing ? "Cargando..." : "Actualizar"}</span>
+            </button>
+          )}
+
+          <button
+            className={styles.closeDrawerBtn}
+            onClick={onClose}
+            aria-label="Cerrar panel"
+          >
+            <X size={20} />
+          </button>
+        </div>
       </div>
 
       {/* Body */}
