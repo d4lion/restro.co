@@ -39,7 +39,8 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "6mb",
       allowedOrigins: [
-        "b1c7-190-158-28-68.ngrok-free.app"
+        "b1c7-190-158-28-68.ngrok-free.app",
+        "192.168.80.10"
       ],
     },
   },

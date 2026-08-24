@@ -410,6 +410,7 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   OrderStatusHistory: 'OrderStatusHistory',
+  OrderTelemetry: 'OrderTelemetry',
   StaffMember: 'StaffMember',
   AnalyticsEvent: 'AnalyticsEvent',
   Subscription: 'Subscription',
@@ -430,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "plan" | "tenant" | "user" | "businessHour" | "menu" | "category" | "menuItem" | "menuItemModifierGroup" | "menuItemModifierOption" | "table" | "order" | "orderItem" | "orderStatusHistory" | "staffMember" | "analyticsEvent" | "subscription" | "billingEvent" | "tenantFeatureOverride"
+    modelProps: "plan" | "tenant" | "user" | "businessHour" | "menu" | "category" | "menuItem" | "menuItemModifierGroup" | "menuItemModifierOption" | "table" | "order" | "orderItem" | "orderStatusHistory" | "orderTelemetry" | "staffMember" | "analyticsEvent" | "subscription" | "billingEvent" | "tenantFeatureOverride"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1396,6 +1397,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OrderTelemetry: {
+      payload: Prisma.$OrderTelemetryPayload<ExtArgs>
+      fields: Prisma.OrderTelemetryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderTelemetryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderTelemetryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderTelemetryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderTelemetryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>
+        }
+        findMany: {
+          args: Prisma.OrderTelemetryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>[]
+        }
+        create: {
+          args: Prisma.OrderTelemetryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>
+        }
+        createMany: {
+          args: Prisma.OrderTelemetryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderTelemetryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderTelemetryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>
+        }
+        update: {
+          args: Prisma.OrderTelemetryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderTelemetryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderTelemetryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderTelemetryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderTelemetryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderTelemetryPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderTelemetryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderTelemetry>
+        }
+        groupBy: {
+          args: Prisma.OrderTelemetryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderTelemetryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderTelemetryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderTelemetryCountAggregateOutputType> | number
+        }
+      }
+    }
     StaffMember: {
       payload: Prisma.$StaffMemberPayload<ExtArgs>
       fields: Prisma.StaffMemberFieldRefs
@@ -2012,6 +2087,14 @@ export const OrderScalarFieldEnum = {
   isPriority: 'isPriority',
   targetPrepTimeMinutes: 'targetPrepTimeMinutes',
   incidentNote: 'incidentNote',
+  preparingAt: 'preparingAt',
+  readyAt: 'readyAt',
+  deliveredAt: 'deliveredAt',
+  cancelledAt: 'cancelledAt',
+  actualPrepTimeSeconds: 'actualPrepTimeSeconds',
+  actualTotalTimeSeconds: 'actualTotalTimeSeconds',
+  wasSlaBreached: 'wasSlaBreached',
+  cancellationReason: 'cancellationReason',
   orderNumber: 'orderNumber'
 } as const
 
@@ -2029,6 +2112,9 @@ export const OrderItemScalarFieldEnum = {
   notes: 'notes',
   status: 'status',
   station: 'station',
+  preparingAt: 'preparingAt',
+  readyAt: 'readyAt',
+  prepTimeSeconds: 'prepTimeSeconds',
   modifiersJson: 'modifiersJson',
   subtotal: 'subtotal'
 } as const
@@ -2047,6 +2133,24 @@ export const OrderStatusHistoryScalarFieldEnum = {
 } as const
 
 export type OrderStatusHistoryScalarFieldEnum = (typeof OrderStatusHistoryScalarFieldEnum)[keyof typeof OrderStatusHistoryScalarFieldEnum]
+
+
+export const OrderTelemetryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  orderId: 'orderId',
+  tenantId: 'tenantId',
+  hourOfDay: 'hourOfDay',
+  dayOfWeek: 'dayOfWeek',
+  activeOrdersCountAtCreation: 'activeOrdersCountAtCreation',
+  preparingOrdersCountAtCreation: 'preparingOrdersCountAtCreation',
+  totalItemQuantity: 'totalItemQuantity',
+  uniqueItemCount: 'uniqueItemCount',
+  hasModifiers: 'hasModifiers',
+  channelSource: 'channelSource'
+} as const
+
+export type OrderTelemetryScalarFieldEnum = (typeof OrderTelemetryScalarFieldEnum)[keyof typeof OrderTelemetryScalarFieldEnum]
 
 
 export const StaffMemberScalarFieldEnum = {
@@ -2381,6 +2485,7 @@ export type GlobalOmitConfig = {
   order?: Prisma.OrderOmit
   orderItem?: Prisma.OrderItemOmit
   orderStatusHistory?: Prisma.OrderStatusHistoryOmit
+  orderTelemetry?: Prisma.OrderTelemetryOmit
   staffMember?: Prisma.StaffMemberOmit
   analyticsEvent?: Prisma.AnalyticsEventOmit
   subscription?: Prisma.SubscriptionOmit

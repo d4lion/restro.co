@@ -29,12 +29,14 @@ export type AggregateOrderItem = {
 export type OrderItemAvgAggregateOutputType = {
   price: number | null
   quantity: number | null
+  prepTimeSeconds: number | null
   subtotal: number | null
 }
 
 export type OrderItemSumAggregateOutputType = {
   price: number | null
   quantity: number | null
+  prepTimeSeconds: number | null
   subtotal: number | null
 }
 
@@ -49,6 +51,9 @@ export type OrderItemMinAggregateOutputType = {
   notes: string | null
   status: string | null
   station: string | null
+  preparingAt: Date | null
+  readyAt: Date | null
+  prepTimeSeconds: number | null
   modifiersJson: string | null
   subtotal: number | null
 }
@@ -64,6 +69,9 @@ export type OrderItemMaxAggregateOutputType = {
   notes: string | null
   status: string | null
   station: string | null
+  preparingAt: Date | null
+  readyAt: Date | null
+  prepTimeSeconds: number | null
   modifiersJson: string | null
   subtotal: number | null
 }
@@ -79,6 +87,9 @@ export type OrderItemCountAggregateOutputType = {
   notes: number
   status: number
   station: number
+  preparingAt: number
+  readyAt: number
+  prepTimeSeconds: number
   modifiersJson: number
   subtotal: number
   _all: number
@@ -88,12 +99,14 @@ export type OrderItemCountAggregateOutputType = {
 export type OrderItemAvgAggregateInputType = {
   price?: true
   quantity?: true
+  prepTimeSeconds?: true
   subtotal?: true
 }
 
 export type OrderItemSumAggregateInputType = {
   price?: true
   quantity?: true
+  prepTimeSeconds?: true
   subtotal?: true
 }
 
@@ -108,6 +121,9 @@ export type OrderItemMinAggregateInputType = {
   notes?: true
   status?: true
   station?: true
+  preparingAt?: true
+  readyAt?: true
+  prepTimeSeconds?: true
   modifiersJson?: true
   subtotal?: true
 }
@@ -123,6 +139,9 @@ export type OrderItemMaxAggregateInputType = {
   notes?: true
   status?: true
   station?: true
+  preparingAt?: true
+  readyAt?: true
+  prepTimeSeconds?: true
   modifiersJson?: true
   subtotal?: true
 }
@@ -138,6 +157,9 @@ export type OrderItemCountAggregateInputType = {
   notes?: true
   status?: true
   station?: true
+  preparingAt?: true
+  readyAt?: true
+  prepTimeSeconds?: true
   modifiersJson?: true
   subtotal?: true
   _all?: true
@@ -240,6 +262,9 @@ export type OrderItemGroupByOutputType = {
   notes: string | null
   status: string
   station: string | null
+  preparingAt: Date | null
+  readyAt: Date | null
+  prepTimeSeconds: number | null
   modifiersJson: string | null
   subtotal: number
   _count: OrderItemCountAggregateOutputType | null
@@ -278,6 +303,9 @@ export type OrderItemWhereInput = {
   notes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   status?: Prisma.StringFilter<"OrderItem"> | string
   station?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  preparingAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  prepTimeSeconds?: Prisma.IntNullableFilter<"OrderItem"> | number | null
   modifiersJson?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.FloatFilter<"OrderItem"> | number
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
@@ -295,6 +323,9 @@ export type OrderItemOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   station?: Prisma.SortOrderInput | Prisma.SortOrder
+  preparingAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  readyAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  prepTimeSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   modifiersJson?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   order?: Prisma.OrderOrderByWithRelationInput
@@ -315,6 +346,9 @@ export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   status?: Prisma.StringFilter<"OrderItem"> | string
   station?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  preparingAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  prepTimeSeconds?: Prisma.IntNullableFilter<"OrderItem"> | number | null
   modifiersJson?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.FloatFilter<"OrderItem"> | number
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
@@ -332,6 +366,9 @@ export type OrderItemOrderByWithAggregationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   station?: Prisma.SortOrderInput | Prisma.SortOrder
+  preparingAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  readyAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  prepTimeSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   modifiersJson?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   _count?: Prisma.OrderItemCountOrderByAggregateInput
@@ -355,6 +392,9 @@ export type OrderItemScalarWhereWithAggregatesInput = {
   notes?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   station?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+  preparingAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrderItem"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrderItem"> | Date | string | null
+  prepTimeSeconds?: Prisma.IntNullableWithAggregatesFilter<"OrderItem"> | number | null
   modifiersJson?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   subtotal?: Prisma.FloatWithAggregatesFilter<"OrderItem"> | number
 }
@@ -368,6 +408,9 @@ export type OrderItemCreateInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
@@ -385,6 +428,9 @@ export type OrderItemUncheckedCreateInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
 }
@@ -398,6 +444,9 @@ export type OrderItemUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
@@ -415,6 +464,9 @@ export type OrderItemUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -430,6 +482,9 @@ export type OrderItemCreateManyInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
 }
@@ -443,6 +498,9 @@ export type OrderItemUpdateManyMutationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -458,6 +516,9 @@ export type OrderItemUncheckedUpdateManyInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -483,6 +544,9 @@ export type OrderItemCountOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   station?: Prisma.SortOrder
+  preparingAt?: Prisma.SortOrder
+  readyAt?: Prisma.SortOrder
+  prepTimeSeconds?: Prisma.SortOrder
   modifiersJson?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
 }
@@ -490,6 +554,7 @@ export type OrderItemCountOrderByAggregateInput = {
 export type OrderItemAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  prepTimeSeconds?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
 }
 
@@ -504,6 +569,9 @@ export type OrderItemMaxOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   station?: Prisma.SortOrder
+  preparingAt?: Prisma.SortOrder
+  readyAt?: Prisma.SortOrder
+  prepTimeSeconds?: Prisma.SortOrder
   modifiersJson?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
 }
@@ -519,6 +587,9 @@ export type OrderItemMinOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   station?: Prisma.SortOrder
+  preparingAt?: Prisma.SortOrder
+  readyAt?: Prisma.SortOrder
+  prepTimeSeconds?: Prisma.SortOrder
   modifiersJson?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
 }
@@ -526,6 +597,7 @@ export type OrderItemMinOrderByAggregateInput = {
 export type OrderItemSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  prepTimeSeconds?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
 }
 
@@ -622,6 +694,9 @@ export type OrderItemCreateWithoutMenuItemInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
@@ -637,6 +712,9 @@ export type OrderItemUncheckedCreateWithoutMenuItemInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
 }
@@ -681,6 +759,9 @@ export type OrderItemScalarWhereInput = {
   notes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   status?: Prisma.StringFilter<"OrderItem"> | string
   station?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  preparingAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  prepTimeSeconds?: Prisma.IntNullableFilter<"OrderItem"> | number | null
   modifiersJson?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.FloatFilter<"OrderItem"> | number
 }
@@ -694,6 +775,9 @@ export type OrderItemCreateWithoutOrderInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
   menuItem: Prisma.MenuItemCreateNestedOneWithoutOrderItemsInput
@@ -709,6 +793,9 @@ export type OrderItemUncheckedCreateWithoutOrderInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
 }
@@ -749,6 +836,9 @@ export type OrderItemCreateManyMenuItemInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
 }
@@ -762,6 +852,9 @@ export type OrderItemUpdateWithoutMenuItemInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
@@ -777,6 +870,9 @@ export type OrderItemUncheckedUpdateWithoutMenuItemInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -791,6 +887,9 @@ export type OrderItemUncheckedUpdateManyWithoutMenuItemInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -805,6 +904,9 @@ export type OrderItemCreateManyOrderInput = {
   notes?: string | null
   status?: string
   station?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  prepTimeSeconds?: number | null
   modifiersJson?: string | null
   subtotal: number
 }
@@ -818,6 +920,9 @@ export type OrderItemUpdateWithoutOrderInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   menuItem?: Prisma.MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
@@ -833,6 +938,9 @@ export type OrderItemUncheckedUpdateWithoutOrderInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -847,6 +955,9 @@ export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   station?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   modifiersJson?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -864,6 +975,9 @@ export type OrderItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   notes?: boolean
   status?: boolean
   station?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  prepTimeSeconds?: boolean
   modifiersJson?: boolean
   subtotal?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -881,6 +995,9 @@ export type OrderItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   notes?: boolean
   status?: boolean
   station?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  prepTimeSeconds?: boolean
   modifiersJson?: boolean
   subtotal?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -898,6 +1015,9 @@ export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   notes?: boolean
   status?: boolean
   station?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  prepTimeSeconds?: boolean
   modifiersJson?: boolean
   subtotal?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -915,11 +1035,14 @@ export type OrderItemSelectScalar = {
   notes?: boolean
   status?: boolean
   station?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  prepTimeSeconds?: boolean
   modifiersJson?: boolean
   subtotal?: boolean
 }
 
-export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "orderId" | "menuItemId" | "name" | "price" | "quantity" | "notes" | "status" | "station" | "modifiersJson" | "subtotal", ExtArgs["result"]["orderItem"]>
+export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "orderId" | "menuItemId" | "name" | "price" | "quantity" | "notes" | "status" | "station" | "preparingAt" | "readyAt" | "prepTimeSeconds" | "modifiersJson" | "subtotal", ExtArgs["result"]["orderItem"]>
 export type OrderItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
@@ -950,6 +1073,9 @@ export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     notes: string | null
     status: string
     station: string | null
+    preparingAt: Date | null
+    readyAt: Date | null
+    prepTimeSeconds: number | null
     modifiersJson: string | null
     subtotal: number
   }, ExtArgs["result"]["orderItem"]>
@@ -1387,6 +1513,9 @@ export interface OrderItemFieldRefs {
   readonly notes: Prisma.FieldRef<"OrderItem", 'String'>
   readonly status: Prisma.FieldRef<"OrderItem", 'String'>
   readonly station: Prisma.FieldRef<"OrderItem", 'String'>
+  readonly preparingAt: Prisma.FieldRef<"OrderItem", 'DateTime'>
+  readonly readyAt: Prisma.FieldRef<"OrderItem", 'DateTime'>
+  readonly prepTimeSeconds: Prisma.FieldRef<"OrderItem", 'Int'>
   readonly modifiersJson: Prisma.FieldRef<"OrderItem", 'String'>
   readonly subtotal: Prisma.FieldRef<"OrderItem", 'Float'>
 }

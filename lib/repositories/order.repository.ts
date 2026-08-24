@@ -9,6 +9,7 @@ export interface OrderRepository {
   findActiveByTenant(tenantId: string): Promise<OrderWithItems[]>;
   findById(orderId: string): Promise<OrderWithItems | null>;
   updateStatus(orderId: string, status: OrderStatus, changedById?: string): Promise<void>;
+  batchUpdateStatus(items: Array<{ orderId: string; status: OrderStatus }>, changedById?: string): Promise<void>;
   getTableSession(tableId: string): Promise<TableSession>;
   togglePriority(orderId: string, isPriority?: boolean): Promise<any>;
   reportIncident(orderId: string, incidentNote: string): Promise<any>;
@@ -24,7 +25,38 @@ async function getNextOrderNumber(tenantId: string): Promise<number> {
   return (last?.orderNumber ?? 0) + 1;
 }
 
+function getTenantTimeComponents(date: Date, timeZone = "America/Bogota") {
+  const dateStr = date.toLocaleString("en-US", { timeZone });
+  const localDate = new Date(dateStr);
+  return {
+    hourOfDay: localDate.getHours(),
+    dayOfWeek: localDate.getDay(),
+  };
+}
+
 function mapOrderToDto(order: any): OrderWithItems {
+  const nowMs = Date.now();
+  const createdAtMs = new Date(order.createdAt).getTime();
+  const preparingAtMs = order.preparingAt ? new Date(order.preparingAt).getTime() : createdAtMs;
+  const targetMinutes = order.targetPrepTimeMinutes || 12;
+  const targetSec = targetMinutes * 60;
+
+  let elapsedSec = 0;
+  if (order.status === "READY" || order.status === "DELIVERED") {
+    if (typeof order.actualPrepTimeSeconds === "number" && order.actualPrepTimeSeconds > 0) {
+      elapsedSec = order.actualPrepTimeSeconds;
+    } else if (order.readyAt) {
+      elapsedSec = Math.max(0, Math.floor((new Date(order.readyAt).getTime() - preparingAtMs) / 1000));
+    } else {
+      elapsedSec = Math.max(0, Math.floor((nowMs - createdAtMs) / 1000));
+    }
+  } else {
+    // PENDING or PREPARING
+    elapsedSec = Math.max(0, Math.floor((nowMs - createdAtMs) / 1000));
+  }
+
+  const isBreached = Boolean(order.wasSlaBreached) || elapsedSec > targetSec;
+
   return {
     id: order.id,
     orderNumber: order.orderNumber,
@@ -36,9 +68,21 @@ function mapOrderToDto(order: any): OrderWithItems {
     deliveryAddress: order.deliveryAddress ?? null,
     deliveryNotes: order.deliveryNotes ?? null,
     tableId: order.tableId ?? null,
+    tableName: order.table?.name ?? null,
     isPriority: order.isPriority ?? false,
-    targetPrepTimeMinutes: order.targetPrepTimeMinutes ?? 12,
+    targetPrepTimeMinutes: targetMinutes,
     incidentNote: order.incidentNote ?? null,
+
+    // Lifecycle Milestones & Telemetry
+    preparingAt: order.preparingAt ?? null,
+    readyAt: order.readyAt ?? null,
+    deliveredAt: order.deliveredAt ?? null,
+    cancelledAt: order.cancelledAt ?? null,
+    actualPrepTimeSeconds: order.actualPrepTimeSeconds ?? null,
+    actualTotalTimeSeconds: order.actualTotalTimeSeconds ?? null,
+    wasSlaBreached: isBreached,
+    cancellationReason: order.cancellationReason ?? null,
+
     items: order.items.map((item: any) => ({
       id: item.id,
       name: item.name,
@@ -47,6 +91,9 @@ function mapOrderToDto(order: any): OrderWithItems {
       notes: item.notes,
       status: item.status ?? "PENDING",
       station: item.station ?? null,
+      preparingAt: item.preparingAt ?? null,
+      readyAt: item.readyAt ?? null,
+      prepTimeSeconds: item.prepTimeSeconds ?? null,
       modifiersJson: item.modifiersJson,
       subtotal: item.subtotal,
     })),
@@ -64,10 +111,20 @@ function mapOrderToDto(order: any): OrderWithItems {
 }
 
 const orderInclude = {
-  items: {
-    include: { menuItem: { select: { name: true } } },
+  items: true,
+  table: {
+    select: { name: true },
   },
-  table: { select: { name: true } },
+  statusHistory: {
+    orderBy: { createdAt: "asc" as const },
+  },
+};
+
+const orderIncludeWithHistory = {
+  items: true,
+  table: {
+    select: { name: true },
+  },
   statusHistory: {
     orderBy: { createdAt: "asc" as const },
   },
@@ -144,6 +201,23 @@ export const orderRepository: OrderRepository = {
       }
     }
 
+    // Calculate Kitchen Load & Telemetry Snapshot
+    const now = new Date();
+    const { hourOfDay, dayOfWeek } = getTenantTimeComponents(now);
+
+    const [activeOrdersCount, preparingOrdersCount] = await Promise.all([
+      prisma.order.count({
+        where: { tenantId: data.tenantId, status: { in: ["PENDING", "PREPARING"] } },
+      }),
+      prisma.order.count({
+        where: { tenantId: data.tenantId, status: "PREPARING" },
+      }),
+    ]);
+
+    const totalItemQuantity = data.items.reduce((sum, i) => sum + i.quantity, 0);
+    const uniqueItemCount = data.items.length;
+    const hasModifiers = data.items.some((i) => i.modifiers && i.modifiers.length > 0);
+
     const order = await prisma.order.create({
       data: {
         tenantId: data.tenantId,
@@ -162,6 +236,19 @@ export const orderRepository: OrderRepository = {
         statusHistory: {
           create: { toStatus: "PENDING" },
         },
+        telemetry: {
+          create: {
+            tenantId: data.tenantId,
+            hourOfDay,
+            dayOfWeek,
+            activeOrdersCountAtCreation: activeOrdersCount,
+            preparingOrdersCountAtCreation: preparingOrdersCount,
+            totalItemQuantity,
+            uniqueItemCount,
+            hasModifiers,
+            channelSource: data.type,
+          },
+        },
       },
       select: { id: true, orderNumber: true },
     });
@@ -178,8 +265,22 @@ export const orderRepository: OrderRepository = {
   },
 
   async findByTenant(tenantId, limit = 100) {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
     const orders = await prisma.order.findMany({
-      where: { tenantId },
+      where: {
+        tenantId,
+        OR: [
+          // All active orders in kitchen flow
+          { status: { in: ["PENDING", "PREPARING", "READY"] } },
+          // Delivered or cancelled orders from TODAY only
+          {
+            status: { in: ["DELIVERED", "CANCELLED"] },
+            createdAt: { gte: startOfToday },
+          },
+        ],
+      },
       include: orderInclude,
       orderBy: { createdAt: "desc" },
       take: limit,
@@ -214,7 +315,7 @@ export const orderRepository: OrderRepository = {
   async findById(orderId) {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: orderInclude,
+      include: orderIncludeWithHistory,
     });
     if (!order) return null;
     return mapOrderToDto(order);
@@ -223,13 +324,74 @@ export const orderRepository: OrderRepository = {
   async updateStatus(orderId, status, changedById) {
     const current = await prisma.order.findUnique({
       where: { id: orderId },
-      select: { status: true },
+      select: {
+        tenantId: true,
+        type: true,
+        status: true,
+        createdAt: true,
+        preparingAt: true,
+        targetPrepTimeMinutes: true,
+        items: { select: { quantity: true, modifiersJson: true } },
+        telemetry: { select: { id: true } },
+      },
     });
+
+    const now = new Date();
+    const updateData: Record<string, any> = { status };
+
+    const createdMs = current?.createdAt ? new Date(current.createdAt).getTime() : now.getTime();
+    const prepStart = current?.preparingAt || current?.createdAt || now;
+    const elapsedSecFromPrep = Math.max(0, Math.floor((now.getTime() - prepStart.getTime()) / 1000));
+    const elapsedSecFromCreated = Math.max(0, Math.floor((now.getTime() - createdMs) / 1000));
+    const maxElapsedSec = Math.max(elapsedSecFromPrep, elapsedSecFromCreated);
+    const targetSec = (current?.targetPrepTimeMinutes || 12) * 60;
+
+    if (status === "PREPARING" && !current?.preparingAt) {
+      updateData.preparingAt = now;
+    } else if (status === "READY") {
+      updateData.readyAt = now;
+      updateData.actualPrepTimeSeconds = elapsedSecFromCreated;
+    } else if (status === "DELIVERED") {
+      updateData.deliveredAt = now;
+      if (current?.createdAt) {
+        updateData.actualTotalTimeSeconds = Math.max(0, Math.floor((now.getTime() - createdMs) / 1000));
+      }
+    } else if (status === "CANCELLED") {
+      updateData.cancelledAt = now;
+    }
+
+    // Flag SLA breach if target prep time was exceeded
+    if (maxElapsedSec > targetSec || (typeof updateData.actualPrepTimeSeconds === "number" && updateData.actualPrepTimeSeconds > targetSec)) {
+      updateData.wasSlaBreached = true;
+    }
+
+    // Auto-backfill telemetry record if order was created before telemetry model existed
+    if (current && !current.telemetry) {
+      const orderDate = current.createdAt || now;
+      const { hourOfDay, dayOfWeek } = getTenantTimeComponents(orderDate);
+      const totalItemQuantity = current.items?.reduce((sum, i) => sum + i.quantity, 0) || 1;
+      const uniqueItemCount = current.items?.length || 1;
+      const hasModifiers = current.items?.some((i) => !!i.modifiersJson && i.modifiersJson !== "[]") || false;
+
+      updateData.telemetry = {
+        create: {
+          tenantId: current.tenantId,
+          hourOfDay,
+          dayOfWeek,
+          activeOrdersCountAtCreation: 0,
+          preparingOrdersCountAtCreation: 0,
+          totalItemQuantity,
+          uniqueItemCount,
+          hasModifiers,
+          channelSource: current.type || "DINE_IN",
+        },
+      };
+    }
 
     await prisma.$transaction([
       prisma.order.update({
         where: { id: orderId },
-        data: { status },
+        data: updateData,
       }),
       prisma.orderStatusHistory.create({
         data: {
@@ -240,6 +402,105 @@ export const orderRepository: OrderRepository = {
         },
       }),
     ]);
+  },
+
+  async batchUpdateStatus(items, changedById) {
+    if (!items || items.length === 0) return;
+
+    const orderIds = items.map((i) => i.orderId);
+    const currentOrders = await prisma.order.findMany({
+      where: { id: { in: orderIds } },
+      select: {
+        id: true,
+        tenantId: true,
+        type: true,
+        status: true,
+        createdAt: true,
+        preparingAt: true,
+        targetPrepTimeMinutes: true,
+        items: { select: { quantity: true, modifiersJson: true } },
+        telemetry: { select: { id: true } },
+      },
+    });
+
+    const currentMap = new Map(currentOrders.map((o) => [o.id, o]));
+    const now = new Date();
+    const dbOperations: any[] = [];
+
+    for (const item of items) {
+      const current = currentMap.get(item.orderId);
+      if (!current) continue;
+
+      const updateData: Record<string, any> = { status: item.status };
+      const createdMs = current.createdAt ? new Date(current.createdAt).getTime() : now.getTime();
+      const prepStart = current.preparingAt || current.createdAt || now;
+      const elapsedSecFromPrep = Math.max(0, Math.floor((now.getTime() - prepStart.getTime()) / 1000));
+      const elapsedSecFromCreated = Math.max(0, Math.floor((now.getTime() - createdMs) / 1000));
+      const maxElapsedSec = Math.max(elapsedSecFromPrep, elapsedSecFromCreated);
+      const targetSec = (current.targetPrepTimeMinutes || 12) * 60;
+
+      if (item.status === "PREPARING" && !current.preparingAt) {
+        updateData.preparingAt = now;
+      } else if (item.status === "READY") {
+        updateData.readyAt = now;
+        updateData.actualPrepTimeSeconds = elapsedSecFromCreated;
+      } else if (item.status === "DELIVERED") {
+        updateData.deliveredAt = now;
+        if (current.createdAt) {
+          updateData.actualTotalTimeSeconds = Math.max(0, Math.floor((now.getTime() - createdMs) / 1000));
+        }
+      } else if (item.status === "CANCELLED") {
+        updateData.cancelledAt = now;
+      }
+
+      if (maxElapsedSec > targetSec || (typeof updateData.actualPrepTimeSeconds === "number" && updateData.actualPrepTimeSeconds > targetSec)) {
+        updateData.wasSlaBreached = true;
+      }
+
+      if (!current.telemetry) {
+        const orderDate = current.createdAt || now;
+        const { hourOfDay, dayOfWeek } = getTenantTimeComponents(orderDate);
+        const totalItemQuantity = current.items?.reduce((sum, i) => sum + i.quantity, 0) || 1;
+        const uniqueItemCount = current.items?.length || 1;
+        const hasModifiers = current.items?.some((i) => !!i.modifiersJson && i.modifiersJson !== "[]") || false;
+
+        updateData.telemetry = {
+          create: {
+            tenantId: current.tenantId,
+            hourOfDay,
+            dayOfWeek,
+            activeOrdersCountAtCreation: 0,
+            preparingOrdersCountAtCreation: 0,
+            totalItemQuantity,
+            uniqueItemCount,
+            hasModifiers,
+            channelSource: current.type || "DINE_IN",
+          },
+        };
+      }
+
+      dbOperations.push(
+        prisma.order.update({
+          where: { id: item.orderId },
+          data: updateData,
+        })
+      );
+
+      dbOperations.push(
+        prisma.orderStatusHistory.create({
+          data: {
+            orderId: item.orderId,
+            fromStatus: current.status ?? null,
+            toStatus: item.status,
+            changedById: changedById ?? null,
+          },
+        })
+      );
+    }
+
+    if (dbOperations.length > 0) {
+      await prisma.$transaction(dbOperations);
+    }
   },
 
   async getTableSession(tableId) {
@@ -308,9 +569,25 @@ export const orderRepository: OrderRepository = {
   },
 
   async updateItemStatus(itemId: string, status: string) {
+    const item = await prisma.orderItem.findUnique({
+      where: { id: itemId },
+      select: { status: true, createdAt: true, preparingAt: true },
+    });
+
+    const now = new Date();
+    const updateData: Record<string, any> = { status };
+
+    if (status === "PREPARING" && !item?.preparingAt) {
+      updateData.preparingAt = now;
+    } else if (status === "READY") {
+      updateData.readyAt = now;
+      const start = item?.preparingAt || item?.createdAt || now;
+      updateData.prepTimeSeconds = Math.max(0, Math.floor((now.getTime() - start.getTime()) / 1000));
+    }
+
     return prisma.orderItem.update({
       where: { id: itemId },
-      data: { status },
+      data: updateData,
     });
   },
 };

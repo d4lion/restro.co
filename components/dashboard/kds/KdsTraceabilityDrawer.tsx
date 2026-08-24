@@ -25,9 +25,15 @@ export function KdsTraceabilityDrawer({
       maximumFractionDigits: 0,
     }).format(n);
 
-  const historyOrders = orders.filter(
-    (o) => o.status === "DELIVERED" || o.status === "CANCELLED"
-  );
+  const startOfTodayMs = new Date().setHours(0, 0, 0, 0);
+
+  const historyOrders = orders
+    .filter((o) => {
+      const isHistoryStatus = o.status === "DELIVERED" || o.status === "CANCELLED";
+      const isToday = new Date(o.createdAt).getTime() >= startOfTodayMs;
+      return isHistoryStatus && isToday;
+    })
+    .slice(0, 10);
 
   const selectedOrder = orders.find((o) => o.id === selectedOrderId) || historyOrders[0] || null;
 
@@ -37,7 +43,7 @@ export function KdsTraceabilityDrawer({
       <div className={styles.drawerHeader}>
         <div className={styles.drawerTitle} style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <History size={20} color="#38BDF8" />
-          Trazabilidad e Historial
+          Trazabilidad e Historial del Día
         </div>
         <button
           className={styles.closeDrawerBtn}
@@ -52,25 +58,17 @@ export function KdsTraceabilityDrawer({
       <div className={styles.drawerBody}>
         {/* Order Selector Chips */}
         <div>
-          <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#94A3B8", marginBottom: 8, textTransform: "uppercase" }}>
-            Comandas Recientes ({historyOrders.length})
+          <div className={styles.drawerSectionLabel}>
+            Últimas {historyOrders.length} Comandas de Hoy
           </div>
           <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 6 }}>
-            {historyOrders.slice(0, 15).map((o) => (
+            {historyOrders.map((o) => (
               <button
                 key={o.id}
                 onClick={() => setSelectedOrderId(o.id)}
-                style={{
-                  background: selectedOrder?.id === o.id ? "#2563EB" : "#1E293B",
-                  color: "#FFFFFF",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: 6,
-                  padding: "6px 10px",
-                  fontSize: "0.8rem",
-                  fontWeight: 800,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
+                className={`${styles.orderChipBtn} ${
+                  selectedOrder?.id === o.id ? styles.orderChipBtnActive : ""
+                }`}
               >
                 #{o.orderNumber}
               </button>
@@ -80,43 +78,31 @@ export function KdsTraceabilityDrawer({
 
         {/* Selected Order Detail & Event Timeline */}
         {selectedOrder ? (
-          <div style={{ background: "#182234", padding: 14, borderRadius: 10, border: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className={styles.drawerDetailCard}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
               <div>
-                <span style={{ fontSize: "1.1rem", fontWeight: 900 }}>Comanda #{selectedOrder.orderNumber}</span>
-                <div style={{ fontSize: "0.8rem", color: "#94A3B8", fontWeight: 700 }}>
+                <span className={styles.drawerOrderTitle}>Comanda #{selectedOrder.orderNumber}</span>
+                <div className={styles.drawerCustomerSub}>
                   {selectedOrder.customerName ? `Cliente: ${selectedOrder.customerName}` : `Tipo: ${selectedOrder.type}`}
                 </div>
               </div>
               <button
                 onClick={() => onReopenOrder(selectedOrder.id)}
-                style={{
-                  background: "#334155",
-                  color: "#38BDF8",
-                  border: "1px solid rgba(56,189,248,0.3)",
-                  padding: "6px 10px",
-                  borderRadius: 6,
-                  fontSize: "0.75rem",
-                  fontWeight: 800,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4,
-                }}
+                className={styles.btnReopen}
               >
                 <RotateCcw size={14} /> Reabrir
               </button>
             </div>
 
             {/* Event Timeline */}
-            <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#94A3B8", marginTop: 12, marginBottom: 8, textTransform: "uppercase" }}>
+            <div className={styles.drawerSectionLabel} style={{ marginTop: 12, marginBottom: 8 }}>
               Timeline de Eventos (Auditoría)
             </div>
 
             <div className={styles.timelineList}>
               {/* Event: Received */}
               <div className={styles.timelineItem}>
-                <div className={styles.timelineDot} style={{ background: "#38BDF8" }} />
+                <div className={styles.timelineDot} style={{ background: "#2563EB" }} />
                 <span className={styles.timelineTime}>
                   {new Date(selectedOrder.createdAt).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                 </span>
@@ -126,7 +112,7 @@ export function KdsTraceabilityDrawer({
               {/* Status History Events */}
               {selectedOrder.statusHistory?.map((h) => (
                 <div key={h.id} className={styles.timelineItem}>
-                  <div className={styles.timelineDot} style={{ background: h.toStatus === "READY" ? "#10B981" : h.toStatus === "INCIDENT" ? "#EF4444" : "#38BDF8" }} />
+                  <div className={styles.timelineDot} style={{ background: h.toStatus === "READY" ? "#16A34A" : h.toStatus === "INCIDENT" ? "#DC2626" : "#2563EB" }} />
                   <span className={styles.timelineTime}>
                     {new Date(h.createdAt).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                   </span>
@@ -146,19 +132,19 @@ export function KdsTraceabilityDrawer({
             </div>
 
             {/* Items Summary */}
-            <div style={{ marginTop: 14, borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 10 }}>
-              <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#94A3B8", marginBottom: 6 }}>
+            <div className={styles.drawerSectionDivider}>
+              <div className={styles.drawerSectionLabel} style={{ marginBottom: 6 }}>
                 PRODUCTOS PEDIDOS ({selectedOrder.items.length})
               </div>
               {selectedOrder.items.map((item) => (
-                <div key={item.id} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.825rem", color: "#CBD5E1", marginBottom: 4 }}>
+                <div key={item.id} className={styles.drawerItemRow}>
                   <span><strong>{item.quantity}x</strong> {item.name}</span>
                   <span>{formatCOP(item.subtotal)}</span>
                 </div>
               ))}
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, paddingTop: 6, borderTop: "1px dashed rgba(255,255,255,0.1)", fontWeight: 900, fontSize: "0.95rem" }}>
+              <div className={styles.drawerTotalRow}>
                 <span>Total</span>
-                <span style={{ color: "#38BDF8" }}>{formatCOP(selectedOrder.total)}</span>
+                <span className={styles.drawerTotalValue}>{formatCOP(selectedOrder.total)}</span>
               </div>
             </div>
           </div>

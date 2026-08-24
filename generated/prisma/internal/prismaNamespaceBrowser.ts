@@ -64,6 +64,7 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   OrderStatusHistory: 'OrderStatusHistory',
+  OrderTelemetry: 'OrderTelemetry',
   StaffMember: 'StaffMember',
   AnalyticsEvent: 'AnalyticsEvent',
   Subscription: 'Subscription',
@@ -294,6 +295,14 @@ export const OrderScalarFieldEnum = {
   isPriority: 'isPriority',
   targetPrepTimeMinutes: 'targetPrepTimeMinutes',
   incidentNote: 'incidentNote',
+  preparingAt: 'preparingAt',
+  readyAt: 'readyAt',
+  deliveredAt: 'deliveredAt',
+  cancelledAt: 'cancelledAt',
+  actualPrepTimeSeconds: 'actualPrepTimeSeconds',
+  actualTotalTimeSeconds: 'actualTotalTimeSeconds',
+  wasSlaBreached: 'wasSlaBreached',
+  cancellationReason: 'cancellationReason',
   orderNumber: 'orderNumber'
 } as const
 
@@ -311,6 +320,9 @@ export const OrderItemScalarFieldEnum = {
   notes: 'notes',
   status: 'status',
   station: 'station',
+  preparingAt: 'preparingAt',
+  readyAt: 'readyAt',
+  prepTimeSeconds: 'prepTimeSeconds',
   modifiersJson: 'modifiersJson',
   subtotal: 'subtotal'
 } as const
@@ -329,6 +341,24 @@ export const OrderStatusHistoryScalarFieldEnum = {
 } as const
 
 export type OrderStatusHistoryScalarFieldEnum = (typeof OrderStatusHistoryScalarFieldEnum)[keyof typeof OrderStatusHistoryScalarFieldEnum]
+
+
+export const OrderTelemetryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  orderId: 'orderId',
+  tenantId: 'tenantId',
+  hourOfDay: 'hourOfDay',
+  dayOfWeek: 'dayOfWeek',
+  activeOrdersCountAtCreation: 'activeOrdersCountAtCreation',
+  preparingOrdersCountAtCreation: 'preparingOrdersCountAtCreation',
+  totalItemQuantity: 'totalItemQuantity',
+  uniqueItemCount: 'uniqueItemCount',
+  hasModifiers: 'hasModifiers',
+  channelSource: 'channelSource'
+} as const
+
+export type OrderTelemetryScalarFieldEnum = (typeof OrderTelemetryScalarFieldEnum)[keyof typeof OrderTelemetryScalarFieldEnum]
 
 
 export const StaffMemberScalarFieldEnum = {

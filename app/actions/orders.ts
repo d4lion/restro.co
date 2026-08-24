@@ -49,8 +49,11 @@ export async function updateOrderStatusAction(
       return { success: false, message: "Datos de actualización inválidos" };
     }
 
-    const currentOrder = await orderRepository.findById(orderId);
-    const previousStatus = currentOrder?.status;
+    const currentOrder = await prisma.order.findUnique({
+      where: { id: orderId },
+      select: { status: true, orderNumber: true },
+    });
+    const previousStatus = currentOrder?.status as OrderStatus | undefined;
 
     await orderRepository.updateStatus(orderId, nextStatus, session.userId);
 
@@ -65,6 +68,34 @@ export async function updateOrderStatusAction(
   } catch (error) {
     console.error("Error updating order status:", error);
     return { success: false, message: "Error actualizando el estado de la comanda" };
+  }
+}
+
+export async function batchUpdateOrderStatusesAction(
+  items: Array<{ orderId: string; nextStatus: OrderStatus }>
+): Promise<{ success: boolean; message: string; count: number }> {
+  try {
+    const session = await getSession();
+    if (!session) return { success: false, message: "Sesión expirada", count: 0 };
+
+    if (!items || items.length === 0) {
+      return { success: true, message: "Sin cambios pendientes", count: 0 };
+    }
+
+    const payload = items.map((i) => ({ orderId: i.orderId, status: i.nextStatus }));
+    await orderRepository.batchUpdateStatus(payload, session.userId);
+
+    revalidatePath("/orders");
+    revalidatePath("/overview");
+
+    return {
+      success: true,
+      message: `${items.length} comanda(s) actualizadas en lote`,
+      count: items.length,
+    };
+  } catch (error) {
+    console.error("Error in batchUpdateOrderStatusesAction:", error);
+    return { success: false, message: "Error procesando lote de comandas", count: 0 };
   }
 }
 

@@ -30,6 +30,8 @@ export type OrderAvgAggregateOutputType = {
   subtotal: number | null
   total: number | null
   targetPrepTimeMinutes: number | null
+  actualPrepTimeSeconds: number | null
+  actualTotalTimeSeconds: number | null
   orderNumber: number | null
 }
 
@@ -37,6 +39,8 @@ export type OrderSumAggregateOutputType = {
   subtotal: number | null
   total: number | null
   targetPrepTimeMinutes: number | null
+  actualPrepTimeSeconds: number | null
+  actualTotalTimeSeconds: number | null
   orderNumber: number | null
 }
 
@@ -58,6 +62,14 @@ export type OrderMinAggregateOutputType = {
   isPriority: boolean | null
   targetPrepTimeMinutes: number | null
   incidentNote: string | null
+  preparingAt: Date | null
+  readyAt: Date | null
+  deliveredAt: Date | null
+  cancelledAt: Date | null
+  actualPrepTimeSeconds: number | null
+  actualTotalTimeSeconds: number | null
+  wasSlaBreached: boolean | null
+  cancellationReason: string | null
   orderNumber: number | null
 }
 
@@ -79,6 +91,14 @@ export type OrderMaxAggregateOutputType = {
   isPriority: boolean | null
   targetPrepTimeMinutes: number | null
   incidentNote: string | null
+  preparingAt: Date | null
+  readyAt: Date | null
+  deliveredAt: Date | null
+  cancelledAt: Date | null
+  actualPrepTimeSeconds: number | null
+  actualTotalTimeSeconds: number | null
+  wasSlaBreached: boolean | null
+  cancellationReason: string | null
   orderNumber: number | null
 }
 
@@ -100,6 +120,14 @@ export type OrderCountAggregateOutputType = {
   isPriority: number
   targetPrepTimeMinutes: number
   incidentNote: number
+  preparingAt: number
+  readyAt: number
+  deliveredAt: number
+  cancelledAt: number
+  actualPrepTimeSeconds: number
+  actualTotalTimeSeconds: number
+  wasSlaBreached: number
+  cancellationReason: number
   orderNumber: number
   _all: number
 }
@@ -109,6 +137,8 @@ export type OrderAvgAggregateInputType = {
   subtotal?: true
   total?: true
   targetPrepTimeMinutes?: true
+  actualPrepTimeSeconds?: true
+  actualTotalTimeSeconds?: true
   orderNumber?: true
 }
 
@@ -116,6 +146,8 @@ export type OrderSumAggregateInputType = {
   subtotal?: true
   total?: true
   targetPrepTimeMinutes?: true
+  actualPrepTimeSeconds?: true
+  actualTotalTimeSeconds?: true
   orderNumber?: true
 }
 
@@ -137,6 +169,14 @@ export type OrderMinAggregateInputType = {
   isPriority?: true
   targetPrepTimeMinutes?: true
   incidentNote?: true
+  preparingAt?: true
+  readyAt?: true
+  deliveredAt?: true
+  cancelledAt?: true
+  actualPrepTimeSeconds?: true
+  actualTotalTimeSeconds?: true
+  wasSlaBreached?: true
+  cancellationReason?: true
   orderNumber?: true
 }
 
@@ -158,6 +198,14 @@ export type OrderMaxAggregateInputType = {
   isPriority?: true
   targetPrepTimeMinutes?: true
   incidentNote?: true
+  preparingAt?: true
+  readyAt?: true
+  deliveredAt?: true
+  cancelledAt?: true
+  actualPrepTimeSeconds?: true
+  actualTotalTimeSeconds?: true
+  wasSlaBreached?: true
+  cancellationReason?: true
   orderNumber?: true
 }
 
@@ -179,6 +227,14 @@ export type OrderCountAggregateInputType = {
   isPriority?: true
   targetPrepTimeMinutes?: true
   incidentNote?: true
+  preparingAt?: true
+  readyAt?: true
+  deliveredAt?: true
+  cancelledAt?: true
+  actualPrepTimeSeconds?: true
+  actualTotalTimeSeconds?: true
+  wasSlaBreached?: true
+  cancellationReason?: true
   orderNumber?: true
   _all?: true
 }
@@ -287,6 +343,14 @@ export type OrderGroupByOutputType = {
   isPriority: boolean
   targetPrepTimeMinutes: number
   incidentNote: string | null
+  preparingAt: Date | null
+  readyAt: Date | null
+  deliveredAt: Date | null
+  cancelledAt: Date | null
+  actualPrepTimeSeconds: number | null
+  actualTotalTimeSeconds: number | null
+  wasSlaBreached: boolean
+  cancellationReason: string | null
   orderNumber: number
   _count: OrderCountAggregateOutputType | null
   _avg: OrderAvgAggregateOutputType | null
@@ -331,11 +395,20 @@ export type OrderWhereInput = {
   isPriority?: Prisma.BoolFilter<"Order"> | boolean
   targetPrepTimeMinutes?: Prisma.IntFilter<"Order"> | number
   incidentNote?: Prisma.StringNullableFilter<"Order"> | string | null
+  preparingAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  cancelledAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  actualPrepTimeSeconds?: Prisma.IntNullableFilter<"Order"> | number | null
+  actualTotalTimeSeconds?: Prisma.IntNullableFilter<"Order"> | number | null
+  wasSlaBreached?: Prisma.BoolFilter<"Order"> | boolean
+  cancellationReason?: Prisma.StringNullableFilter<"Order"> | string | null
   orderNumber?: Prisma.IntFilter<"Order"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
   statusHistory?: Prisma.OrderStatusHistoryListRelationFilter
+  telemetry?: Prisma.XOR<Prisma.OrderTelemetryNullableScalarRelationFilter, Prisma.OrderTelemetryWhereInput> | null
 }
 
 export type OrderOrderByWithRelationInput = {
@@ -356,11 +429,20 @@ export type OrderOrderByWithRelationInput = {
   isPriority?: Prisma.SortOrder
   targetPrepTimeMinutes?: Prisma.SortOrder
   incidentNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  preparingAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  readyAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancelledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  actualPrepTimeSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  actualTotalTimeSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  wasSlaBreached?: Prisma.SortOrder
+  cancellationReason?: Prisma.SortOrderInput | Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   table?: Prisma.TableOrderByWithRelationInput
   items?: Prisma.OrderItemOrderByRelationAggregateInput
   statusHistory?: Prisma.OrderStatusHistoryOrderByRelationAggregateInput
+  telemetry?: Prisma.OrderTelemetryOrderByWithRelationInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -384,11 +466,20 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   isPriority?: Prisma.BoolFilter<"Order"> | boolean
   targetPrepTimeMinutes?: Prisma.IntFilter<"Order"> | number
   incidentNote?: Prisma.StringNullableFilter<"Order"> | string | null
+  preparingAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  cancelledAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  actualPrepTimeSeconds?: Prisma.IntNullableFilter<"Order"> | number | null
+  actualTotalTimeSeconds?: Prisma.IntNullableFilter<"Order"> | number | null
+  wasSlaBreached?: Prisma.BoolFilter<"Order"> | boolean
+  cancellationReason?: Prisma.StringNullableFilter<"Order"> | string | null
   orderNumber?: Prisma.IntFilter<"Order"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
   statusHistory?: Prisma.OrderStatusHistoryListRelationFilter
+  telemetry?: Prisma.XOR<Prisma.OrderTelemetryNullableScalarRelationFilter, Prisma.OrderTelemetryWhereInput> | null
 }, "id">
 
 export type OrderOrderByWithAggregationInput = {
@@ -409,6 +500,14 @@ export type OrderOrderByWithAggregationInput = {
   isPriority?: Prisma.SortOrder
   targetPrepTimeMinutes?: Prisma.SortOrder
   incidentNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  preparingAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  readyAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancelledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  actualPrepTimeSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  actualTotalTimeSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  wasSlaBreached?: Prisma.SortOrder
+  cancellationReason?: Prisma.SortOrderInput | Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
   _avg?: Prisma.OrderAvgOrderByAggregateInput
@@ -438,6 +537,14 @@ export type OrderScalarWhereWithAggregatesInput = {
   isPriority?: Prisma.BoolWithAggregatesFilter<"Order"> | boolean
   targetPrepTimeMinutes?: Prisma.IntWithAggregatesFilter<"Order"> | number
   incidentNote?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  preparingAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  cancelledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  actualPrepTimeSeconds?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
+  actualTotalTimeSeconds?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
+  wasSlaBreached?: Prisma.BoolWithAggregatesFilter<"Order"> | boolean
+  cancellationReason?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   orderNumber?: Prisma.IntWithAggregatesFilter<"Order"> | number
 }
 
@@ -457,11 +564,20 @@ export type OrderCreateInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
@@ -482,9 +598,18 @@ export type OrderUncheckedCreateInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryUncheckedCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
@@ -503,11 +628,20 @@ export type OrderUpdateInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
@@ -528,9 +662,18 @@ export type OrderUncheckedUpdateInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
@@ -551,6 +694,14 @@ export type OrderCreateManyInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
 }
 
@@ -570,6 +721,14 @@ export type OrderUpdateManyMutationInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -591,6 +750,14 @@ export type OrderUncheckedUpdateManyInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -622,6 +789,14 @@ export type OrderCountOrderByAggregateInput = {
   isPriority?: Prisma.SortOrder
   targetPrepTimeMinutes?: Prisma.SortOrder
   incidentNote?: Prisma.SortOrder
+  preparingAt?: Prisma.SortOrder
+  readyAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
+  cancelledAt?: Prisma.SortOrder
+  actualPrepTimeSeconds?: Prisma.SortOrder
+  actualTotalTimeSeconds?: Prisma.SortOrder
+  wasSlaBreached?: Prisma.SortOrder
+  cancellationReason?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -629,6 +804,8 @@ export type OrderAvgOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
   targetPrepTimeMinutes?: Prisma.SortOrder
+  actualPrepTimeSeconds?: Prisma.SortOrder
+  actualTotalTimeSeconds?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -650,6 +827,14 @@ export type OrderMaxOrderByAggregateInput = {
   isPriority?: Prisma.SortOrder
   targetPrepTimeMinutes?: Prisma.SortOrder
   incidentNote?: Prisma.SortOrder
+  preparingAt?: Prisma.SortOrder
+  readyAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
+  cancelledAt?: Prisma.SortOrder
+  actualPrepTimeSeconds?: Prisma.SortOrder
+  actualTotalTimeSeconds?: Prisma.SortOrder
+  wasSlaBreached?: Prisma.SortOrder
+  cancellationReason?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -671,6 +856,14 @@ export type OrderMinOrderByAggregateInput = {
   isPriority?: Prisma.SortOrder
   targetPrepTimeMinutes?: Prisma.SortOrder
   incidentNote?: Prisma.SortOrder
+  preparingAt?: Prisma.SortOrder
+  readyAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
+  cancelledAt?: Prisma.SortOrder
+  actualPrepTimeSeconds?: Prisma.SortOrder
+  actualTotalTimeSeconds?: Prisma.SortOrder
+  wasSlaBreached?: Prisma.SortOrder
+  cancellationReason?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -678,6 +871,8 @@ export type OrderSumOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   total?: Prisma.SortOrder
   targetPrepTimeMinutes?: Prisma.SortOrder
+  actualPrepTimeSeconds?: Prisma.SortOrder
+  actualTotalTimeSeconds?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
 }
 
@@ -798,6 +993,20 @@ export type OrderUpdateOneRequiredWithoutStatusHistoryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutStatusHistoryInput, Prisma.OrderUpdateWithoutStatusHistoryInput>, Prisma.OrderUncheckedUpdateWithoutStatusHistoryInput>
 }
 
+export type OrderCreateNestedOneWithoutTelemetryInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutTelemetryInput, Prisma.OrderUncheckedCreateWithoutTelemetryInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutTelemetryInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneRequiredWithoutTelemetryNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutTelemetryInput, Prisma.OrderUncheckedCreateWithoutTelemetryInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutTelemetryInput
+  upsert?: Prisma.OrderUpsertWithoutTelemetryInput
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutTelemetryInput, Prisma.OrderUpdateWithoutTelemetryInput>, Prisma.OrderUncheckedUpdateWithoutTelemetryInput>
+}
+
 export type OrderCreateWithoutTenantInput = {
   id?: string
   createdAt?: Date | string
@@ -814,10 +1023,19 @@ export type OrderCreateWithoutTenantInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutTenantInput = {
@@ -837,9 +1055,18 @@ export type OrderUncheckedCreateWithoutTenantInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryUncheckedCreateNestedOneWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutTenantInput = {
@@ -889,6 +1116,14 @@ export type OrderScalarWhereInput = {
   isPriority?: Prisma.BoolFilter<"Order"> | boolean
   targetPrepTimeMinutes?: Prisma.IntFilter<"Order"> | number
   incidentNote?: Prisma.StringNullableFilter<"Order"> | string | null
+  preparingAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  readyAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  cancelledAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  actualPrepTimeSeconds?: Prisma.IntNullableFilter<"Order"> | number | null
+  actualTotalTimeSeconds?: Prisma.IntNullableFilter<"Order"> | number | null
+  wasSlaBreached?: Prisma.BoolFilter<"Order"> | boolean
+  cancellationReason?: Prisma.StringNullableFilter<"Order"> | string | null
   orderNumber?: Prisma.IntFilter<"Order"> | number
 }
 
@@ -908,10 +1143,19 @@ export type OrderCreateWithoutTableInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutTableInput = {
@@ -931,9 +1175,18 @@ export type OrderUncheckedCreateWithoutTableInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryUncheckedCreateNestedOneWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutTableInput = {
@@ -978,10 +1231,19 @@ export type OrderCreateWithoutItemsInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   statusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutItemsInput = {
@@ -1002,8 +1264,17 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryUncheckedCreateNestedOneWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutItemsInput = {
@@ -1038,10 +1309,19 @@ export type OrderUpdateWithoutItemsInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutItemsInput = {
@@ -1062,8 +1342,17 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderCreateWithoutStatusHistoryInput = {
@@ -1082,10 +1371,19 @@ export type OrderCreateWithoutStatusHistoryInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutStatusHistoryInput = {
@@ -1106,8 +1404,17 @@ export type OrderUncheckedCreateWithoutStatusHistoryInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  telemetry?: Prisma.OrderTelemetryUncheckedCreateNestedOneWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutStatusHistoryInput = {
@@ -1142,10 +1449,19 @@ export type OrderUpdateWithoutStatusHistoryInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutStatusHistoryInput = {
@@ -1166,8 +1482,157 @@ export type OrderUncheckedUpdateWithoutStatusHistoryInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUncheckedUpdateOneWithoutOrderNestedInput
+}
+
+export type OrderCreateWithoutTelemetryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  type?: string
+  customerName?: string | null
+  customerPhone?: string | null
+  deliveryAddress?: string | null
+  deliveryNotes?: string | null
+  status?: string
+  subtotal?: number
+  total?: number
+  notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
+  orderNumber: number
+  tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
+  table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  statusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutTelemetryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenantId: string
+  type?: string
+  tableId?: string | null
+  customerName?: string | null
+  customerPhone?: string | null
+  deliveryAddress?: string | null
+  deliveryNotes?: string | null
+  status?: string
+  subtotal?: number
+  total?: number
+  notes?: string | null
+  isPriority?: boolean
+  targetPrepTimeMinutes?: number
+  incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
+  orderNumber: number
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  statusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutTelemetryInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutTelemetryInput, Prisma.OrderUncheckedCreateWithoutTelemetryInput>
+}
+
+export type OrderUpsertWithoutTelemetryInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutTelemetryInput, Prisma.OrderUncheckedUpdateWithoutTelemetryInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutTelemetryInput, Prisma.OrderUncheckedCreateWithoutTelemetryInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutTelemetryInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutTelemetryInput, Prisma.OrderUncheckedUpdateWithoutTelemetryInput>
+}
+
+export type OrderUpdateWithoutTelemetryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
+  table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  statusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutTelemetryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyTenantInput = {
@@ -1187,6 +1652,14 @@ export type OrderCreateManyTenantInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
 }
 
@@ -1206,10 +1679,19 @@ export type OrderUpdateWithoutTenantInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutTenantInput = {
@@ -1229,9 +1711,18 @@ export type OrderUncheckedUpdateWithoutTenantInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutTenantInput = {
@@ -1251,6 +1742,14 @@ export type OrderUncheckedUpdateManyWithoutTenantInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -1271,6 +1770,14 @@ export type OrderCreateManyTableInput = {
   isPriority?: boolean
   targetPrepTimeMinutes?: number
   incidentNote?: string | null
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  actualPrepTimeSeconds?: number | null
+  actualTotalTimeSeconds?: number | null
+  wasSlaBreached?: boolean
+  cancellationReason?: string | null
   orderNumber: number
 }
 
@@ -1290,10 +1797,19 @@ export type OrderUpdateWithoutTableInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutTableInput = {
@@ -1313,9 +1829,18 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   statusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  telemetry?: Prisma.OrderTelemetryUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutTableInput = {
@@ -1335,6 +1860,14 @@ export type OrderUncheckedUpdateManyWithoutTableInput = {
   isPriority?: Prisma.BoolFieldUpdateOperationsInput | boolean
   targetPrepTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   incidentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualPrepTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actualTotalTimeSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  wasSlaBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -1396,11 +1929,20 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   isPriority?: boolean
   targetPrepTimeMinutes?: boolean
   incidentNote?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  deliveredAt?: boolean
+  cancelledAt?: boolean
+  actualPrepTimeSeconds?: boolean
+  actualTotalTimeSeconds?: boolean
+  wasSlaBreached?: boolean
+  cancellationReason?: boolean
   orderNumber?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   statusHistory?: boolean | Prisma.Order$statusHistoryArgs<ExtArgs>
+  telemetry?: boolean | Prisma.Order$telemetryArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
@@ -1422,6 +1964,14 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   isPriority?: boolean
   targetPrepTimeMinutes?: boolean
   incidentNote?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  deliveredAt?: boolean
+  cancelledAt?: boolean
+  actualPrepTimeSeconds?: boolean
+  actualTotalTimeSeconds?: boolean
+  wasSlaBreached?: boolean
+  cancellationReason?: boolean
   orderNumber?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
@@ -1445,6 +1995,14 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   isPriority?: boolean
   targetPrepTimeMinutes?: boolean
   incidentNote?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  deliveredAt?: boolean
+  cancelledAt?: boolean
+  actualPrepTimeSeconds?: boolean
+  actualTotalTimeSeconds?: boolean
+  wasSlaBreached?: boolean
+  cancellationReason?: boolean
   orderNumber?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
@@ -1468,15 +2026,24 @@ export type OrderSelectScalar = {
   isPriority?: boolean
   targetPrepTimeMinutes?: boolean
   incidentNote?: boolean
+  preparingAt?: boolean
+  readyAt?: boolean
+  deliveredAt?: boolean
+  cancelledAt?: boolean
+  actualPrepTimeSeconds?: boolean
+  actualTotalTimeSeconds?: boolean
+  wasSlaBreached?: boolean
+  cancellationReason?: boolean
   orderNumber?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "tenantId" | "type" | "tableId" | "customerName" | "customerPhone" | "deliveryAddress" | "deliveryNotes" | "status" | "subtotal" | "total" | "notes" | "isPriority" | "targetPrepTimeMinutes" | "incidentNote" | "orderNumber", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "tenantId" | "type" | "tableId" | "customerName" | "customerPhone" | "deliveryAddress" | "deliveryNotes" | "status" | "subtotal" | "total" | "notes" | "isPriority" | "targetPrepTimeMinutes" | "incidentNote" | "preparingAt" | "readyAt" | "deliveredAt" | "cancelledAt" | "actualPrepTimeSeconds" | "actualTotalTimeSeconds" | "wasSlaBreached" | "cancellationReason" | "orderNumber", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   statusHistory?: boolean | Prisma.Order$statusHistoryArgs<ExtArgs>
+  telemetry?: boolean | Prisma.Order$telemetryArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1495,6 +2062,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     table: Prisma.$TablePayload<ExtArgs> | null
     items: Prisma.$OrderItemPayload<ExtArgs>[]
     statusHistory: Prisma.$OrderStatusHistoryPayload<ExtArgs>[]
+    telemetry: Prisma.$OrderTelemetryPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1514,6 +2082,14 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     isPriority: boolean
     targetPrepTimeMinutes: number
     incidentNote: string | null
+    preparingAt: Date | null
+    readyAt: Date | null
+    deliveredAt: Date | null
+    cancelledAt: Date | null
+    actualPrepTimeSeconds: number | null
+    actualTotalTimeSeconds: number | null
+    wasSlaBreached: boolean
+    cancellationReason: string | null
     orderNumber: number
   }, ExtArgs["result"]["order"]>
   composites: {}
@@ -1913,6 +2489,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   table<T extends Prisma.Order$tableArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$tableArgs<ExtArgs>>): Prisma.Prisma__TableClient<runtime.Types.Result.GetResult<Prisma.$TablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Order$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   statusHistory<T extends Prisma.Order$statusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$statusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  telemetry<T extends Prisma.Order$telemetryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$telemetryArgs<ExtArgs>>): Prisma.Prisma__OrderTelemetryClient<runtime.Types.Result.GetResult<Prisma.$OrderTelemetryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1959,6 +2536,14 @@ export interface OrderFieldRefs {
   readonly isPriority: Prisma.FieldRef<"Order", 'Boolean'>
   readonly targetPrepTimeMinutes: Prisma.FieldRef<"Order", 'Int'>
   readonly incidentNote: Prisma.FieldRef<"Order", 'String'>
+  readonly preparingAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly readyAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly deliveredAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly cancelledAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly actualPrepTimeSeconds: Prisma.FieldRef<"Order", 'Int'>
+  readonly actualTotalTimeSeconds: Prisma.FieldRef<"Order", 'Int'>
+  readonly wasSlaBreached: Prisma.FieldRef<"Order", 'Boolean'>
+  readonly cancellationReason: Prisma.FieldRef<"Order", 'String'>
   readonly orderNumber: Prisma.FieldRef<"Order", 'Int'>
 }
     
@@ -2425,6 +3010,25 @@ export type Order$statusHistoryArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.OrderStatusHistoryScalarFieldEnum | Prisma.OrderStatusHistoryScalarFieldEnum[]
+}
+
+/**
+ * Order.telemetry
+ */
+export type Order$telemetryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderTelemetry
+   */
+  select?: Prisma.OrderTelemetrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderTelemetry
+   */
+  omit?: Prisma.OrderTelemetryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderTelemetryInclude<ExtArgs> | null
+  where?: Prisma.OrderTelemetryWhereInput
 }
 
 /**

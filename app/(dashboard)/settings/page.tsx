@@ -5,6 +5,7 @@ import type { PlanKey, PlanRecord } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import { StoreHeaderPreviewCard } from "@/components/dashboard/settings/StoreHeaderPreviewCard";
 import { OrderSettingsCard } from "@/components/dashboard/settings/OrderSettingsCard";
+import { NotificationSettingsCard } from "@/components/dashboard/settings/NotificationSettingsCard";
 import { BusinessHoursCard } from "@/components/dashboard/settings/BusinessHoursCard";
 import { LogoutCard } from "@/components/dashboard/settings/LogoutCard";
 import styles from "./page.module.css";
@@ -55,6 +56,9 @@ export default async function SettingsPage() {
           closeTime: h.closeTime,
         }))}
       />
+
+      {/* ── Realtime Notification Settings ─────────────────────── */}
+      <NotificationSettingsCard />
 
       {/* ── Order Settings ───────────────────────────────────── */}
       <OrderSettingsCard
