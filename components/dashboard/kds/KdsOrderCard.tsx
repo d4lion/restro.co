@@ -21,9 +21,9 @@ interface KdsOrderCardProps {
   order: OrderWithItems;
   onUpdateStatus: (orderId: string, nextStatus: OrderStatus) => void;
   onTogglePriority: (orderId: string, currentPriority: boolean) => void;
-  onReportIncident: (orderId: string) => void;
+  onReportIncident: (orderId: string, orderNumber: number, customerName?: string | null) => void;
   onUpdateItemStatus: (itemId: string, nextStatus: string) => void;
-  onCancelOrder: (orderId: string) => void;
+  onCancelOrder: (orderId: string, orderNumber: number, customerName?: string | null) => void;
 }
 
 export function KdsOrderCard({
@@ -157,12 +157,18 @@ export function KdsOrderCard({
       <div className={styles.slaSection}>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <Clock size={13} className={timerClass} />
-          <span className={`${styles.timerElapsed} ${timerClass}`}>
+          <span
+            className={`${styles.timerElapsed} ${timerClass}`}
+            suppressHydrationWarning
+          >
             {elapsedFormatted}
           </span>
         </div>
 
-        <span style={{ color: isOverdue ? "#DC2626" : "#64748B", fontWeight: 600 }}>
+        <span
+          style={{ color: isOverdue ? "#DC2626" : "#64748B", fontWeight: 600 }}
+          suppressHydrationWarning
+        >
           {isOverdue ? overdueFormatted : `Objetivo: ${targetMinutes}:00`}
         </span>
       </div>
@@ -293,7 +299,7 @@ export function KdsOrderCard({
 
           <button
             className={`${styles.subBtn} ${order.incidentNote ? styles.subBtnIncident : ""}`}
-            onClick={() => onReportIncident(order.id)}
+            onClick={() => onReportIncident(order.id, order.orderNumber, order.customerName)}
             title="Reportar incidencia"
           >
             <AlertTriangle size={13} />
@@ -302,7 +308,7 @@ export function KdsOrderCard({
 
           <button
             className={`${styles.subBtn} ${styles.subBtnDanger}`}
-            onClick={() => onCancelOrder(order.id)}
+            onClick={() => onCancelOrder(order.id, order.orderNumber, order.customerName)}
             title="Cancelar comanda"
           >
             <XCircle size={13} />
