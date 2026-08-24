@@ -12,6 +12,7 @@ import {
 } from "@/app/actions/orders";
 import { KdsOrderCard } from "./KdsOrderCard";
 import { KdsTraceabilityDrawer } from "./KdsTraceabilityDrawer";
+import { KdsActionModal, ModalMode } from "./KdsActionModal";
 import {
   Volume2,
   VolumeX,
@@ -47,6 +48,15 @@ export function KdsDashboardClient({
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [now, setNow] = useState<Date>(new Date());
   const [, startTransition] = useTransition();
+
+  // Action Modal State (Cancel or Incident)
+  const [activeModal, setActiveModal] = useState<{
+    isOpen: boolean;
+    mode: ModalMode;
+    orderId: string;
+    orderNumber: number;
+    customerName?: string | null;
+  } | null>(null);
 
   // Optimistic Status Lock Ref (prevents flickering/bouncing during server background sync)
   const pendingStatusRef = useRef<Record<string, OrderStatus>>({});
@@ -304,19 +314,88 @@ export function KdsDashboardClient({
     });
   };
 
-  // Incident Report Handler
-  const handleReportIncident = (orderId: string) => {
-    const note = prompt("Escribe la incidencia (ej. Falta de ingrediente, error en pedido):");
-    if (!note?.trim()) return;
-
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, incidentNote: note.trim() } : o))
-    );
-
-    startTransition(async () => {
-      await reportOrderIncidentAction(orderId, note.trim());
-      toast.warning("Incidencia registrada en auditoría");
+  // Incident Report Modal Trigger
+  const handleReportIncident = (
+    orderId: string,
+    orderNumber: number,
+    customerName?: string | null
+  ) => {
+    setActiveModal({
+      isOpen: true,
+      mode: "INCIDENT",
+      orderId,
+      orderNumber,
+      customerName,
     });
+  };
+
+  // Cancel Order Modal Trigger
+  const handleCancelOrder = (
+    orderId: string,
+    orderNumber: number,
+    customerName?: string | null
+  ) => {
+    setActiveModal({
+      isOpen: true,
+      mode: "CANCEL",
+      orderId,
+      orderNumber,
+      customerName,
+    });
+  };
+
+  // Confirm Handler for Action Modal
+  const handleModalConfirm = (reasonTitle: string, customNote?: string) => {
+    if (!activeModal) return;
+
+    const { mode, orderId, orderNumber } = activeModal;
+    const fullReason = customNote?.trim()
+      ? `${reasonTitle}: ${customNote.trim()}`
+      : reasonTitle;
+
+    setActiveModal(null);
+
+    if (mode === "CANCEL") {
+      const previousStatus = orders.find((o) => o.id === orderId)?.status;
+
+      // Optimistic UI Update
+      pendingStatusRef.current[orderId] = "CANCELLED";
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId
+            ? { ...o, status: "CANCELLED", cancellationReason: fullReason }
+            : o
+        )
+      );
+
+      startTransition(async () => {
+        const res = await updateOrderStatusAction(orderId, "CANCELLED", fullReason);
+        delete pendingStatusRef.current[orderId];
+
+        if (!res.success) {
+          toast.error("No se pudo cancelar la orden");
+          if (previousStatus) {
+            setOrders((prev) =>
+              prev.map((o) => (o.id === orderId ? { ...o, status: previousStatus } : o))
+            );
+          }
+        } else {
+          await reportOrderIncidentAction(orderId, `CANCELADA: ${fullReason}`);
+          toast.warning(`Comanda #${orderNumber} cancelada (${reasonTitle})`);
+        }
+      });
+    } else if (mode === "INCIDENT") {
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId ? { ...o, incidentNote: fullReason } : o
+        )
+      );
+
+      startTransition(async () => {
+        await reportOrderIncidentAction(orderId, fullReason);
+        toast.warning(`Incidencia registrada en Comanda #${orderNumber}`);
+      });
+    }
   };
 
   // Item Status Handler
@@ -337,39 +416,6 @@ export function KdsDashboardClient({
   const handleReopenOrder = (orderId: string) => {
     handleUpdateStatus(orderId, "PENDING");
     setShowTraceability(false);
-  };
-
-  // Cancel Order Handler
-  const handleCancelOrder = (orderId: string) => {
-    const reason = prompt("Escribe la razón de cancelación (ej. Cliente canceló, falta de insumo):");
-    if (reason === null) return;
-
-    const previousStatus = orders.find((o) => o.id === orderId)?.status;
-
-    // Optimistic UI Update
-    pendingStatusRef.current[orderId] = "CANCELLED";
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: "CANCELLED" } : o))
-    );
-
-    startTransition(async () => {
-      const res = await updateOrderStatusAction(orderId, "CANCELLED");
-      delete pendingStatusRef.current[orderId];
-
-      if (!res.success) {
-        toast.error("No se pudo cancelar la orden");
-        if (previousStatus) {
-          setOrders((prev) =>
-            prev.map((o) => (o.id === orderId ? { ...o, status: previousStatus } : o))
-          );
-        }
-      } else {
-        if (reason.trim()) {
-          await reportOrderIncidentAction(orderId, `CANCELADA: ${reason.trim()}`);
-        }
-        toast.warning("Comanda cancelada y registrada en auditoría");
-      }
-    });
   };
 
   // Filter Orders
@@ -691,9 +737,22 @@ export function KdsDashboardClient({
             orders={orders}
             onClose={() => setShowTraceability(false)}
             onReopenOrder={handleReopenOrder}
+            onRefresh={syncOrders}
           />
         )}
       </div>
+
+      {/* Action Modal (Cancel Order / Report Incident) */}
+      {activeModal?.isOpen && (
+        <KdsActionModal
+          isOpen={activeModal.isOpen}
+          mode={activeModal.mode}
+          orderNumber={activeModal.orderNumber}
+          customerName={activeModal.customerName}
+          onClose={() => setActiveModal(null)}
+          onConfirm={handleModalConfirm}
+        />
+      )}
     </div>
   );
 }
