@@ -13,6 +13,7 @@ import {
   Circle,
   Clock3,
   CheckCircle2,
+  XCircle,
 } from "lucide-react";
 import styles from "./KdsDashboard.module.css";
 
@@ -20,9 +21,9 @@ interface KdsOrderCardProps {
   order: OrderWithItems;
   onUpdateStatus: (orderId: string, nextStatus: OrderStatus) => void;
   onTogglePriority: (orderId: string, currentPriority: boolean) => void;
-  onReportIncident: (orderId: string) => void;
+  onReportIncident: (orderId: string, orderNumber: number, customerName?: string | null) => void;
   onUpdateItemStatus: (itemId: string, nextStatus: string) => void;
-  onCancelOrder: (orderId: string) => void;
+  onCancelOrder: (orderId: string, orderNumber: number, customerName?: string | null) => void;
 }
 
 export function KdsOrderCard({
@@ -35,18 +36,31 @@ export function KdsOrderCard({
 }: KdsOrderCardProps) {
   // Compute SLA & Elapsed Time
   const createdAtMs = new Date(order.createdAt).getTime();
-  const nowMs = Date.now();
-  const elapsedSec = Math.max(0, Math.floor((nowMs - createdAtMs) / 1000));
+  const targetMinutes = order.targetPrepTimeMinutes || 12;
+  const targetSec = targetMinutes * 60;
+
+  let elapsedSec = 0;
+
+  if (order.status === "READY" || order.status === "DELIVERED") {
+    if (typeof order.actualPrepTimeSeconds === "number" && order.actualPrepTimeSeconds > 0) {
+      elapsedSec = order.actualPrepTimeSeconds;
+    } else if (order.readyAt) {
+      elapsedSec = Math.max(0, Math.floor((new Date(order.readyAt).getTime() - createdAtMs) / 1000));
+    } else {
+      elapsedSec = Math.max(0, Math.floor((Date.now() - createdAtMs) / 1000));
+    }
+  } else {
+    // For PENDING and PREPARING, count total elapsed wait time from createdAt
+    elapsedSec = Math.max(0, Math.floor((Date.now() - createdAtMs) / 1000));
+  }
+
   const elapsedMinutes = Math.floor(elapsedSec / 60);
   const elapsedSeconds = elapsedSec % 60;
   const elapsedFormatted = `${elapsedMinutes < 10 ? "0" : ""}${elapsedMinutes}:${elapsedSeconds < 10 ? "0" : ""}${elapsedSeconds}`;
 
-  const targetMinutes = order.targetPrepTimeMinutes || 12;
-  const targetSec = targetMinutes * 60;
   const progressPercent = Math.min(100, Math.floor((elapsedSec / targetSec) * 100));
-
-  const isOverdue = elapsedSec >= targetSec;
-  const overdueSec = elapsedSec - targetSec;
+  const isOverdue = Boolean(order.wasSlaBreached) || elapsedSec >= targetSec;
+  const overdueSec = Math.max(0, elapsedSec - targetSec);
   const overdueMin = Math.floor(overdueSec / 60);
   const overdueRemainderSec = overdueSec % 60;
   const overdueFormatted = `+${overdueMin < 10 ? "0" : ""}${overdueMin}:${overdueRemainderSec < 10 ? "0" : ""}${overdueRemainderSec} retrasado`;
@@ -67,8 +81,12 @@ export function KdsOrderCard({
   const getDestinationMeta = () => {
     switch (order.type) {
       case "DINE_IN":
+        const displayTable = order.tableName
+          ? (order.tableName.toLowerCase().startsWith("mesa") ? order.tableName : `Mesa ${order.tableName}`)
+          : "LOCAL";
+
         return {
-          label: order.tableId ? `Mesa ${order.tableId}` : "LOCAL",
+          label: displayTable,
           icon: <Utensils size={12} />,
           className: styles.pillDineIn,
         };
@@ -139,12 +157,18 @@ export function KdsOrderCard({
       <div className={styles.slaSection}>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <Clock size={13} className={timerClass} />
-          <span className={`${styles.timerElapsed} ${timerClass}`}>
+          <span
+            className={`${styles.timerElapsed} ${timerClass}`}
+            suppressHydrationWarning
+          >
             {elapsedFormatted}
           </span>
         </div>
 
-        <span style={{ color: isOverdue ? "#DC2626" : "#64748B", fontWeight: 600 }}>
+        <span
+          style={{ color: isOverdue ? "#DC2626" : "#64748B", fontWeight: 600 }}
+          suppressHydrationWarning
+        >
           {isOverdue ? overdueFormatted : `Objetivo: ${targetMinutes}:00`}
         </span>
       </div>
@@ -265,25 +289,30 @@ export function KdsOrderCard({
         {/* Sub-actions */}
         <div className={styles.subActionsRow}>
           <button
-            className={styles.subBtn}
+            className={`${styles.subBtn} ${order.isPriority ? styles.subBtnPriority : ""}`}
             onClick={() => onTogglePriority(order.id, Boolean(order.isPriority))}
+            title={order.isPriority ? "Quitar prioridad" : "Marcar prioridad"}
           >
-            <Zap size={11} /> {order.isPriority ? "Quit. Prioridad" : "⚡ Priorizar"}
+            <Zap size={13} />
+            <span>{order.isPriority ? "Prioritaria" : "Priorizar"}</span>
           </button>
 
           <button
-            className={styles.subBtn}
-            onClick={() => onReportIncident(order.id)}
+            className={`${styles.subBtn} ${order.incidentNote ? styles.subBtnIncident : ""}`}
+            onClick={() => onReportIncident(order.id, order.orderNumber, order.customerName)}
+            title="Reportar incidencia"
           >
-            <AlertTriangle size={11} /> Incidencia
+            <AlertTriangle size={13} />
+            <span>Incidencia</span>
           </button>
 
           <button
             className={`${styles.subBtn} ${styles.subBtnDanger}`}
-            onClick={() => onCancelOrder(order.id)}
-            title="Cancelar orden"
+            onClick={() => onCancelOrder(order.id, order.orderNumber, order.customerName)}
+            title="Cancelar comanda"
           >
-            Cancelar
+            <XCircle size={13} />
+            <span>Cancelar</span>
           </button>
         </div>
       </div>

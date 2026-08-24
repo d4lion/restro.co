@@ -118,6 +118,7 @@ model Tenant {
   orders           Order[]
   staff            StaffMember[]
   analyticsEvents  AnalyticsEvent[]
+  orderTelemetry   OrderTelemetry[]
   subscription     Subscription?
   users            User[]
   featureOverrides TenantFeatureOverride[]
@@ -308,12 +309,23 @@ model Order {
   targetPrepTimeMinutes Int     @default(12)
   incidentNote          String?
 
+  // Lifecycle Milestones & Operational Timestamps
+  preparingAt            DateTime?
+  readyAt                DateTime?
+  deliveredAt            DateTime?
+  cancelledAt            DateTime?
+  actualPrepTimeSeconds  Int?
+  actualTotalTimeSeconds Int?
+  wasSlaBreached         Boolean   @default(false)
+  cancellationReason     String?
+
   // Order number (human-readable, per-tenant sequential)
   orderNumber Int
 
-  // Items
+  // Items & Relations
   items         OrderItem[]
   statusHistory OrderStatusHistory[]
+  telemetry     OrderTelemetry?
 }
 
 model OrderItem {
@@ -334,6 +346,11 @@ model OrderItem {
   status   String  @default("PENDING") // PENDING | PREPARING | READY
   station  String? // Cocina | Parrilla | Fritura | Bebidas | Postres | Despacho
 
+  // Cooking Timestamps & Metrics per Item
+  preparingAt     DateTime?
+  readyAt         DateTime?
+  prepTimeSeconds Int?
+
   // JSON array of selected modifiers: [{ optionId: string, name: string, priceExtra: number, groupId: string, groupName: string }]
   modifiersJson String?
 
@@ -351,6 +368,36 @@ model OrderStatusHistory {
   toStatus    String
   changedById String? // Staff user ID who changed the status
   note        String?
+}
+
+// ─── TELEMETRY & AI ANALYTICS ──────────────────────────────────────────────────
+
+model OrderTelemetry {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Temporal AI Features
+  hourOfDay Int // 0 - 23
+  dayOfWeek Int // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+
+  // Kitchen Load Metrics at Creation Time
+  activeOrdersCountAtCreation    Int @default(0)
+  preparingOrdersCountAtCreation Int @default(0)
+
+  // Order Metrics
+  totalItemQuantity Int     @default(1)
+  uniqueItemCount   Int     @default(1)
+  hasModifiers      Boolean @default(false)
+  channelSource     String  @default("QR_DINE_IN") // QR_DINE_IN | WAITER | WHATSAPP | TAKEOUT | DELIVERY
+
+  @@index([tenantId])
+  @@index([createdAt])
 }
 
 // ─── STAFF ────────────────────────────────────────────────────────────────────

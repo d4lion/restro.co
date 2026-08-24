@@ -244,9 +244,21 @@ export interface OrderWithItems {
   deliveryAddress?: string | null;
   deliveryNotes?: string | null;
   tableId: string | null;
+  tableName?: string | null;
   isPriority?: boolean;
   targetPrepTimeMinutes?: number;
   incidentNote?: string | null;
+  
+  // Lifecycle Milestones & Operational Timestamps
+  preparingAt?: Date | null;
+  readyAt?: Date | null;
+  deliveredAt?: Date | null;
+  cancelledAt?: Date | null;
+  actualPrepTimeSeconds?: number | null;
+  actualTotalTimeSeconds?: number | null;
+  wasSlaBreached?: boolean;
+  cancellationReason?: string | null;
+
   items: {
     id: string;
     name: string;
@@ -255,6 +267,9 @@ export interface OrderWithItems {
     notes: string | null;
     status?: string;
     station?: string | null;
+    preparingAt?: Date | null;
+    readyAt?: Date | null;
+    prepTimeSeconds?: number | null;
     modifiersJson: string | null;
     subtotal: number;
   }[];

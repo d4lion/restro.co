@@ -4,6 +4,7 @@ import React, { useState, useEffect, useTransition, useCallback, useRef } from "
 import type { OrderWithItems, OrderStatus } from "@/lib/types";
 import {
   updateOrderStatusAction,
+  batchUpdateOrderStatusesAction,
   fetchKdsOrdersAction,
   toggleOrderPriorityAction,
   reportOrderIncidentAction,
@@ -11,6 +12,7 @@ import {
 } from "@/app/actions/orders";
 import { KdsOrderCard } from "./KdsOrderCard";
 import { KdsTraceabilityDrawer } from "./KdsTraceabilityDrawer";
+import { KdsActionModal, ModalMode } from "./KdsActionModal";
 import {
   Volume2,
   VolumeX,
@@ -26,6 +28,7 @@ import {
   BellRing,
 } from "lucide-react";
 import { toast } from "sonner";
+import { subscribeToKdsOrders } from "@/hooks/useKdsRealtime";
 import styles from "./KdsDashboard.module.css";
 
 interface KdsDashboardClientProps {
@@ -45,6 +48,15 @@ export function KdsDashboardClient({
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [now, setNow] = useState<Date>(new Date());
   const [, startTransition] = useTransition();
+
+  // Action Modal State (Cancel or Incident)
+  const [activeModal, setActiveModal] = useState<{
+    isOpen: boolean;
+    mode: ModalMode;
+    orderId: string;
+    orderNumber: number;
+    customerName?: string | null;
+  } | null>(null);
 
   // Optimistic Status Lock Ref (prevents flickering/bouncing during server background sync)
   const pendingStatusRef = useRef<Record<string, OrderStatus>>({});
@@ -108,6 +120,17 @@ export function KdsDashboardClient({
     }
   }, [soundEnabled, playChimeNewOrder]);
 
+  // Debounced sync wrapper to prevent duplicate server roundtrips
+  const syncTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debouncedSyncOrders = useCallback(() => {
+    if (syncTimerRef.current) {
+      clearTimeout(syncTimerRef.current);
+    }
+    syncTimerRef.current = setTimeout(() => {
+      syncOrders();
+    }, 350);
+  }, [syncOrders]);
+
   // Live timer ticker every 1000ms
   useEffect(() => {
     const timer = setInterval(() => {
@@ -116,15 +139,75 @@ export function KdsDashboardClient({
     return () => clearInterval(timer);
   }, []);
 
-  // Environment-aware Polling: 45s in Production, 10s in Development/Local
-  const pollingIntervalMs = process.env.NODE_ENV === "production" ? 45000 : 10000;
+  // Supabase Realtime Orders Subscription (Sub-second event-driven updates)
+  useEffect(() => {
+    if (!tenantId) return;
+
+    const unsubscribe = subscribeToKdsOrders(
+      tenantId,
+      (payload) => {
+        if (!payload) return;
+
+        const tableName = payload.table || payload.schema_table;
+        const eventType = payload.event || payload.type || payload.operation;
+
+        // 1. Direct local state update on Order status/priority changes (0 server roundtrips)
+        if (tableName === "Order" && eventType === "UPDATE" && payload.record?.id) {
+          const updated = payload.record;
+          setOrders((prev) =>
+            prev.map((o) => {
+              if (o.id !== updated.id) return o;
+              const lockedStatus = pendingStatusRef.current[updated.id];
+              return {
+                ...o,
+                status: lockedStatus || updated.status || o.status,
+                isPriority: typeof updated.isPriority === "boolean" ? updated.isPriority : o.isPriority,
+                incidentNote: updated.incidentNote !== undefined ? updated.incidentNote : o.incidentNote,
+              };
+            })
+          );
+          return;
+        }
+
+        // 2. Direct local state update on OrderItem status changes (0 server roundtrips)
+        if (tableName === "OrderItem" && eventType === "UPDATE" && payload.record?.id) {
+          const updatedItem = payload.record;
+          setOrders((prev) =>
+            prev.map((o) => ({
+              ...o,
+              items: o.items.map((i) =>
+                i.id === updatedItem.id ? { ...i, status: updatedItem.status || i.status } : i
+              ),
+            }))
+          );
+          return;
+        }
+
+        // 3. For NEW orders (INSERT), fetch details using debounced sync (max 1 server request)
+        if (eventType === "INSERT") {
+          debouncedSyncOrders();
+        }
+      },
+      (status) => {
+        // Only fetch on initial load connection if not yet initialized
+        if (status === "SUBSCRIBED" && !isInitializedRef.current) {
+          syncOrders();
+        }
+      }
+    );
+
+    return unsubscribe;
+  }, [tenantId, syncOrders, debouncedSyncOrders]);
+
+  // Fallback Polling (Reconciliation safety net): 5 minutes (300,000 ms) instead of 45s
+  const FALLBACK_POLLING_INTERVAL_MS = 5 * 60 * 1000;
 
   useEffect(() => {
     const syncInterval = setInterval(() => {
       syncOrders();
-    }, pollingIntervalMs);
+    }, FALLBACK_POLLING_INTERVAL_MS);
     return () => clearInterval(syncInterval);
-  }, [syncOrders, pollingIntervalMs]);
+  }, [syncOrders, FALLBACK_POLLING_INTERVAL_MS]);
 
   // Fullscreen Modo Cocina Toggle
   const toggleFullscreen = () => {
@@ -139,45 +222,86 @@ export function KdsDashboardClient({
     }
   };
 
-  // Status Change with 100% Stable Optimistic UI Support (No Bouncing)
+  // ── Client Request Batching Pool (Debounced Request Queue) ──────
+  const batchPoolRef = useRef<Map<string, OrderStatus>>(new Map());
+  const batchTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const flushBatchPool = useCallback(() => {
+    if (batchPoolRef.current.size === 0) return;
+
+    const pendingBatch = Array.from(batchPoolRef.current.entries()).map(([orderId, nextStatus]) => ({
+      orderId,
+      nextStatus,
+    }));
+
+    // Clear pool buffer
+    batchPoolRef.current.clear();
+
+    startTransition(async () => {
+      const res = await batchUpdateOrderStatusesAction(pendingBatch);
+
+      // Clean up lock for all items in batch after completion
+      pendingBatch.forEach((item) => {
+        delete pendingStatusRef.current[item.orderId];
+      });
+
+      if (!res.success) {
+        toast.error("Error sincronizando cambios en lote");
+        syncOrders();
+      }
+    });
+  }, [syncOrders]);
+
+  // Flush remaining batch when tab closes
+  useEffect(() => {
+    const handleUnload = () => {
+      flushBatchPool();
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, [flushBatchPool]);
+
+  // Status Change with Instant Optimistic UI + Debounced Request Pool
   const handleUpdateStatus = (orderId: string, nextStatus: OrderStatus) => {
     const targetOrder = orders.find((o) => o.id === orderId);
     if (!targetOrder) return;
 
-    const previousStatus = targetOrder.status;
-
     // 1. Set Optimistic Lock in Ref so background sync NEVER reverts it
     pendingStatusRef.current[orderId] = nextStatus;
 
-    // 2. Instant Optimistic UI Update
+    // 2. Instant Optimistic UI Update (0ms latency!)
+    const nowTime = new Date();
     setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: nextStatus } : o))
+      prev.map((o) => {
+        if (o.id !== orderId) return o;
+        const updateObj: Partial<OrderWithItems> = { status: nextStatus };
+        if (nextStatus === "PREPARING" && !o.preparingAt) {
+          updateObj.preparingAt = nowTime;
+        } else if (nextStatus === "READY" && !o.readyAt) {
+          updateObj.readyAt = nowTime;
+          const createdAtMs = new Date(o.createdAt).getTime();
+          const actualSec = Math.max(0, Math.floor((nowTime.getTime() - createdAtMs) / 1000));
+          updateObj.actualPrepTimeSeconds = actualSec;
+          if (actualSec > (o.targetPrepTimeMinutes || 12) * 60) {
+            updateObj.wasSlaBreached = true;
+          }
+        }
+        return { ...o, ...updateObj };
+      })
     );
 
-    startTransition(async () => {
-      const res = await updateOrderStatusAction(orderId, nextStatus);
+    // 3. Queue update into Batch Pool
+    batchPoolRef.current.set(orderId, nextStatus);
 
-      // Clean up lock after server action completes
-      delete pendingStatusRef.current[orderId];
-
-      if (!res.success) {
-        toast.error(res.message);
-        // Rollback on server error
-        setOrders((prev) =>
-          prev.map((o) => (o.id === orderId ? { ...o, status: previousStatus } : o))
-        );
-      } else {
-        // Show Undo Toast
-        toast.success(`Comanda #${targetOrder.orderNumber} ➔ ${nextStatus}`, {
-          action: {
-            label: "DESHACER",
-            onClick: () => {
-              handleUpdateStatus(orderId, previousStatus);
-            },
-          },
-        });
-      }
-    });
+    // 4. Debounce flush after 1.2 seconds of inactivity
+    if (batchTimerRef.current) {
+      clearTimeout(batchTimerRef.current);
+    }
+    batchTimerRef.current = setTimeout(() => {
+      flushBatchPool();
+    }, 1200);
   };
 
   // Priority Toggle Handler
@@ -190,19 +314,88 @@ export function KdsDashboardClient({
     });
   };
 
-  // Incident Report Handler
-  const handleReportIncident = (orderId: string) => {
-    const note = prompt("Escribe la incidencia (ej. Falta de ingrediente, error en pedido):");
-    if (!note?.trim()) return;
-
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, incidentNote: note.trim() } : o))
-    );
-
-    startTransition(async () => {
-      await reportOrderIncidentAction(orderId, note.trim());
-      toast.warning("Incidencia registrada en auditoría");
+  // Incident Report Modal Trigger
+  const handleReportIncident = (
+    orderId: string,
+    orderNumber: number,
+    customerName?: string | null
+  ) => {
+    setActiveModal({
+      isOpen: true,
+      mode: "INCIDENT",
+      orderId,
+      orderNumber,
+      customerName,
     });
+  };
+
+  // Cancel Order Modal Trigger
+  const handleCancelOrder = (
+    orderId: string,
+    orderNumber: number,
+    customerName?: string | null
+  ) => {
+    setActiveModal({
+      isOpen: true,
+      mode: "CANCEL",
+      orderId,
+      orderNumber,
+      customerName,
+    });
+  };
+
+  // Confirm Handler for Action Modal
+  const handleModalConfirm = (reasonTitle: string, customNote?: string) => {
+    if (!activeModal) return;
+
+    const { mode, orderId, orderNumber } = activeModal;
+    const fullReason = customNote?.trim()
+      ? `${reasonTitle}: ${customNote.trim()}`
+      : reasonTitle;
+
+    setActiveModal(null);
+
+    if (mode === "CANCEL") {
+      const previousStatus = orders.find((o) => o.id === orderId)?.status;
+
+      // Optimistic UI Update
+      pendingStatusRef.current[orderId] = "CANCELLED";
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId
+            ? { ...o, status: "CANCELLED", cancellationReason: fullReason }
+            : o
+        )
+      );
+
+      startTransition(async () => {
+        const res = await updateOrderStatusAction(orderId, "CANCELLED", fullReason);
+        delete pendingStatusRef.current[orderId];
+
+        if (!res.success) {
+          toast.error("No se pudo cancelar la orden");
+          if (previousStatus) {
+            setOrders((prev) =>
+              prev.map((o) => (o.id === orderId ? { ...o, status: previousStatus } : o))
+            );
+          }
+        } else {
+          await reportOrderIncidentAction(orderId, `CANCELADA: ${fullReason}`);
+          toast.warning(`Comanda #${orderNumber} cancelada (${reasonTitle})`);
+        }
+      });
+    } else if (mode === "INCIDENT") {
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId ? { ...o, incidentNote: fullReason } : o
+        )
+      );
+
+      startTransition(async () => {
+        await reportOrderIncidentAction(orderId, fullReason);
+        toast.warning(`Incidencia registrada en Comanda #${orderNumber}`);
+      });
+    }
   };
 
   // Item Status Handler
@@ -223,39 +416,6 @@ export function KdsDashboardClient({
   const handleReopenOrder = (orderId: string) => {
     handleUpdateStatus(orderId, "PENDING");
     setShowTraceability(false);
-  };
-
-  // Cancel Order Handler
-  const handleCancelOrder = (orderId: string) => {
-    const reason = prompt("Escribe la razón de cancelación (ej. Cliente canceló, falta de insumo):");
-    if (reason === null) return;
-
-    const previousStatus = orders.find((o) => o.id === orderId)?.status;
-
-    // Optimistic UI Update
-    pendingStatusRef.current[orderId] = "CANCELLED";
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: "CANCELLED" } : o))
-    );
-
-    startTransition(async () => {
-      const res = await updateOrderStatusAction(orderId, "CANCELLED");
-      delete pendingStatusRef.current[orderId];
-
-      if (!res.success) {
-        toast.error("No se pudo cancelar la orden");
-        if (previousStatus) {
-          setOrders((prev) =>
-            prev.map((o) => (o.id === orderId ? { ...o, status: previousStatus } : o))
-          );
-        }
-      } else {
-        if (reason.trim()) {
-          await reportOrderIncidentAction(orderId, `CANCELADA: ${reason.trim()}`);
-        }
-        toast.warning("Comanda cancelada y registrada en auditoría");
-      }
-    });
   };
 
   // Filter Orders
@@ -298,10 +458,30 @@ export function KdsDashboardClient({
   let totalActiveSec = 0;
 
   [...pendingOrders, ...preparingOrders, ...readyOrders].forEach((o) => {
-    const elapsedSec = Math.max(0, (now.getTime() - new Date(o.createdAt).getTime()) / 1000);
-    totalActiveSec += elapsedSec;
+    let prepSec = 0;
     const targetSec = (o.targetPrepTimeMinutes || 12) * 60;
-    if (elapsedSec < targetSec) onTimeCount++;
+    const createdAtMs = new Date(o.createdAt).getTime();
+
+    if (o.status === "READY") {
+      if (typeof o.actualPrepTimeSeconds === "number" && o.actualPrepTimeSeconds > 0) {
+        prepSec = o.actualPrepTimeSeconds;
+      } else if (o.readyAt) {
+        const preparingAtMs = o.preparingAt ? new Date(o.preparingAt).getTime() : createdAtMs;
+        prepSec = Math.max(0, Math.floor((new Date(o.readyAt).getTime() - preparingAtMs) / 1000));
+      } else {
+        prepSec = Math.max(0, Math.floor((now.getTime() - createdAtMs) / 1000));
+      }
+    } else {
+      // PENDING and PREPARING
+      prepSec = Math.max(0, Math.floor((now.getTime() - createdAtMs) / 1000));
+    }
+
+    totalActiveSec += prepSec;
+
+    const isBreached = Boolean(o.wasSlaBreached) || prepSec > targetSec;
+    if (!isBreached) {
+      onTimeCount++;
+    }
   });
 
   const slaPercent = activeOrdersCount > 0 ? Math.round((onTimeCount / activeOrdersCount) * 100) : 100;
@@ -354,7 +534,10 @@ export function KdsDashboardClient({
 
           <div className={styles.metricBadge}>
             <span className={styles.metricLabel}>TIEMPO PROM.</span>
-            <span className={`${styles.metricValue} ${styles.metricValueGreen}`}>
+            <span
+              className={`${styles.metricValue} ${styles.metricValueGreen}`}
+              suppressHydrationWarning
+            >
               {avgFormatted}
             </span>
           </div>
@@ -364,6 +547,7 @@ export function KdsDashboardClient({
             <span
               className={styles.metricValue}
               style={{ color: slaPercent >= 85 ? "#4ADE80" : "#F59E0B" }}
+              suppressHydrationWarning
             >
               {slaPercent}%
             </span>
@@ -371,7 +555,10 @@ export function KdsDashboardClient({
 
           <div className={styles.metricBadge}>
             <span className={styles.metricLabel}>HORA</span>
-            <span className={styles.metricValue} style={{ color: "#F8FAFC" }}>
+            <span
+              className={`${styles.metricValue} ${styles.metricClockValue}`}
+              suppressHydrationWarning
+            >
               {localTimeFormatted}
             </span>
           </div>
@@ -550,9 +737,22 @@ export function KdsDashboardClient({
             orders={orders}
             onClose={() => setShowTraceability(false)}
             onReopenOrder={handleReopenOrder}
+            onRefresh={syncOrders}
           />
         )}
       </div>
+
+      {/* Action Modal (Cancel Order / Report Incident) */}
+      {activeModal?.isOpen && (
+        <KdsActionModal
+          isOpen={activeModal.isOpen}
+          mode={activeModal.mode}
+          orderNumber={activeModal.orderNumber}
+          customerName={activeModal.customerName}
+          onClose={() => setActiveModal(null)}
+          onConfirm={handleModalConfirm}
+        />
+      )}
     </div>
   );
 }

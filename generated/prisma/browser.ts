@@ -83,6 +83,11 @@ export type OrderItem = Prisma.OrderItemModel
  */
 export type OrderStatusHistory = Prisma.OrderStatusHistoryModel
 /**
+ * Model OrderTelemetry
+ * 
+ */
+export type OrderTelemetry = Prisma.OrderTelemetryModel
+/**
  * Model StaffMember
  * 
  */

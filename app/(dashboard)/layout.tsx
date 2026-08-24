@@ -3,6 +3,7 @@ import { getSession } from "@/lib/session";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileDashboardNav } from "@/components/layout/MobileDashboardNav";
+import { OrderNotificationListener } from "@/components/notifications/OrderNotificationListener";
 import { Toaster } from "sonner";
 import styles from "./layout.module.css";
 
@@ -53,6 +54,9 @@ export default async function DashboardLayout({
       <div className={styles.mobileNav}>
         <MobileDashboardNav />
       </div>
+
+      {/* Realtime Order Notification Slide-in Toasts */}
+      <OrderNotificationListener tenantId={session.tenantId} />
 
       {/* Sonner toast notifications */}
       <Toaster
