@@ -24,7 +24,7 @@ describe("isStoreOpenNow utility function", () => {
 
   it("should return true when business hours array is empty or undefined", () => {
     expect(isStoreOpenNow([])).toBe(true);
-    expect(isStoreOpenNow(null as any)).toBe(true);
+    expect(isStoreOpenNow(null as unknown as Parameters<typeof isStoreOpenNow>[0])).toBe(true);
   });
 
   it("should return true when current time is within open hours on a Monday", () => {
