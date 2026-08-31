@@ -11,14 +11,18 @@ jobs:
     name: Run Tests, Typecheck & Build
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: "file:./dev.db"
+      DIRECT_URL: "file:./dev.db"
+      NEXTAUTH_SECRET: "ci-testing-secret-key-12345"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install dependencies
@@ -37,7 +41,4 @@ jobs:
         run: npm run test:ci
 
       - name: Run Next.js Build
-        env:
-          DATABASE_URL: "file:./dev.db"
-          NEXTAUTH_SECRET: "ci-testing-secret-key-12345"
         run: npm run build
