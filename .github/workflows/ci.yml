@@ -15,7 +15,6 @@ jobs:
       DATABASE_URL: "file:./dev.db"
       DIRECT_URL: "file:./dev.db"
       NEXTAUTH_SECRET: "ci-testing-secret-key-12345"
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
