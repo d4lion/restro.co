@@ -18,6 +18,11 @@ import {
   CalendarDays,
   Package,
   Lock,
+  Store,
+  ShoppingBag,
+  Clock,
+  Bell,
+  CreditCard,
 } from "lucide-react";
 import {
   Tooltip,
@@ -92,6 +97,14 @@ const navItems: NavItem[] = [
     badge: <BuildingBadge />,
   },
   { href: "/settings",  label: "Configuración", icon: <Settings       size={18} strokeWidth={1.8} /> },
+];
+
+const settingsSubItems = [
+  { href: "/settings", label: "Mi Restaurante", icon: <Store size={14} strokeWidth={1.8} />, exact: true },
+  { href: "/settings/orders", label: "Formas de Pedir", icon: <ShoppingBag size={14} strokeWidth={1.8} />, exact: false },
+  { href: "/settings/hours", label: "Horarios", icon: <Clock size={14} strokeWidth={1.8} />, exact: false },
+  { href: "/settings/notifications", label: "Alertas y Sonidos", icon: <Bell size={14} strokeWidth={1.8} />, exact: false },
+  { href: "/settings/plan", label: "Mi Plan", icon: <CreditCard size={14} strokeWidth={1.8} />, exact: false },
 ];
 
 interface SidebarProps {
@@ -235,13 +248,38 @@ export function Sidebar({
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{link}</TooltipTrigger>
                   <TooltipContent side="right" sideOffset={12}>
-                    {item.label} {isLocked ? "🔒" : ""}
+                    {item.label} {isLocked ? " (Bloqueado)" : ""}
                   </TooltipContent>
                 </Tooltip>
               );
             }
 
-            return <React.Fragment key={item.href}>{link}</React.Fragment>;
+            return (
+              <React.Fragment key={item.href}>
+                {link}
+                {!collapsed && isCurrentRoute && item.href === "/settings" && (
+                  <div className={styles.subNavList}>
+                    {settingsSubItems.map((sub) => {
+                      const isSubActive = sub.exact
+                        ? pathname === sub.href
+                        : pathname === sub.href || pathname.startsWith(`${sub.href}/`);
+
+                      return (
+                        <Link
+                          key={sub.href}
+                          href={sub.href}
+                          prefetch={true}
+                          className={`${styles.subNavItem} ${isSubActive ? styles["subNavItem--active"] : ""}`}
+                        >
+                          <span className={styles.subNavIcon}>{sub.icon}</span>
+                          <span className={styles.subNavLabel}>{sub.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </React.Fragment>
+            );
           })}
         </nav>
 
