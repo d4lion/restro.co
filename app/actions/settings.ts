@@ -1,7 +1,10 @@
 "use server";
 
-import { getSession, deleteSession } from "@/lib/session";
+import { getSession, deleteSession, revalidateUserSession } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
+import { planRepository } from "@/lib/repositories/plan.repository";
+import { PLAN_LIMITS, type PlanKey } from "@/lib/types";
 import { revalidateTenantCache, revalidateMenuCache } from "@/lib/cache";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -10,6 +13,72 @@ export type SettingsActionResult = {
   success: boolean;
   message: string;
 };
+
+export async function changePlanAction(planKey: PlanKey): Promise<SettingsActionResult> {
+  const session = await getSession();
+  if (!session) return { success: false, message: "Sesión expirada" };
+
+  try {
+    let plan = await planRepository.findByKey(planKey);
+    if (!plan) {
+      const defaults = PLAN_LIMITS[planKey];
+      const created = await prisma.plan.create({
+        data: {
+          key: planKey,
+          label: defaults.label,
+          tag: defaults.tag,
+          priceMonthly: defaults.priceMonthly,
+          priceYearly: defaults.priceYearly,
+          maxTables: Number.isFinite(defaults.maxTables) ? defaults.maxTables : -1,
+          maxMenuItems: Number.isFinite(defaults.maxMenuItems) ? defaults.maxMenuItems : -1,
+          maxStaff: Number.isFinite(defaults.maxStaff) ? defaults.maxStaff : -1,
+          maxMenus: Number.isFinite(defaults.maxMenus) ? defaults.maxMenus : -1,
+          analyticsDays: defaults.analyticsDays,
+          hasAI: defaults.hasAI,
+          hasInventory: defaults.hasInventory,
+          hasMultiLanguage: defaults.hasMultiLanguage,
+          hasExportPDF: defaults.hasExportPDF,
+          hasExportExcel: defaults.hasExportExcel,
+          hasCustomBranding: defaults.hasCustomBranding,
+          hasWhatsApp: defaults.hasWhatsApp,
+          hasPrioritySupport: defaults.hasPrioritySupport,
+        },
+      });
+      plan = created as unknown as NonNullable<typeof plan>;
+    }
+
+    await prisma.subscription.upsert({
+      where: { tenantId: session.tenantId },
+      update: {
+        planId: plan.id,
+        status: "ACTIVE",
+      },
+      create: {
+        tenantId: session.tenantId,
+        planId: plan.id,
+        status: "ACTIVE",
+      },
+    });
+
+    // Keep tenant settings intact (owner controls isMenuOnly in /settings)
+
+    revalidateUserSession(session.userId);
+    const tenant = await tenantRepository.findById(session.tenantId);
+    if (tenant?.slug) {
+      revalidateTenantCache(tenant.slug);
+      revalidateMenuCache(session.tenantId, tenant.slug);
+    }
+    revalidatePath("/", "layout");
+
+    return {
+      success: true,
+      message: `Plan actualizado a ${plan.label}`,
+    };
+  } catch (error) {
+    console.error("Failed to change plan:", error);
+    return { success: false, message: "No se pudo cambiar el plan" };
+  }
+}
 
 export async function updateLocalDataAction(
   formData: FormData

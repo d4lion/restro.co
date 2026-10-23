@@ -1,9 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "@/app/(public)/restaurant/[slug]/page.module.css";
-import { ItemConfiguratorModal, ConfiguratorItem } from "./ItemConfiguratorModal";
+import {
+  ItemConfiguratorModal,
+  ConfiguratorItem,
+  getProductShareSlug,
+  findProductByViewParam,
+} from "./ItemConfiguratorModal";
 import { CartDrawer } from "./CartDrawer";
+import {
+  trackTelemetryEvent,
+  sendTelemetryBeacon,
+  getBrowserTelemetryContext,
+  getTelemetrySessionId,
+  TELEMETRY_EVENTS,
+} from "@/lib/telemetry";
+import { getTableParamFromSearch } from "@/lib/waiter-qr";
 
 export interface CartItem {
   id: string;
@@ -50,12 +63,15 @@ interface PublicMenuClientProps {
   isOpen?: boolean;
   businessHours?: Array<{ dayOfWeek: number; openTime: string; closeTime: string }>;
   isMenuOnly?: boolean;
+  isPlanMenuOnly?: boolean;
   allowDineIn?: boolean;
   requireTableQrForDineIn?: boolean;
   allowTakeout?: boolean;
   allowDelivery?: boolean;
   allowWhatsAppOrdering?: boolean;
   whatsappNumber?: string | null;
+  /** Plan Carta Digital: habilita carrito de mesa + QR para el mesero (solo con QR de mesa). */
+  tableCartEnabled?: boolean;
 }
 
 const IconSearch = () => (
@@ -186,12 +202,14 @@ export function PublicMenuClient({
   isOpen = true,
   businessHours = [],
   isMenuOnly = false,
+  isPlanMenuOnly = false,
   allowDineIn = true,
   requireTableQrForDineIn = true,
   allowTakeout = false,
   allowDelivery = false,
   allowWhatsAppOrdering = false,
   whatsappNumber = null,
+  tableCartEnabled = false,
 }: PublicMenuClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -199,6 +217,307 @@ export function PublicMenuClient({
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<ConfiguratorItem | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // ─── Cart modes ────────────────────────────────────────────────────────────
+  // Read after mount (SSR has no URL). The table itself is verified server-side in CartDrawer.
+  const [hasTableParam, setHasTableParam] = useState(false);
+  useEffect(() => {
+    setHasTableParam(Boolean(getTableParamFromSearch(window.location.search)));
+  }, []);
+
+  /** Carta Digital: carrito de mesa + QR para el mesero, si la carta permite carrito y se escaneó mesa. */
+  const waiterQrEligible = !isMenuOnly && Boolean(tableCartEnabled && hasTableParam);
+  /**
+   * Si el dueño activó "Solo Carta Visual" (isMenuOnly), el carrito queda totalmente deshabilitado.
+   * Si el carrito está permitido (!isMenuOnly):
+   * - Planes completos (Restro IA / Business): siempre tienen carrito activo.
+   * - Si se permite WhatsApp: el carrito se habilita desde cualquier lugar sin requerir mesa.
+   * - Si es Carta Digital y escaneó mesa: el carrito se habilita para el QR del mesero.
+   */
+  const cartEnabled =
+    !isMenuOnly &&
+    (!isPlanMenuOnly || Boolean(allowWhatsAppOrdering) || waiterQrEligible);
+
+  // ─── Zero-Block Telemetry State (Collected across ALL plans) ───────────────
+  const pageLoadedAtRef = useRef<number>(Date.now());
+  const scrollMilestonesSentRef = useRef<Set<number>>(new Set());
+  const maxScrollDepthPctRef = useRef<number>(0);
+  const impressedItemIdsRef = useRef<Set<string>>(new Set());
+  const viewedItemIdsRef = useRef<Set<string>>(new Set());
+  const searchesCountRef = useRef<number>(0);
+  const cartAdditionsCountRef = useRef<number>(0);
+  const categoryVisibleSinceRef = useRef<Map<string, number>>(new Map());
+  const pendingImpressionEventsRef = useRef<
+    Array<{ event: string; data: Record<string, unknown>; timestamp: string }>
+  >([]);
+
+  const flushPendingImpressions = () => {
+    if (pendingImpressionEventsRef.current.length === 0) return;
+    const eventsToSend = pendingImpressionEventsRef.current.splice(
+      0,
+      pendingImpressionEventsRef.current.length
+    );
+    sendTelemetryBeacon({
+      tenantId,
+      sessionId: getTelemetrySessionId(),
+      events: eventsToSend,
+    });
+  };
+
+  // Lookup map for item -> category metadata
+  const findItemCategory = (itemId: string) => {
+    for (const cat of categories) {
+      if (cat.items.some((i) => i.id === itemId)) {
+        return { categoryId: cat.id, categoryName: cat.name };
+      }
+    }
+    return { categoryId: null, categoryName: null };
+  };
+
+  const recordItemView = (
+    item: ConfiguratorItem & { isHighlighted?: boolean },
+    source: "card_click" | "shared_link"
+  ) => {
+    viewedItemIdsRef.current.add(item.id);
+    const { categoryId, categoryName } = findItemCategory(item.id);
+    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.ITEM_VIEW, {
+      itemId: item.id,
+      itemName: item.name,
+      categoryId,
+      categoryName,
+      price: item.price,
+      hasImage: Boolean(item.imageUrl),
+      isHighlighted: Boolean(item.isHighlighted),
+      modifierGroupsCount: item.modifierGroups?.length ?? 0,
+      source,
+      plan,
+      isMenuOnly,
+    });
+  };
+
+  // 1. Initial menu_view + passive scroll depth tracker + session_summary on exit
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    pageLoadedAtRef.current = Date.now();
+    const totalItemsCount = categories.reduce((acc, cat) => acc + cat.items.length, 0);
+    const params = new URLSearchParams(window.location.search);
+
+    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.MENU_VIEW, {
+      plan,
+      isMenuOnly,
+      isOpen,
+      totalCategories: categories.length,
+      totalItems: totalItemsCount,
+      initialProductView: params.get("activeProductView") || null,
+      referrer: typeof document !== "undefined" ? document.referrer || null : null,
+    });
+
+    let rafId: number | null = null;
+    const handleScroll = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+        const fullHeight = Math.max(
+          document.body.scrollHeight || 0,
+          document.documentElement.scrollHeight || 0
+        );
+
+        if (fullHeight <= 0) return;
+        const scrollable = fullHeight - viewportHeight;
+        const pct =
+          scrollable <= 20
+            ? 100
+            : Math.min(100, Math.max(0, Math.round(((scrollTop + viewportHeight) / fullHeight) * 100)));
+
+        if (pct > maxScrollDepthPctRef.current) {
+          maxScrollDepthPctRef.current = pct;
+        }
+
+        const milestones = [25, 50, 75, 100];
+        for (const m of milestones) {
+          if (pct >= m && !scrollMilestonesSentRef.current.has(m)) {
+            scrollMilestonesSentRef.current.add(m);
+            trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.SCROLL_DEPTH, {
+              depthPct: m,
+              scrollY: Math.round(scrollTop),
+              pageHeight: Math.round(fullHeight),
+              timeToReachMs: Date.now() - pageLoadedAtRef.current,
+              plan,
+            });
+          }
+        }
+      });
+    };
+
+    const handleSessionFlush = () => {
+      flushPendingImpressions();
+      const totalDwellTimeMs = Math.max(0, Date.now() - pageLoadedAtRef.current);
+      if (totalDwellTimeMs < 200) return;
+
+      trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.SESSION_SUMMARY, {
+        totalDwellTimeMs,
+        maxScrollDepthPct: maxScrollDepthPctRef.current,
+        uniqueItemsImpressedCount: impressedItemIdsRef.current.size,
+        uniqueItemsViewedCount: viewedItemIdsRef.current.size,
+        searchesCount: searchesCountRef.current,
+        cartAdditionsCount: cartAdditionsCountRef.current,
+        plan,
+        isMenuOnly,
+      });
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        handleSessionFlush();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", handleSessionFlush);
+
+    return () => {
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", handleSessionFlush);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tenantId]);
+
+  // 2. Zero-Block IntersectionObserver for Product Impressions & Category Dwell Time
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") return;
+
+    const flushInterval = window.setInterval(flushPendingImpressions, 2500);
+    const browserCtx = getBrowserTelemetryContext();
+
+    const itemObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const el = entry.target as HTMLElement;
+          const itemId = el.dataset.telemetryItemId;
+          if (!itemId || impressedItemIdsRef.current.has(itemId)) continue;
+
+          impressedItemIdsRef.current.add(itemId);
+          pendingImpressionEventsRef.current.push({
+            event: TELEMETRY_EVENTS.PRODUCT_IMPRESSION,
+            timestamp: new Date().toISOString(),
+            data: {
+              ...browserCtx,
+              itemId,
+              itemName: el.dataset.telemetryItemName || null,
+              categoryId: el.dataset.telemetryCategoryId || null,
+              categoryName: el.dataset.telemetryCategoryName || null,
+              price: Number(el.dataset.telemetryItemPrice || 0),
+              plan,
+            },
+          });
+
+          if (pendingImpressionEventsRef.current.length >= 12) {
+            flushPendingImpressions();
+          }
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    const categoryObserver = new IntersectionObserver(
+      (entries) => {
+        const now = Date.now();
+        for (const entry of entries) {
+          const el = entry.target as HTMLElement;
+          const catId = el.dataset.telemetryCategoryId;
+          const catName = el.dataset.telemetryCategoryName;
+          if (!catId) continue;
+
+          if (entry.isIntersecting) {
+            if (!categoryVisibleSinceRef.current.has(catId)) {
+              categoryVisibleSinceRef.current.set(catId, now);
+            }
+          } else {
+            const startedAt = categoryVisibleSinceRef.current.get(catId);
+            if (startedAt) {
+              categoryVisibleSinceRef.current.delete(catId);
+              const dwellTimeMs = now - startedAt;
+              if (dwellTimeMs >= 1000) {
+                trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CATEGORY_DWELL, {
+                  categoryId: catId,
+                  categoryName: catName || null,
+                  dwellTimeMs,
+                  plan,
+                });
+              }
+            }
+          }
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    const cardNodes = document.querySelectorAll("[data-telemetry-item-id]");
+    cardNodes.forEach((node) => itemObserver.observe(node));
+
+    const categoryNodes = document.querySelectorAll("[data-telemetry-category-section]");
+    categoryNodes.forEach((node) => categoryObserver.observe(node));
+
+    return () => {
+      window.clearInterval(flushInterval);
+      itemObserver.disconnect();
+      categoryObserver.disconnect();
+      flushPendingImpressions();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tenantId, activeCategory, searchQuery, categories]);
+
+  // Sync product modal from ?activeProductView=... on mount and browser back/forward navigation
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const allItems = categories.flatMap((cat) => cat.items);
+
+    const syncFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const viewParam = params.get("activeProductView");
+      if (!viewParam) {
+        setSelectedProduct(null);
+        return;
+      }
+      const matched = findProductByViewParam(allItems, viewParam);
+      if (matched) {
+        setSelectedProduct(matched as ConfiguratorItem);
+        recordItemView(matched as ConfiguratorItem, "shared_link");
+      }
+    };
+
+    syncFromUrl();
+    window.addEventListener("popstate", syncFromUrl);
+    return () => window.removeEventListener("popstate", syncFromUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories]);
+
+  const handleSelectProduct = (item: ConfiguratorItem | null) => {
+    setSelectedProduct(item);
+    if (item) {
+      recordItemView(item, "card_click");
+    }
+    if (typeof window === "undefined") return;
+    try {
+      const url = new URL(window.location.href);
+      if (item) {
+        url.searchParams.set("activeProductView", getProductShareSlug(item));
+      } else {
+        url.searchParams.delete("activeProductView");
+      }
+      window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+    } catch {
+      // Ignore URL update errors in non-standard environments
+    }
+  };
 
   const isFreeTier = plan === "STARTER";
   const waUrl = getWhatsAppUrl(phone, tenantName);
@@ -231,19 +550,51 @@ export function PublicMenuClient({
     ? filteredCategories 
     : filteredCategories.filter(cat => cat.id === activeCategory);
 
+  // 3. Debounced Search Query Telemetry (captures zero-result searches too)
+  useEffect(() => {
+    const trimmed = searchQuery.trim();
+    if (trimmed.length < 2) return;
+
+    const timer = window.setTimeout(() => {
+      const resultsCount = filteredCategories.reduce((acc, cat) => acc + cat.items.length, 0);
+      searchesCountRef.current += 1;
+      trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.SEARCH_QUERY, {
+        query: trimmed,
+        resultsCount,
+        hasResults: resultsCount > 0,
+        plan,
+      });
+    }, 700);
+
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, tenantId]);
+
   const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  const handleOpenCart = (source: "top_bar" | "sticky_banner") => {
+    setIsCartOpen(true);
+    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CART_OPEN, {
+      source,
+      itemCount: totalCartCount,
+      cartTotal: cart.reduce((acc, item) => acc + item.subtotal, 0),
+      plan,
+    });
+  };
 
   const handleAddToCart = (
     item: ConfiguratorItem,
     quantity: number,
     selections: Record<string, string[]>
   ) => {
-    if (isMenuOnly) return;
+    if (!cartEnabled) return;
 
     let unitPrice = item.price;
+    let modifiersCount = 0;
     if (item.modifierGroups) {
       item.modifierGroups.forEach((g) => {
         const selectedIds = selections[g.id] || [];
+        modifiersCount += selectedIds.length;
         g.options.forEach((opt) => {
           if (selectedIds.includes(opt.id)) {
             unitPrice += opt.priceExtra;
@@ -252,13 +603,28 @@ export function PublicMenuClient({
       });
     }
 
+    const subtotal = unitPrice * quantity;
     const newItem: CartItem = {
       id: crypto.randomUUID(),
       menuItem: item,
       quantity,
       selections,
-      subtotal: unitPrice * quantity,
+      subtotal,
     };
+
+    cartAdditionsCountRef.current += quantity;
+    const { categoryId, categoryName } = findItemCategory(item.id);
+    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CART_ADD, {
+      itemId: item.id,
+      itemName: item.name,
+      categoryId,
+      categoryName,
+      price: item.price,
+      quantity,
+      subtotal,
+      modifiersCount,
+      plan,
+    });
 
     setCart((prev) => [...prev, newItem]);
   };
@@ -268,6 +634,17 @@ export function PublicMenuClient({
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     setActiveCategory(catId);
+
+    const matchedCat = categories.find((c) => c.id === catId);
+    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CATEGORY_CLICK, {
+      categoryId: catId,
+      categoryName: catId === "ALL" ? "Todos" : matchedCat?.name ?? catId,
+      itemCount:
+        catId === "ALL"
+          ? categories.reduce((acc, cat) => acc + cat.items.length, 0)
+          : matchedCat?.items.length ?? 0,
+      plan,
+    });
 
     e.currentTarget.scrollIntoView({
       behavior: "smooth",
@@ -296,14 +673,24 @@ export function PublicMenuClient({
       {/* Top Announcement Bar */}
       <div className={styles.topAnnounceBar} style={{ backgroundColor: brandColor, color: buttonTextColor }}>
         <span className={styles.announceText}>
-          {isMenuOnly ? "Carta Digital Informativa — Consulta nuestros productos" : "¡Gana puntos y recompensas!"}
+          {isMenuOnly
+            ? "Carta Digital Informativa — Consulta nuestros productos"
+            : !cartEnabled
+            ? tableCartEnabled && !hasTableParam && !allowWhatsAppOrdering
+              ? "Escanea el código QR de tu mesa para armar tu pedido"
+              : "Carta Digital Informativa — Consulta nuestros productos"
+            : waiterQrEligible && !allowWhatsAppOrdering
+            ? "Arma tu pedido y muéstraselo a tu mesero"
+            : allowWhatsAppOrdering
+            ? "Arma tu pedido y envíalo por WhatsApp"
+            : "¡Gana puntos y recompensas!"}
         </span>
-        {!isMenuOnly && (
+        {cartEnabled && (
           <div className={styles.topActionsGroup}>
             <button
               type="button"
               className={styles.topCartBtn}
-              onClick={() => setIsCartOpen(true)}
+              onClick={() => handleOpenCart("top_bar")}
               style={{ backgroundColor: buttonTextColor, color: brandColor }}
             >
               Ver mi pedido {totalCartCount > 0 ? `(${totalCartCount})` : ""} ›
@@ -357,7 +744,17 @@ export function PublicMenuClient({
           </div>
           
           <div className={styles.storeAccordions}>
-            <details className={styles.infoAccordion}>
+            <details
+              className={styles.infoAccordion}
+              onToggle={(e) => {
+                if ((e.currentTarget as HTMLDetailsElement).open) {
+                  trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CONTACT_INTERACTION, {
+                    target: "contact_accordion",
+                    plan,
+                  });
+                }
+              }}
+            >
               <summary>
                 <div className={styles.summaryContent}>
                   <IconMapPin /> <span>Contacto y redes</span>
@@ -367,27 +764,82 @@ export function PublicMenuClient({
               <div className={styles.accordionContent}>
                 <p><strong>Ubicación:</strong> {address || "Sin dirección"}, {city || "Colombia"}</p>
                 <p><strong>WhatsApp:</strong> {phone || "+57 310 555 0000"}</p>
-                <a href={waUrl} className={styles.whatsappLink}><IconWhatsApp /> Escribir al WhatsApp</a>
+                <a
+                  href={waUrl}
+                  className={styles.whatsappLink}
+                  onClick={() =>
+                    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CONTACT_INTERACTION, {
+                      target: "whatsapp",
+                      plan,
+                    })
+                  }
+                >
+                  <IconWhatsApp /> Escribir al WhatsApp
+                </a>
                 
                 {(instagramUrl || facebookUrl || tiktokUrl || websiteUrl) && (
                   <div style={{ display: "flex", gap: "12px", marginTop: "16px", paddingTop: "12px", borderTop: "1px solid #e2e8f0" }}>
                     {instagramUrl && (
-                      <a href={instagramUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                      <a
+                        href={instagramUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}
+                        onClick={() =>
+                          trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CONTACT_INTERACTION, {
+                            target: "instagram",
+                            plan,
+                          })
+                        }
+                      >
                         <IconInstagram />
                       </a>
                     )}
                     {facebookUrl && (
-                      <a href={facebookUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                      <a
+                        href={facebookUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}
+                        onClick={() =>
+                          trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CONTACT_INTERACTION, {
+                            target: "facebook",
+                            plan,
+                          })
+                        }
+                      >
                         <IconFacebook />
                       </a>
                     )}
                     {tiktokUrl && (
-                      <a href={tiktokUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                      <a
+                        href={tiktokUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}
+                        onClick={() =>
+                          trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CONTACT_INTERACTION, {
+                            target: "tiktok",
+                            plan,
+                          })
+                        }
+                      >
                         <IconTiktok />
                       </a>
                     )}
                     {websiteUrl && (
-                      <a href={websiteUrl} target="_blank" rel="noreferrer" style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}>
+                      <a
+                        href={websiteUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: brandColor, padding: "10px", backgroundColor: "#f8fafc", borderRadius: "8px" }}
+                        onClick={() =>
+                          trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CONTACT_INTERACTION, {
+                            target: "website",
+                            plan,
+                          })
+                        }
+                      >
                         <IconGlobe />
                       </a>
                     )}
@@ -396,7 +848,17 @@ export function PublicMenuClient({
               </div>
             </details>
             
-            <details className={styles.infoAccordion}>
+            <details
+              className={styles.infoAccordion}
+              onToggle={(e) => {
+                if ((e.currentTarget as HTMLDetailsElement).open) {
+                  trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CONTACT_INTERACTION, {
+                    target: "hours_accordion",
+                    plan,
+                  });
+                }
+              }}
+            >
               <summary>
                 <div className={styles.summaryContent}>
                   <IconClock /> <span>Horarios de atención</span>
@@ -508,6 +970,9 @@ export function PublicMenuClient({
               key={category.id}
               id={`cat-sec-${category.id}`}
               className={styles.categorySection}
+              data-telemetry-category-section="true"
+              data-telemetry-category-id={category.id}
+              data-telemetry-category-name={category.name}
             >
               <h2 className={styles.categorySectionTitle}>{category.name.toUpperCase()}</h2>
               {category.description && (
@@ -519,8 +984,12 @@ export function PublicMenuClient({
                   <div
                     key={item.id}
                     className={styles.productCard}
-                    onClick={() => !isMenuOnly && setSelectedProduct(item as ConfiguratorItem)}
-                    style={{ cursor: isMenuOnly ? "default" : "pointer" }}
+                    data-telemetry-item-id={item.id}
+                    data-telemetry-item-name={item.name}
+                    data-telemetry-category-id={category.id}
+                    data-telemetry-category-name={category.name}
+                    data-telemetry-item-price={String(item.price)}
+                    onClick={() => handleSelectProduct(item as ConfiguratorItem)}
                   >
                     <div className={styles.productTopImage}>
                       {item.imageUrl ? (
@@ -547,7 +1016,7 @@ export function PublicMenuClient({
                           {formatCOP(item.price)}
                         </span>
                         
-                        {!isMenuOnly && (
+                        {cartEnabled ? (
                           <button
                             type="button"
                             className={styles.productAddBtn}
@@ -565,6 +1034,15 @@ export function PublicMenuClient({
                               </span>
                             ) : null}
                           </button>
+                        ) : (
+                          <span className={styles.productViewHint}>
+                            <IconInfo />
+                            <span>
+                              {item.modifierGroups && item.modifierGroups.length > 0
+                                ? "Ver acompañantes"
+                                : "Ver detalle"}
+                            </span>
+                          </span>
                         )}
                       </div>
                     </div>
@@ -631,19 +1109,19 @@ export function PublicMenuClient({
         </footer>
       )}
 
-      {/* Item Configurator Modal */}
-      {!isMenuOnly && (
-        <ItemConfiguratorModal
-          item={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-          onAddToCart={handleAddToCart}
-          brandColor={brandColor}
-          buttonTextColor={buttonTextColor}
-        />
-      )}
+      {/* Item Configurator / Detail Modal */}
+      <ItemConfiguratorModal
+        tenantId={tenantId}
+        item={selectedProduct}
+        onClose={() => handleSelectProduct(null)}
+        onAddToCart={handleAddToCart}
+        brandColor={brandColor}
+        buttonTextColor={buttonTextColor}
+        isMenuOnly={!cartEnabled}
+      />
 
       {/* Cart Drawer */}
-      {!isMenuOnly && (
+      {cartEnabled && (
         <CartDrawer
           tenantId={tenantId}
           isOpen={isCartOpen}
@@ -659,15 +1137,17 @@ export function PublicMenuClient({
           allowDelivery={allowDelivery}
           allowWhatsAppOrdering={allowWhatsAppOrdering}
           whatsappNumber={whatsappNumber}
+          menuOnlyPlan={isPlanMenuOnly}
+          allowWaiterQr={waiterQrEligible}
         />
       )}
 
       {/* Floating Sticky Cart Banner */}
-      {!isMenuOnly && totalCartCount > 0 && (
+      {cartEnabled && totalCartCount > 0 && (
         <div 
           className={styles.stickyCartBanner} 
           style={{ backgroundColor: brandColor, color: buttonTextColor }}
-          onClick={() => setIsCartOpen(true)}
+          onClick={() => handleOpenCart("sticky_banner")}
         >
           <div className={styles.stickyCartInfo}>
             <span className={styles.stickyCartCount} style={{ backgroundColor: buttonTextColor, color: brandColor }}>

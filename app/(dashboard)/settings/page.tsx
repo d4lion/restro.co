@@ -2,11 +2,11 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import type { PlanKey, PlanRecord } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
 import { StoreHeaderPreviewCard } from "@/components/dashboard/settings/StoreHeaderPreviewCard";
 import { OrderSettingsCard } from "@/components/dashboard/settings/OrderSettingsCard";
 import { NotificationSettingsCard } from "@/components/dashboard/settings/NotificationSettingsCard";
 import { BusinessHoursCard } from "@/components/dashboard/settings/BusinessHoursCard";
+import { SubscriptionPlansCard } from "@/components/dashboard/settings/SubscriptionPlansCard";
 import { LogoutCard } from "@/components/dashboard/settings/LogoutCard";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
@@ -66,9 +66,11 @@ export default async function SettingsPage() {
         allowTakeout={tenant.allowTakeout}
         allowDelivery={tenant.allowDelivery}
         isMenuOnly={tenant.isMenuOnly}
+        isPlanMenuOnly={currentPlan === "CARTA_DIGITAL" || currentPlan === "STARTER"}
         requireTableQrForDineIn={tenant.requireTableQrForDineIn}
         allowWhatsAppOrdering={tenant.allowWhatsAppOrdering}
         whatsappNumber={tenant.whatsappNumber}
+        isCartaDigitalPlan={currentPlan === "CARTA_DIGITAL"}
       />
 
       {/* ── Business Hours ────────────────────────────────────── */}
@@ -94,63 +96,7 @@ export default async function SettingsPage() {
       </div>
 
       {/* ── Subscription Plans Card ─────────────────────────── */}
-      <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Planes de Suscripción SaaS (COP)</h2>
-        <p className={styles.cardSub}>Precios en pesos colombianos para todo tipo de establecimiento.</p>
-
-        <div className={styles.plansGrid}>
-          {/* Plan Starter */}
-          <div className={`${styles.planCard} ${currentPlan === "STARTER" ? styles["planCard--active"] : ""}`}>
-            {currentPlan === "STARTER" && <span className={styles.activeBadge}>PLAN ACTUAL</span>}
-            <h3 className={styles.planName}>Starter</h3>
-            <p className={styles.planPrice}>Gratis</p>
-            <ul className={styles.planFeatures}>
-              <li>Carta digital QR móvil</li>
-              <li>Imágenes de productos incluidas</li>
-              <li>Hasta 5 mesas</li>
-              <li>Hasta 20 productos</li>
-            </ul>
-          </div>
-
-          {/* Plan Restro IA */}
-          <div className={`${styles.planCard} ${styles["planCard--featured"]} ${currentPlan === "RESTRO_IA" ? styles["planCard--active"] : ""}`}>
-            {currentPlan === "RESTRO_IA" && <span className={styles.activeBadge}>PLAN ACTUAL</span>}
-            <span className={styles.popularTag}>RECOMENDADO</span>
-            <h3 className={styles.planName}>Restro IA</h3>
-            <p className={styles.planPrice}>$49.900 <small>/mes</small></p>
-            <ul className={styles.planFeatures}>
-              <li>Todo lo de Starter</li>
-              <li><strong>IA: Recomendaciones y combos</strong></li>
-              <li><strong>IA: Predicción de horas pico</strong></li>
-              <li>Hasta 30 mesas</li>
-              <li>Productos ilimitados</li>
-            </ul>
-            {currentPlan !== "RESTRO_IA" && (
-              <Button type="button" variant="primary" size="sm" fullWidth style={{ marginTop: "12px" }}>
-                Seleccionar Plan
-              </Button>
-            )}
-          </div>
-
-          {/* Plan Business */}
-          <div className={`${styles.planCard} ${currentPlan === "BUSINESS" ? styles["planCard--active"] : ""}`}>
-            {currentPlan === "BUSINESS" && <span className={styles.activeBadge}>PLAN ACTUAL</span>}
-            <h3 className={styles.planName}>Business</h3>
-            <p className={styles.planPrice}>$99.900 <small>/mes</small></p>
-            <ul className={styles.planFeatures}>
-              <li>Todo lo de Restro IA</li>
-              <li>Mesas ilimitadas</li>
-              <li>Cuentas staff ilimitadas</li>
-              <li>Exportar reportes Excel &amp; PDF</li>
-            </ul>
-            {currentPlan !== "BUSINESS" && (
-              <Button type="button" variant="outline" size="sm" fullWidth style={{ marginTop: "12px" }}>
-                Contactar Ventas
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
+      <SubscriptionPlansCard currentPlan={currentPlan} />
 
       {/* ── Logout — client component with confirm ──────────── */}
       <LogoutCard />

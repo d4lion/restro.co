@@ -161,6 +161,36 @@ export const tenantRepository = {
     return !existing;
   },
 
+  async checkNameAndSlugAvailability(name: string, slug: string): Promise<{
+    isNameTaken: boolean;
+    isSlugTaken: boolean;
+    available: boolean;
+  }> {
+    const [byName, bySlug] = await Promise.all([
+      prisma.tenant.findFirst({
+        where: {
+          name: {
+            equals: name.trim(),
+            mode: "insensitive",
+          },
+        },
+        select: { id: true },
+      }),
+      prisma.tenant.findFirst({
+        where: { slug },
+        select: { id: true },
+      }),
+    ]);
+
+    const isNameTaken = Boolean(byName);
+    const isSlugTaken = Boolean(bySlug);
+    return {
+      isNameTaken,
+      isSlugTaken,
+      available: !isNameTaken && !isSlugTaken,
+    };
+  },
+
   async addWhatsappWaitlist(tenantId: string, email: string) {
     return prisma.tenant.update({
       where: { id: tenantId },

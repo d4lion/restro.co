@@ -474,18 +474,20 @@
   border-color: #CBD5E1;
 }
 
-/* Top Image Column */
+/* Top Image Column — Standardized 4:3 Aspect Ratio */
 .productTopImage {
   width: 100%;
-  height: 200px;
+  aspect-ratio: 4 / 3;
   background: #F8FAFC;
   position: relative;
+  overflow: hidden;
 }
 
 .productImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .productImgFallback {
@@ -578,6 +580,26 @@
   align-items: center;
   justify-content: center;
   border: 2px solid #FFFFFF;
+}
+
+.productViewHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.productCard:hover .productViewHint {
+  background: #F1F5F9;
+  color: #0F172A;
+  border-color: #CBD5E1;
 }
 
 /* Floating WhatsApp Button */

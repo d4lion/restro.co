@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 import { tenantRepository } from "./tenant.repository";
 import { menuRepository } from "./menu.repository";
 import { planRepository } from "./plan.repository";
+import { analyticsRepository } from "./analytics.repository";
 import { CACHE_TAGS, CACHE_TTL } from "@/lib/cache";
 
 /**
@@ -38,6 +39,24 @@ export async function getCachedPublicMenu(tenantId: string) {
     }
   );
   return fetcher(tenantId);
+}
+
+/**
+ * Level 1.5 Cache: Get pre-aggregated behavioral telemetry report for a tenant
+ * Cached for 5 minutes (or until rollup job revalidates 'analytics:[tenantId]')
+ */
+export async function getCachedBehavioralReport(tenantId: string, days = 30) {
+  const fetcher = unstable_cache(
+    async (tId: string, periodDays: number) => {
+      return analyticsRepository.getBehavioralReportForTenant(tId, periodDays);
+    },
+    [`cached-behavioral-report-${tenantId}-${days}`],
+    {
+      tags: [CACHE_TAGS.analyticsTenantId(tenantId)],
+      revalidate: CACHE_TTL.analyticsReport,
+    }
+  );
+  return fetcher(tenantId, days);
 }
 
 /**

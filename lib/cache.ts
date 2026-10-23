@@ -6,6 +6,7 @@ import { revalidateTag, revalidatePath } from "next/cache";
 export const CACHE_TAGS = {
   tenantSlug: (slug: string) => `tenant:${slug}`,
   menuTenantId: (tenantId: string) => `menu:${tenantId}`,
+  analyticsTenantId: (tenantId: string) => `analytics:${tenantId}`,
   plans: "saas-plans",
 };
 
@@ -17,6 +18,8 @@ export const CACHE_TTL = {
   publicMenu: 300,
   /** Level 1: Tenant Profile - 5 minutes with on-demand revalidation */
   tenantProfile: 300,
+  /** Level 1.5: Pre-aggregated Behavioral Analytics Report - 5 minutes */
+  analyticsReport: 300,
   /** Level 2: SaaS Plans & Feature Limits - 24 hours */
   plans: 86400,
 };
@@ -56,5 +59,19 @@ export function revalidatePlansCache() {
     revalidateTag(CACHE_TAGS.plans, "default");
   } catch (error) {
     console.error("Failed to revalidate plans cache", error);
+  }
+}
+
+/**
+ * Revalidate pre-aggregated behavioral analytics report cache for a tenant
+ */
+export function revalidateAnalyticsCache(tenantId: string) {
+  try {
+    revalidateTag(CACHE_TAGS.analyticsTenantId(tenantId), "default");
+    revalidatePath("/analytics", "page");
+  } catch (error) {
+    if (process.env.NODE_ENV !== "test") {
+      console.error(`Failed to revalidate analytics cache for tenantId: ${tenantId}`, error);
+    }
   }
 }

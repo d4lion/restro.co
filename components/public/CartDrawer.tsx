@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useTransition } from "react";
-import { X, ShoppingBag, Loader2, Utensils, Bike, MessageSquare, AlertCircle, CheckCircle2, ShieldAlert } from "lucide-react";
+import { X, ShoppingBag, Loader2, Utensils, Bike, MessageSquare, AlertCircle, CheckCircle2, ShieldAlert, QrCode } from "lucide-react";
 import { toast } from "sonner";
 import styles from "./CartDrawer.module.css";
 import { CartItem } from "./PublicMenuClient";
 import { createPublicOrderAction, validateTableAction } from "@/app/actions/orders";
+import { trackTelemetryEvent, TELEMETRY_EVENTS } from "@/lib/telemetry";
+import { buildWaiterQrPayload, fitsInWaiterQr, generateWaiterQrDataUrl } from "@/lib/waiter-qr";
 
 interface Props {
   tenantId: string;
@@ -22,6 +24,10 @@ interface Props {
   allowDelivery?: boolean;
   allowWhatsAppOrdering?: boolean;
   whatsappNumber?: string | null;
+  /** Plan Starter / Carta Digital: sin pedidos a cocina (KDS). Solo WhatsApp y/o QR al mesero. */
+  menuOnlyPlan?: boolean;
+  /** Plan Carta Digital: permite generar el QR para el mesero desde una mesa verificada. */
+  allowWaiterQr?: boolean;
 }
 
 // Client-side in-memory cache map to make table validation instant (0ms)
@@ -42,17 +48,21 @@ export function CartDrawer({
   allowDelivery = false,
   allowWhatsAppOrdering = false,
   whatsappNumber = null,
+  menuOnlyPlan = false,
+  allowWaiterQr = false,
 }: Props) {
-  // Available types
-  const availableTypes: Array<"DINE_IN" | "TAKEOUT" | "DELIVERY"> = [];
-  if (allowDineIn) availableTypes.push("DINE_IN");
-  if (allowTakeout) availableTypes.push("TAKEOUT");
-  if (allowDelivery) availableTypes.push("DELIVERY");
-
   // Verified Table State (Confirmed via DB query to prevent enumeration attacks)
   const [urlTableParam, setUrlTableParam] = useState<string | null>(null);
   const [verifiedTable, setVerifiedTable] = useState<{ id: string; name: string } | null>(null);
   const [isValidatingTable, setIsValidatingTable] = useState(false);
+
+  // Available types: for WhatsApp, takeout and delivery are always allowed even without table
+  const availableTypes: Array<"DINE_IN" | "TAKEOUT" | "DELIVERY"> = [];
+  if (allowDineIn && (urlTableParam || !requireTableQrForDineIn || allowWhatsAppOrdering)) {
+    availableTypes.push("DINE_IN");
+  }
+  if (allowTakeout || allowWhatsAppOrdering) availableTypes.push("TAKEOUT");
+  if (allowDelivery || allowWhatsAppOrdering) availableTypes.push("DELIVERY");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -60,6 +70,7 @@ export function CartDrawer({
       const tableParam =
         searchParams.get("table") ||
         searchParams.get("tableId") ||
+        searchParams.get("table_id") ||
         searchParams.get("mesa") ||
         searchParams.get("qr") ||
         searchParams.get("t");
@@ -114,6 +125,11 @@ export function CartDrawer({
   // Compute smart initial orderType
   const getSmartInitialType = (): "DINE_IN" | "TAKEOUT" | "DELIVERY" => {
     if (urlTableParam && allowDineIn) return "DINE_IN";
+    if (allowWhatsAppOrdering && !urlTableParam) {
+      if (allowDelivery) return "DELIVERY";
+      if (allowTakeout) return "TAKEOUT";
+      return "TAKEOUT";
+    }
     if (allowDelivery) return "DELIVERY";
     if (allowTakeout) return "TAKEOUT";
     if (allowDineIn) return "DINE_IN";
@@ -135,11 +151,35 @@ export function CartDrawer({
 
   const [isPending, startTransition] = useTransition();
 
+  const [waiterQr, setWaiterQr] = useState<{
+    dataUrl: string;
+    tableName: string;
+    itemCount: number;
+  } | null>(null);
+  const [isGeneratingQr, setIsGeneratingQr] = useState(false);
+
+  // Discard a generated QR when the drawer closes or the cart changes (it would be stale).
+  useEffect(() => {
+    if (!isOpen) setWaiterQr(null);
+  }, [isOpen]);
+  useEffect(() => {
+    setWaiterQr(null);
+  }, [cart]);
+
   if (!isOpen) return null;
 
-  // Strict Table QR block applies ONLY when orderType === "DINE_IN"
+  // Selector de tipo de pedido: planes completos, o planes solo-carta con pedido por WhatsApp.
+  const showOrderTypeSelector = !menuOnlyPlan || allowWhatsAppOrdering;
+  // Botón "QR para el mesero": solo planes solo-carta con mesa verificada por el servidor.
+  const showWaiterQrOption = menuOnlyPlan && allowWaiterQr && Boolean(verifiedTable);
+
+  // Strict Table QR block applies ONLY for direct kitchen/KDS dine-in orders (never for WhatsApp).
   const isDineInBlocked =
-    orderType === "DINE_IN" && requireTableQrForDineIn && !verifiedTable;
+    !allowWhatsAppOrdering &&
+    showOrderTypeSelector &&
+    orderType === "DINE_IN" &&
+    requireTableQrForDineIn &&
+    !verifiedTable;
 
   const totalAmount = cart.reduce((acc, item) => acc + item.subtotal, 0);
 
@@ -150,7 +190,26 @@ export function CartDrawer({
       maximumFractionDigits: 0,
     }).format(n);
 
+  const handleSelectOrderType = (nextType: "DINE_IN" | "TAKEOUT" | "DELIVERY") => {
+    setOrderType(nextType);
+    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.ORDER_TYPE_SELECT, {
+      orderType: nextType,
+    });
+  };
+
   const updateQuantity = (id: string, delta: number) => {
+    const target = cart.find((item) => item.id === id);
+    if (target) {
+      const newQty = Math.max(1, target.quantity + delta);
+      trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CART_ITEM_UPDATE, {
+        itemId: target.menuItem.id,
+        itemName: target.menuItem.name,
+        delta,
+        newQuantity: newQty,
+        subtotal: (target.subtotal / target.quantity) * newQty,
+      });
+    }
+
     setCart((prev) =>
       prev.map((item) => {
         if (item.id === id) {
@@ -167,6 +226,15 @@ export function CartDrawer({
   };
 
   const removeItem = (id: string) => {
+    const target = cart.find((item) => item.id === id);
+    if (target) {
+      trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.CART_ITEM_REMOVE, {
+        itemId: target.menuItem.id,
+        itemName: target.menuItem.name,
+        quantity: target.quantity,
+        removedSubtotal: target.subtotal,
+      });
+    }
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
@@ -194,7 +262,7 @@ export function CartDrawer({
         toast.error("Ingresa tu nombre para identificar tu pedido al recoger");
         return false;
       }
-      if (!customerPhone.trim()) {
+      if (!allowWhatsAppOrdering && !customerPhone.trim()) {
         toast.error("Ingresa tu número de teléfono de contacto");
         return false;
       }
@@ -205,7 +273,7 @@ export function CartDrawer({
         toast.error("Ingresa tu nombre completo para la entrega");
         return false;
       }
-      if (!customerPhone.trim()) {
+      if (!allowWhatsAppOrdering && !customerPhone.trim()) {
         toast.error("Ingresa tu teléfono móvil de contacto");
         return false;
       }
@@ -218,10 +286,118 @@ export function CartDrawer({
     return true;
   };
 
+  const openWhatsAppOrder = () => {
+    let cleanPhone = (whatsappNumber || "").replace(/[^0-9]/g, "");
+    if (!cleanPhone) cleanPhone = "573105550000";
+    if (cleanPhone.length === 10 && cleanPhone.startsWith("3")) {
+      cleanPhone = "57" + cleanPhone;
+    }
+
+    const typeLabel = verifiedTable
+      ? `EN MESA: ${verifiedTable.name}`
+      : orderType === "DELIVERY"
+      ? "DOMICILIO"
+      : orderType === "TAKEOUT"
+      ? "PARA RECOGER"
+      : "PEDIDO POR WHATSAPP";
+
+    let summaryText = `🛒 *NUEVO PEDIDO (${typeLabel})*\n`;
+    if (verifiedTable) summaryText += `📍 Mesa: ${verifiedTable.name}\n`;
+    if (customerName.trim()) summaryText += `👤 Nombre: ${customerName.trim()}\n`;
+    if (orderType === "DELIVERY" && deliveryAddress.trim()) summaryText += `🏠 Dirección: ${deliveryAddress.trim()}\n`;
+    if (customerPhone.trim()) summaryText += `📞 Teléfono: ${customerPhone.trim()}\n`;
+    if (orderNotes.trim()) summaryText += `📝 Nota: ${orderNotes.trim()}\n`;
+    summaryText += `\n*PRODUCTOS:*\n`;
+
+    cart.forEach((item) => {
+      summaryText += `• ${item.quantity}x ${item.menuItem.name} — ${formatCOP(item.subtotal)}\n`;
+      const mods = getModifiersText(item);
+      if (mods) summaryText += `   _${mods}_\n`;
+    });
+
+    summaryText += `\n💰 *TOTAL: ${formatCOP(totalAmount)}*`;
+
+    const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(summaryText)}`;
+    window.open(waUrl, "_blank");
+  };
+
+  /**
+   * Plan Carta Digital: genera el QR (JSON compacto con IDs) para el mesero.
+   * Solo funciona con una mesa verificada en servidor. No persiste nada en la BD.
+   */
+  const handleGenerateWaiterQr = async () => {
+    if (!verifiedTable || cart.length === 0) return;
+    setIsGeneratingQr(true);
+    try {
+      const payload = buildWaiterQrPayload({
+        tenantId,
+        tableId: verifiedTable.id,
+        cart,
+      });
+
+      if (!fitsInWaiterQr(payload)) {
+        toast.error("El pedido es demasiado grande para un solo QR. Divídelo en dos pedidos.");
+        return;
+      }
+
+      const dataUrl = await generateWaiterQrDataUrl(payload);
+      const itemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+      setWaiterQr({ dataUrl, tableName: verifiedTable.name, itemCount });
+
+      trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.WAITER_QR_GENERATED, {
+        tableId: verifiedTable.id,
+        itemCount,
+        uniqueItemCount: cart.length,
+        totalAmount,
+      });
+    } catch {
+      toast.error("No se pudo generar el QR. Inténtalo de nuevo.");
+    } finally {
+      setIsGeneratingQr(false);
+    }
+  };
+
   const handleCheckout = () => {
     if (cart.length === 0) return;
 
-    if (!validateCheckoutData()) return;
+    if (!validateCheckoutData()) {
+      trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.ORDER_FAILED, {
+        orderType,
+        reason: "validation_failed",
+        totalAmount,
+      });
+      return;
+    }
+
+    const totalItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+    const channel = allowWhatsAppOrdering ? "whatsapp" : "kds";
+
+    trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.ORDER_STARTED, {
+      orderType,
+      itemCount: totalItemCount,
+      uniqueItemCount: cart.length,
+      totalAmount,
+      channel,
+      hasVerifiedTable: Boolean(verifiedTable),
+    });
+
+    // Planes Starter / Carta Digital: el pedido va solo por WhatsApp (sin BD ni KDS).
+    if (menuOnlyPlan) {
+      if (!allowWhatsAppOrdering) return;
+      openWhatsAppOrder();
+      trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.ORDER_COMPLETED, {
+        orderType,
+        itemCount: totalItemCount,
+        uniqueItemCount: cart.length,
+        totalAmount,
+        channel: "whatsapp",
+        hasVerifiedTable: Boolean(verifiedTable),
+      });
+      toast.success("Abrimos WhatsApp con tu pedido. Envía el mensaje para confirmarlo.");
+      setCart([]);
+      onClose();
+      return;
+    }
 
     startTransition(async () => {
       const orderData = {
@@ -266,31 +442,16 @@ export function CartDrawer({
       const res = await createPublicOrderAction(orderData);
 
       if (res.success) {
-        if (allowWhatsAppOrdering) {
-          let cleanPhone = (whatsappNumber || "").replace(/[^0-9]/g, "");
-          if (!cleanPhone) cleanPhone = "573105550000";
-          if (cleanPhone.length === 10 && cleanPhone.startsWith("3")) {
-            cleanPhone = "57" + cleanPhone;
-          }
+        trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.ORDER_COMPLETED, {
+          orderType,
+          itemCount: totalItemCount,
+          uniqueItemCount: cart.length,
+          totalAmount,
+          channel,
+          hasVerifiedTable: Boolean(verifiedTable),
+        });
 
-          let summaryText = `🛒 *NUEVO PEDIDO (${orderType === "DINE_IN" ? "EN MESA" : orderType === "TAKEOUT" ? "PARA RECOGER" : "DOMICILIO"})*\n`;
-          if (verifiedTable) summaryText += `📍 Mesa: ${verifiedTable.name}\n`;
-          if (customerName) summaryText += `👤 Nombre: ${customerName}\n`;
-          if (deliveryAddress) summaryText += `🏠 Dirección: ${deliveryAddress}\n`;
-          if (customerPhone) summaryText += `📞 Teléfono: ${customerPhone}\n`;
-          summaryText += `\n*PRODUCTOS:*\n`;
-
-          cart.forEach((item) => {
-            summaryText += `• ${item.quantity}x ${item.menuItem.name} — ${formatCOP(item.subtotal)}\n`;
-            const mods = getModifiersText(item);
-            if (mods) summaryText += `   _${mods}_\n`;
-          });
-
-          summaryText += `\n💰 *TOTAL: ${formatCOP(totalAmount)}*`;
-
-          const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(summaryText)}`;
-          window.open(waUrl, "_blank");
-        }
+        if (allowWhatsAppOrdering) openWhatsAppOrder();
 
         toast.success(
           orderType === "TAKEOUT"
@@ -303,6 +464,11 @@ export function CartDrawer({
         setCart([]);
         onClose();
       } else {
+        trackTelemetryEvent(tenantId, TELEMETRY_EVENTS.ORDER_FAILED, {
+          orderType,
+          reason: res.message || "server_error",
+          totalAmount,
+        });
         toast.error(res.message || "Error al enviar el pedido");
       }
     });
@@ -339,23 +505,72 @@ export function CartDrawer({
         </div>
 
         <div className={styles.content}>
-          {cart.length === 0 ? (
+          {waiterQr ? (
+            <div data-testid="waiter-qr-panel" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, textAlign: "center" }}>
+              <div style={{ fontWeight: 700, fontSize: "1rem", color: "#0F172A" }}>
+                Muéstrale este código a tu mesero
+              </div>
+              <p style={{ margin: 0, fontSize: "0.8rem", color: "#64748B", lineHeight: 1.4 }}>
+                {waiterQr.tableName} · {waiterQr.itemCount} {waiterQr.itemCount === 1 ? "producto" : "productos"}. Tu pedido aún no ha sido enviado: el mesero lo confirma al escanear.
+              </p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={waiterQr.dataUrl}
+                alt="Código QR de tu pedido para el mesero"
+                width={260}
+                height={260}
+                style={{ border: "1px solid #E2E8F0", borderRadius: 12, padding: 6, background: "#FFFFFF" }}
+              />
+              <div style={{ width: "100%", textAlign: "left", background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 8, padding: 12 }}>
+                <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#64748B", marginBottom: 6 }}>
+                  RESUMEN (por si el mesero prefiere leerlo)
+                </div>
+                {cart.map((item) => (
+                  <div key={item.id} style={{ fontSize: "0.825rem", color: "#0F172A", marginBottom: 6 }}>
+                    <strong>{item.quantity}x {item.menuItem.name}</strong>
+                    {getModifiersText(item) && (
+                      <div style={{ fontSize: "0.75rem", color: "#64748B" }}>{getModifiersText(item)}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: "flex", gap: 8, width: "100%" }}>
+                <button
+                  type="button"
+                  onClick={() => setWaiterQr(null)}
+                  style={{ flex: 1, padding: "10px 8px", borderRadius: 8, border: "1px solid #CBD5E1", background: "#FFFFFF", color: "#334155", fontWeight: 700, fontSize: "0.85rem", cursor: "pointer" }}
+                >
+                  Editar pedido
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWaiterQr(null);
+                    onClose();
+                  }}
+                  style={{ flex: 1, padding: "10px 8px", borderRadius: 8, border: "none", background: brandColor || "#0066FF", color: buttonTextColor || "#FFFFFF", fontWeight: 700, fontSize: "0.85rem", cursor: "pointer" }}
+                >
+                  Listo
+                </button>
+              </div>
+            </div>
+          ) : cart.length === 0 ? (
             <div className={styles.emptyState}>
               <ShoppingBag size={48} color="#cbd5e1" />
               <p>Tu carrito está vacío</p>
             </div>
           ) : (
             <>
-              {/* Order Type Selector Tabs */}
-              <div style={{ marginBottom: 16 }}>
-                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#64748B" }}>
-                  ¿CÓMO DESEAS RECIBIR TU PEDIDO?
-                </label>
-                <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
-                  {allowDineIn && (
+              {showOrderTypeSelector && (
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#64748B" }}>
+                    ¿CÓMO DESEAS RECIBIR TU PEDIDO?
+                  </label>
+                  <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+                    {(allowDineIn && (urlTableParam || verifiedTable || !requireTableQrForDineIn)) && (
                     <button
                       type="button"
-                      onClick={() => setOrderType("DINE_IN")}
+                      onClick={() => handleSelectOrderType("DINE_IN")}
                       style={{
                         flex: 1,
                         padding: "9px 6px",
@@ -375,10 +590,10 @@ export function CartDrawer({
                       <Utensils size={15} /> En Mesa
                     </button>
                   )}
-                  {allowTakeout && (
+                  {(allowTakeout || allowWhatsAppOrdering) && (
                     <button
                       type="button"
-                      onClick={() => setOrderType("TAKEOUT")}
+                      onClick={() => handleSelectOrderType("TAKEOUT")}
                       style={{
                         flex: 1,
                         padding: "9px 6px",
@@ -398,10 +613,10 @@ export function CartDrawer({
                       <ShoppingBag size={15} /> Para Recoger
                     </button>
                   )}
-                  {allowDelivery && (
+                  {(allowDelivery || allowWhatsAppOrdering) && (
                     <button
                       type="button"
-                      onClick={() => setOrderType("DELIVERY")}
+                      onClick={() => handleSelectOrderType("DELIVERY")}
                       style={{
                         flex: 1,
                         padding: "9px 6px",
@@ -423,9 +638,39 @@ export function CartDrawer({
                   )}
                 </div>
               </div>
+              )}
+
+              {/* Waiter QR mode: table status (menu-only plans without WhatsApp ordering) */}
+              {menuOnlyPlan && allowWaiterQr && !showOrderTypeSelector && (
+                isValidatingTable ? (
+                  <div style={{ background: "#F1F5F9", color: "#475569", padding: "8px 12px", borderRadius: 8, fontSize: "0.8rem", marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>
+                    <Loader2 size={16} className={styles.spin} /> Verificando autenticidad de la mesa...
+                  </div>
+                ) : verifiedTable ? (
+                  <div style={{ background: "#F0FDF4", border: "1px solid #BBF7D0", color: "#166534", padding: "10px 12px", borderRadius: 8, fontSize: "0.8rem", marginBottom: 16, lineHeight: 1.4 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: "0.825rem" }}>
+                      <CheckCircle2 size={18} style={{ color: "#16A34A" }} />
+                      <span>Estás en: {verifiedTable.name}</span>
+                    </div>
+                    <p style={{ margin: "6px 0 0 0" }}>
+                      Arma tu pedido y genera un código QR para mostrárselo a tu mesero. El pedido no se envía automáticamente.
+                    </p>
+                  </div>
+                ) : (
+                  <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", color: "#991B1B", padding: "12px", borderRadius: 8, fontSize: "0.8rem", marginBottom: 16, display: "flex", gap: 10 }}>
+                    <ShieldAlert size={20} style={{ flexShrink: 0, marginTop: 2, color: "#DC2626" }} />
+                    <div>
+                      <strong style={{ fontSize: "0.85rem" }}>Mesa no verificada:</strong>
+                      <p style={{ margin: "4px 0 0 0", fontSize: "0.775rem", lineHeight: 1.4 }}>
+                        Escanea el código QR físico de tu mesa para poder generar el QR del mesero.
+                      </p>
+                    </div>
+                  </div>
+                )
+              )}
 
               {/* Verified Table Badge vs Invalid/Missing QR Warning */}
-              {orderType === "DINE_IN" && (
+              {showOrderTypeSelector && orderType === "DINE_IN" && (
                 isValidatingTable ? (
                   <div style={{ background: "#F1F5F9", color: "#475569", padding: "8px 12px", borderRadius: 8, fontSize: "0.8rem", marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>
                     <Loader2 size={16} className={styles.spin} /> Verificando autenticidad de la mesa...
@@ -433,9 +678,9 @@ export function CartDrawer({
                 ) : verifiedTable ? (
                   <div style={{ background: "#F0FDF4", border: "1px solid #BBF7D0", color: "#166534", padding: "10px 12px", borderRadius: 8, fontSize: "0.825rem", marginBottom: 16, display: "flex", alignItems: "center", gap: 8, fontWeight: 700 }}>
                     <CheckCircle2 size={18} style={{ color: "#16A34A" }} />
-                    <span>Actualmente estas en: {verifiedTable.name}</span>
+                    <span>Actualmente estás en: {verifiedTable.name}</span>
                   </div>
-                ) : requireTableQrForDineIn ? (
+                ) : urlTableParam ? (
                   <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", color: "#991B1B", padding: "12px", borderRadius: 8, fontSize: "0.8rem", marginBottom: 16, display: "flex", gap: 10 }}>
                     <ShieldAlert size={20} style={{ flexShrink: 0, marginTop: 2, color: "#DC2626" }} />
                     <div>
@@ -445,11 +690,21 @@ export function CartDrawer({
                       </p>
                     </div>
                   </div>
+                ) : !allowWhatsAppOrdering && requireTableQrForDineIn ? (
+                  <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", color: "#991B1B", padding: "12px", borderRadius: 8, fontSize: "0.8rem", marginBottom: 16, display: "flex", gap: 10 }}>
+                    <ShieldAlert size={20} style={{ flexShrink: 0, marginTop: 2, color: "#DC2626" }} />
+                    <div>
+                      <strong style={{ fontSize: "0.85rem" }}>Mesa requerida para pedir en local:</strong>
+                      <p style={{ margin: "4px 0 0 0", fontSize: "0.775rem", lineHeight: 1.4 }}>
+                        Escanea el código QR físico de tu mesa para enviar tu pedido a cocina.
+                      </p>
+                    </div>
+                  </div>
                 ) : null
               )}
 
-              {/* Customer Inputs for Takeout & Delivery */}
-              {(orderType === "TAKEOUT" || orderType === "DELIVERY") && (
+              {/* Customer Inputs for Takeout & Delivery (or WhatsApp without verified table) */}
+              {showOrderTypeSelector && (orderType === "TAKEOUT" || orderType === "DELIVERY" || (allowWhatsAppOrdering && !verifiedTable)) && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16, background: "#F8FAFC", padding: 14, borderRadius: 8, border: "1px solid #E2E8F0" }}>
                   <div>
                     <label style={{ fontSize: "0.775rem", fontWeight: 700, color: "#334155" }}>Nombre completo *</label>
@@ -463,7 +718,7 @@ export function CartDrawer({
                   </div>
 
                   <div>
-                    <label style={{ fontSize: "0.775rem", fontWeight: 700, color: "#334155" }}>Teléfono móvil de contacto *</label>
+                    <label style={{ fontSize: "0.775rem", fontWeight: 700, color: "#334155" }}>Teléfono móvil de contacto</label>
                     <input
                       type="text"
                       placeholder="Ej. 3001234567"
@@ -540,36 +795,75 @@ export function CartDrawer({
           )}
         </div>
 
-        {cart.length > 0 && (
+        {cart.length > 0 && !waiterQr && (
           <div className={styles.footer}>
             <div className={styles.totalRow}>
-              <span>Total a pagar</span>
+              <span>{menuOnlyPlan && !allowWhatsAppOrdering ? "Total estimado" : "Total a pagar"}</span>
               <span>{formatCOP(totalAmount)}</span>
             </div>
-            {!isStoreOpen ? (
-              <div style={{ padding: "12px", backgroundColor: "#FEE2E2", color: "#991B1B", borderRadius: "8px", textAlign: "center", fontSize: "14px", fontWeight: 500, marginTop: "8px" }}>
-                El restaurante está cerrado en este momento.
-              </div>
-            ) : (
+
+            {showWaiterQrOption && (
               <button
+                type="button"
                 className={styles.checkoutBtn}
-                onClick={handleCheckout}
-                disabled={isPending || isDineInBlocked || isValidatingTable}
+                onClick={handleGenerateWaiterQr}
+                disabled={isGeneratingQr}
+                data-testid="generate-waiter-qr-btn"
                 style={{
-                  backgroundColor: isDineInBlocked ? "#94A3B8" : brandColor || "#0066FF",
+                  backgroundColor: brandColor || "#0066FF",
                   color: buttonTextColor || "#FFFFFF",
-                  cursor: isDineInBlocked ? "not-allowed" : "pointer",
+                  marginBottom: allowWhatsAppOrdering ? 8 : 0,
                 }}
               >
-                {isPending ? (
+                {isGeneratingQr ? (
                   <>
-                    <Loader2 size={20} className={styles.spin} /> Procesando...
+                    <Loader2 size={20} className={styles.spin} /> Generando QR...
                   </>
                 ) : (
-                  getCheckoutButtonLabel()
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                    <QrCode size={18} /> Generar QR para el mesero
+                  </div>
                 )}
               </button>
             )}
+
+            {/* If on Carta Digital without WhatsApp and table is still validating */}
+            {menuOnlyPlan && !allowWhatsAppOrdering && isValidatingTable && (
+              <button
+                type="button"
+                className={styles.checkoutBtn}
+                disabled
+                style={{ backgroundColor: "#94A3B8", color: "#FFFFFF", cursor: "wait" }}
+              >
+                <Loader2 size={18} className={styles.spin} /> Verificando mesa...
+              </button>
+            )}
+
+            {(!menuOnlyPlan || allowWhatsAppOrdering) &&
+              (!isStoreOpen ? (
+                <div style={{ padding: "12px", backgroundColor: "#FEE2E2", color: "#991B1B", borderRadius: "8px", textAlign: "center", fontSize: "14px", fontWeight: 500, marginTop: "8px" }}>
+                  El restaurante está cerrado en este momento.
+                </div>
+              ) : (
+                <button
+                  className={styles.checkoutBtn}
+                  onClick={handleCheckout}
+                  disabled={isPending || isDineInBlocked || (!allowWhatsAppOrdering && orderType === "DINE_IN" && isValidatingTable)}
+                  style={{
+                    backgroundColor: isDineInBlocked ? "#94A3B8" : brandColor || "#0066FF",
+                    color: buttonTextColor || "#FFFFFF",
+                    cursor: isDineInBlocked ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {isPending ? (
+                    <>
+                      <Loader2 size={20} className={styles.spin} /> Procesando...
+                    </>
+                  ) : (
+                    getCheckoutButtonLabel()
+                  )}
+                </button>
+              ))}
           </div>
         )}
       </div>

@@ -21,6 +21,28 @@ export async function createPublicOrderAction(
       return { success: false, message: "Datos de orden inválidos" };
     }
 
+    const tenant = await prisma.tenant.findUnique({
+      where: { id: data.tenantId },
+      select: {
+        isMenuOnly: true,
+        subscription: {
+          select: {
+            plan: {
+              select: { key: true },
+            },
+          },
+        },
+      },
+    });
+
+    const planKey = tenant?.subscription?.plan?.key ?? "STARTER";
+    if (tenant?.isMenuOnly || planKey === "CARTA_DIGITAL" || planKey === "STARTER") {
+      return {
+        success: false,
+        message: "Este restaurante opera en modo Carta Digital informativa (sin pedidos en línea).",
+      };
+    }
+
     const order = await orderRepository.create(data);
 
     revalidatePath("/orders");

@@ -11,9 +11,11 @@ interface OrderSettingsCardProps {
   allowTakeout: boolean;
   allowDelivery: boolean;
   isMenuOnly?: boolean;
+  isPlanMenuOnly?: boolean;
   requireTableQrForDineIn?: boolean;
   allowWhatsAppOrdering?: boolean;
   whatsappNumber?: string | null;
+  isCartaDigitalPlan?: boolean;
 }
 
 export function OrderSettingsCard({
@@ -21,9 +23,11 @@ export function OrderSettingsCard({
   allowTakeout: initialTakeout,
   allowDelivery: initialDelivery,
   isMenuOnly: initialMenuOnly = false,
+  isPlanMenuOnly = false,
   requireTableQrForDineIn: initialRequireQr = true,
   allowWhatsAppOrdering: initialWhatsApp = false,
   whatsappNumber: initialWhatsAppNum = "",
+  isCartaDigitalPlan = false,
 }: OrderSettingsCardProps) {
   const [allowDineIn, setAllowDineIn] = useState(initialDineIn);
   const [allowTakeout, setAllowTakeout] = useState(initialTakeout);
@@ -32,6 +36,10 @@ export function OrderSettingsCard({
   const [requireTableQrForDineIn, setRequireTableQrForDineIn] = useState(initialRequireQr);
   const [allowWhatsAppOrdering, setAllowWhatsAppOrdering] = useState(initialWhatsApp);
   const [whatsappNumber, setWhatsappNumber] = useState(initialWhatsAppNum || "");
+
+  // Solo Carta Visual deactivates the cart and ordering options
+  const orderingDisabled = isMenuOnly || (isPlanMenuOnly && !allowWhatsAppOrdering);
+  const whatsappLocked = isMenuOnly;
 
   const [isPending, startTransition] = useTransition();
 
@@ -69,7 +77,7 @@ export function OrderSettingsCard({
         <div>
           <h2 className={styles.cardTitle}>Canales y Modos de Pedido</h2>
           <p className={styles.cardHint}>
-            Configura las reglas de tu carta digital: solo lectura, pedidos estrictos por QR de mesa, para llevar, domicilio o pedidos por WhatsApp.
+            Configura las reglas de tu carta digital: solo lectura, pedidos por QR en mesa, para llevar, domicilio o pedidos por WhatsApp.
           </p>
         </div>
       </div>
@@ -89,14 +97,29 @@ export function OrderSettingsCard({
               </div>
             </span>
             <span className={styles.optionDesc}>
-              Tu menú funcionará estrictamente como una carta digital informativa. Se ocultan los botones de compra y el carrito.
+              Tu menú funcionará como una carta digital informativa: permite abrir cada producto y ver todos sus acompañantes, opciones y precios, sin selección ni carrito de pedidos.
             </span>
           </div>
         </div>
       </div>
 
-      {/* Ordering Options Grid (Disabled if isMenuOnly is active) */}
-      <div className={styles.optionsGrid} style={{ opacity: isMenuOnly ? 0.4 : 1, pointerEvents: isMenuOnly ? "none" : "auto" }}>
+      {isPlanMenuOnly && (
+        <p style={{ fontSize: "0.8rem", color: "#475569", background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 8, padding: "10px 12px", margin: "12px 0 0 0", lineHeight: 1.45 }}>
+          <strong>Tu plan:</strong> no envía comandas a cocina (KDS).
+          {isMenuOnly ? (
+            <> Actualmente tienes activada la opción <strong>Solo Carta Visual</strong> (el carrito está desactivado para todos los visitantes).</>
+          ) : (
+            <>
+              {" "}El carrito está habilitado:
+              {isCartaDigitalPlan && " los clientes que escaneen el QR físico de una mesa podrán armar su pedido y generar el código QR para el mesero."}
+              {" "}Si activas <em>Enviar Pedidos a WhatsApp</em>, también podrán pedir por WhatsApp desde cualquier lugar o desde la mesa sin requerir escaneo de mesa.
+            </>
+          )}
+        </p>
+      )}
+
+      {/* Ordering Options Grid (Disabled if effectiveMenuOnly is active) */}
+      <div className={styles.optionsGrid} style={{ opacity: orderingDisabled ? 0.4 : 1, pointerEvents: orderingDisabled ? "none" : "auto" }}>
         {/* Dine In */}
         <div
           className={`${styles.optionCard} ${allowDineIn ? styles.optionCardActive : ""}`}
@@ -156,10 +179,11 @@ export function OrderSettingsCard({
       </div>
 
       {/* Advanced Rules: Require Table QR for Dine-In & WhatsApp Ordering */}
-      <div className={styles.advancedGrid} style={{ opacity: isMenuOnly ? 0.4 : 1, pointerEvents: isMenuOnly ? "none" : "auto" }}>
+      <div className={styles.advancedGrid}>
         {/* Strict Table QR Requirement */}
         <div
           className={`${styles.subRuleCard} ${requireTableQrForDineIn ? styles.subRuleCardActive : ""}`}
+          style={{ opacity: orderingDisabled ? 0.4 : 1, pointerEvents: orderingDisabled ? "none" : "auto" }}
           onClick={() => setRequireTableQrForDineIn(!requireTableQrForDineIn)}
         >
           <QrCode size={18} />
@@ -177,6 +201,7 @@ export function OrderSettingsCard({
         {/* WhatsApp Ordering Redirect */}
         <div
           className={`${styles.subRuleCard} ${allowWhatsAppOrdering ? styles.subRuleCardActive : ""}`}
+          style={{ opacity: whatsappLocked ? 0.4 : 1, pointerEvents: whatsappLocked ? "none" : "auto" }}
         >
           <MessageSquare size={18} style={{ color: "#25D366" }} />
           <div style={{ flex: 1 }}>
