@@ -21,6 +21,12 @@ export const tableRepository = {
     });
   },
 
+  async countByTenant(tenantId: string): Promise<number> {
+    return prisma.table.count({
+      where: { tenantId },
+    });
+  },
+
   async create(tenantId: string, data: { name: string; capacity?: number }) {
     const last = await prisma.table.findFirst({
       where: { tenantId },

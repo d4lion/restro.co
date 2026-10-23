@@ -1,8 +1,12 @@
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
+import { planRepository } from "@/lib/repositories/plan.repository";
+import { PLAN_LIMITS, isDashboardModuleLocked, type PlanKey } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { PlanUpsellView } from "@/components/dashboard/PlanUpsellView";
+import { MessageCircle } from "lucide-react";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
 
@@ -22,8 +26,33 @@ export default async function WhatsappPage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const tenant = await tenantRepository.findById(session.tenantId);
+  const [tenant, planInfo] = await Promise.all([
+    tenantRepository.findById(session.tenantId),
+    planRepository.getPlanForTenant(session.tenantId),
+  ]);
   if (!tenant) redirect("/login");
+
+  const plan = (planInfo?.plan.key ?? tenant.subscription?.plan?.key ?? "STARTER") as PlanKey;
+  const limits = planInfo?.limits ?? PLAN_LIMITS[plan];
+
+  if (isDashboardModuleLocked(plan, "/whatsapp", limits)) {
+    return (
+      <PlanUpsellView
+        moduleName="Canal WhatsApp Business"
+        currentPlanLabel={limits.label}
+        recommendedPlanLabel="Business"
+        recommendedPlanPrice="$99.900 COP / mes"
+        description="Automatiza la recepción de pedidos a domicilio y para recoger directamente desde tu línea de WhatsApp Business conectada a tu cocina."
+        features={[
+          "Envío automático de tu carta interactiva cuando un cliente escribe por WhatsApp",
+          "Recepción de pedidos de domicilio y recogida sin comisiones por orden",
+          "Sincronización directa de pedidos confirmados con tu pantalla KDS",
+          "Notificaciones automáticas de estado de pedido para tus comensales",
+        ]}
+        icon={<MessageCircle size={28} strokeWidth={1.8} />}
+      />
+    );
+  }
 
   return (
     <div className={styles.page}>

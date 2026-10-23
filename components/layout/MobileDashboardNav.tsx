@@ -9,7 +9,9 @@ import {
   ClipboardList,
   LayoutGrid,
   Settings,
+  Lock,
 } from "lucide-react";
+import { isDashboardModuleLocked, type PlanKey } from "@/lib/types";
 import styles from "@/app/(dashboard)/layout.module.css";
 
 const navItems = [
@@ -20,7 +22,7 @@ const navItems = [
   { href: "/settings",  label: "Config",   icon: Settings },
 ];
 
-export function MobileDashboardNav() {
+export function MobileDashboardNav({ plan = "STARTER" }: { plan?: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const [pendingPath, setPendingPath] = useState<string | null>(null);
@@ -48,6 +50,7 @@ export function MobileDashboardNav() {
             (href !== "/overview" && pendingPath.startsWith(href)));
 
         const isActive = isPending || (pendingPath === null && isCurrentRoute);
+        const isLocked = isDashboardModuleLocked(plan as PlanKey, href);
 
         return (
           <Link
@@ -63,13 +66,20 @@ export function MobileDashboardNav() {
               }
             }}
             className={`${styles.mobileNavItem} ${isActive ? styles["mobileNavItem--active"] : ""}`}
-            style={{ touchAction: "manipulation" }}
+            style={{ touchAction: "manipulation", opacity: isLocked && !isActive ? 0.65 : 1 }}
           >
-            <span className={styles.mobileNavIcon}>
+            <span className={styles.mobileNavIcon} style={{ position: "relative" }}>
               <Icon
                 size={22}
                 strokeWidth={isActive ? 2.5 : 1.75}
               />
+              {isLocked && (
+                <Lock
+                  size={10}
+                  strokeWidth={2.5}
+                  style={{ position: "absolute", top: -2, right: -6 }}
+                />
+              )}
             </span>
             {label}
           </Link>

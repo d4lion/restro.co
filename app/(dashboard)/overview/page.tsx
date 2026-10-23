@@ -187,14 +187,20 @@ export default async function OverviewPage() {
         <StatCard
           label="Suscripción SaaS"
           value={limits.label}
-          sub={`${limits.maxTables === Infinity ? "Mesas Ilimitadas" : limits.maxTables + " Mesas"}`}
-          colorKey={plan === "RESTRO_IA" ? "teal" : "slate"}
+          sub={
+            plan === "STARTER"
+              ? "Hasta 5 productos y 5 mesas"
+              : "Productos y QRs Ilimitados"
+          }
+          colorKey={plan === "RESTRO_IA" || plan === "BUSINESS" ? "teal" : plan === "CARTA_DIGITAL" ? "blue" : "slate"}
           icon={<Star size={20} strokeWidth={1.8} />}
           bottomMetric={
-            plan === "RESTRO_IA" ? (
+            plan === "RESTRO_IA" || plan === "BUSINESS" ? (
               <span style={{ color: "#0F766E", display: "flex", gap: "6px" }}><Sparkles size={14}/> Predicción y menú IA activos</span>
+            ) : plan === "CARTA_DIGITAL" ? (
+              <span style={{ color: "#2563EB" }}>Carta y QRs por mesa sin límites</span>
             ) : (
-              <span style={{ color: "#64748B" }}>Desbloquea analítica y predicción IA</span>
+              <span style={{ color: "#64748B" }}>Pásate a Carta Digital ($9.9k) sin límites</span>
             )
           }
         />

@@ -2,12 +2,27 @@
 
 import { getSession } from "@/lib/session";
 import { tableRepository } from "@/lib/repositories/table.repository";
+import { planRepository } from "@/lib/repositories/plan.repository";
+import { PLAN_LIMITS } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
 export async function createTableAction(data: { name: string; capacity?: number }) {
   const session = await getSession();
   if (!session) return { success: false, message: "Sesión expirada" };
   if (!data.name?.trim()) return { success: false, message: "Nombre de mesa requerido" };
+
+  const planInfo = await planRepository.getPlanForTenant(session.tenantId);
+  const limits = planInfo?.limits ?? PLAN_LIMITS[session.plan ?? "STARTER"];
+
+  if (Number.isFinite(limits.maxTables)) {
+    const currentTablesCount = await tableRepository.countByTenant(session.tenantId);
+    if (currentTablesCount >= limits.maxTables) {
+      return {
+        success: false,
+        message: `Has alcanzado el límite de ${limits.maxTables} mesas de tu plan ${limits.label}. Mejora tu plan a Carta Digital ($9.900/mes) o superior para crear mesas y códigos QR ilimitados.`,
+      };
+    }
+  }
 
   await tableRepository.create(session.tenantId, {
     name: data.name.trim(),

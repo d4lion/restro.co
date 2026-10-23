@@ -17,6 +17,7 @@ import {
   Zap,
   CalendarDays,
   Package,
+  Lock,
 } from "lucide-react";
 import {
   Tooltip,
@@ -24,6 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/shadcn/tooltip";
+import { isDashboardModuleLocked, type PlanKey } from "@/lib/types";
 import styles from "./Sidebar.module.css";
 
 interface NavItem {
@@ -32,6 +34,17 @@ interface NavItem {
   icon: React.ReactNode;
   badge?: React.ReactNode;
 }
+
+const LockedModuleBadge = () => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span className={styles.lockedBadge} aria-label="Módulo bloqueado">
+        <Lock size={12} strokeWidth={2.3} />
+      </span>
+    </TooltipTrigger>
+    <TooltipContent side="top">Mejora tu plan para activar este módulo</TooltipContent>
+  </Tooltip>
+);
 
 const BuildingBadge = () => (
   <Tooltip>
@@ -108,12 +121,20 @@ export function Sidebar({
   }, [router]);
 
   const planLabel =
-    plan === "RESTRO_IA" ? "Restro IA" : plan === "BUSINESS" ? "Business" : "Starter";
+    plan === "RESTRO_IA"
+      ? "Restro IA"
+      : plan === "BUSINESS"
+      ? "Business"
+      : plan === "CARTA_DIGITAL"
+      ? "Carta Digital"
+      : "Starter";
   const planClass =
     plan === "RESTRO_IA"
       ? styles["plan--ia"]
       : plan === "BUSINESS"
       ? styles["plan--business"]
+      : plan === "CARTA_DIGITAL"
+      ? styles["plan--carta"]
       : styles["plan--starter"];
 
   return (
@@ -164,6 +185,7 @@ export function Sidebar({
                 (item.href !== "/overview" && pendingPath.startsWith(item.href)));
 
             const isActive = isPending || (pendingPath === null && isCurrentRoute);
+            const isLocked = isDashboardModuleLocked(plan as PlanKey, item.href);
 
             const link = (
               <Link
@@ -182,6 +204,8 @@ export function Sidebar({
                     ? styles["navItem--pending"]
                     : isActive
                     ? styles["navItem--active"]
+                    : isLocked
+                    ? styles["navItem--locked"]
                     : ""
                 }`}
               >
@@ -191,6 +215,10 @@ export function Sidebar({
                     <span className={styles.navLabel}>{item.label}</span>
                     {isPending ? (
                       <span className={styles.pendingSpinner} />
+                    ) : isLocked ? (
+                      <span className={styles.navBadge}>
+                        <LockedModuleBadge />
+                      </span>
                     ) : (
                       item.badge && <span className={styles.navBadge}>{item.badge}</span>
                     )}
@@ -207,7 +235,7 @@ export function Sidebar({
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{link}</TooltipTrigger>
                   <TooltipContent side="right" sideOffset={12}>
-                    {item.label}
+                    {item.label} {isLocked ? "🔒" : ""}
                   </TooltipContent>
                 </Tooltip>
               );

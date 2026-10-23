@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import QRCode from "qrcode";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -23,6 +24,9 @@ import {
   Loader2,
   CheckSquare,
   Square,
+  Printer,
+  Lock,
+  ArrowUpRight,
 } from "lucide-react";
 import { toast } from "sonner";
 import styles from "./TableManagerClient.module.css";
@@ -41,9 +45,27 @@ interface Props {
   tables: TableItem[];
   tenantSlug: string;
   tenantName: string;
+  plan?: string;
+  planLabel?: string;
+  maxTables?: number | null;
 }
 
-export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
+export function TableManagerClient({
+  tables,
+  tenantSlug,
+  tenantName,
+  plan = "STARTER",
+  planLabel = "Starter",
+  maxTables = null,
+}: Props) {
+  const isCartaDigitalOnly = plan === "CARTA_DIGITAL" || plan === "STARTER";
+  const hasTableLimit = typeof maxTables === "number" && maxTables > 0;
+  const currentTablesCount = tables.length;
+  const isAtTableLimit = hasTableLimit && currentTablesCount >= maxTables;
+  const isNearTableLimit = hasTableLimit && !isAtTableLimit && currentTablesCount >= maxTables - 1;
+  const remainingTables = hasTableLimit ? Math.max(0, maxTables - currentTablesCount) : null;
+  const quotaPercentage = hasTableLimit ? Math.min(100, Math.round((currentTablesCount / maxTables) * 100)) : 0;
+
   // Modal states
   const [selectedTableForQr, setSelectedTableForQr] = useState<TableItem | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
@@ -68,7 +90,7 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
   useEffect(() => {
     if (selectedTableForQr) {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-      const fullQrUrl = `${baseUrl}/${tenantSlug}?tableId=${encodeURIComponent(selectedTableForQr.id)}`;
+      const fullQrUrl = `${baseUrl}/restaurant/${tenantSlug}?tableId=${encodeURIComponent(selectedTableForQr.id)}`;
 
       QRCode.toDataURL(fullQrUrl, {
         width: 400,
@@ -197,11 +219,64 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
     toast.success("Imagen de código QR descargada");
   }
 
+  // Print QR Code for the table
+  function handlePrintQr() {
+    if (!qrDataUrl || !selectedTableForQr) return;
+    const printWin = window.open("", "_blank", "width=500,height=650");
+    if (!printWin) {
+      toast.error("Habilita las ventanas emergentes para imprimir el QR");
+      return;
+    }
+    printWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>QR ${tenantName} - ${selectedTableForQr.name}</title>
+          <style>
+            body {
+              font-family: 'Inter', system-ui, sans-serif;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              min-height: 90vh;
+              margin: 0;
+              text-align: center;
+              color: #0F172A;
+            }
+            .card {
+              border: 2px solid #0F172A;
+              border-radius: 16px;
+              padding: 32px 28px;
+              max-width: 320px;
+            }
+            h1 { font-size: 20px; margin: 0 0 6px; }
+            h2 { font-size: 26px; margin: 0 0 16px; color: #2563EB; }
+            img { width: 260px; height: 260px; display: block; margin: 0 auto 16px; }
+            p { font-size: 13px; color: #475569; margin: 0; }
+          </style>
+        </head>
+        <body>
+          <div class="card">
+            <h1>${tenantName}</h1>
+            <h2>${selectedTableForQr.name}</h2>
+            <img src="${qrDataUrl}" alt="QR ${selectedTableForQr.name}" />
+            <p>Escanea el código QR con tu cámara para ver nuestra Carta Digital</p>
+          </div>
+          <script>
+            window.onload = function() { window.print(); };
+          </script>
+        </body>
+      </html>
+    `);
+    printWin.document.close();
+  }
+
   // Copy QR Link using tableId
   function handleCopyLink() {
     if (!selectedTableForQr) return;
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const fullQrUrl = `${baseUrl}/${tenantSlug}?tableId=${encodeURIComponent(selectedTableForQr.id)}`;
+    const fullQrUrl = `${baseUrl}/restaurant/${tenantSlug}?tableId=${encodeURIComponent(selectedTableForQr.id)}`;
     navigator.clipboard.writeText(fullQrUrl);
     toast.success("Enlace copiado al portapapeles");
   }
@@ -223,12 +298,111 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
           </div>
         </div>
 
+        {/* Quota indicator — ONLY rendered when the current plan has a finite table limit (e.g. Starter = 5) */}
+        {hasTableLimit && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "16px",
+              flexWrap: "wrap",
+              padding: "14px 16px",
+              borderRadius: "10px",
+              marginBottom: "16px",
+              background: isAtTableLimit ? "#FEF2F2" : isNearTableLimit ? "#FFFBEB" : "#F8FAFC",
+              border: `1px solid ${isAtTableLimit ? "#FECACA" : isNearTableLimit ? "#FDE68A" : "#CBD5E1"}`,
+            }}
+          >
+            <div style={{ flex: 1, minWidth: "240px", display: "flex", flexDirection: "column", gap: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                <span style={{ fontSize: "13px", fontWeight: 700, color: "#0F172A" }}>
+                  Límite de mesas del Plan {planLabel}
+                </span>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    padding: "2px 10px",
+                    borderRadius: "999px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    background: isAtTableLimit ? "#FEE2E2" : "#DBEAFE",
+                    color: isAtTableLimit ? "#B91C1C" : "#1D4ED8",
+                  }}
+                >
+                  {currentTablesCount} / {maxTables} mesas
+                </span>
+              </div>
+
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: "360px",
+                  height: "7px",
+                  borderRadius: "999px",
+                  background: "#E2E8F0",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: `${quotaPercentage}%`,
+                    height: "100%",
+                    borderRadius: "999px",
+                    background: isAtTableLimit ? "#DC2626" : isNearTableLimit ? "#D97706" : "#2563EB",
+                    transition: "width 0.25s ease",
+                  }}
+                />
+              </div>
+
+              <p style={{ margin: 0, fontSize: "12.5px", color: "#475569", lineHeight: 1.4 }}>
+                {isAtTableLimit ? (
+                  <>
+                    Has alcanzado el máximo de <strong>{maxTables} mesas</strong> permitidas en el plan{" "}
+                    <strong>{planLabel}</strong>. Mejora al plan <strong>Carta Digital ($9.900/mes)</strong> para crear mesas y códigos QR ilimitados.
+                  </>
+                ) : (
+                  <>
+                    Tu plan <strong>{planLabel}</strong> permite hasta <strong>{maxTables} mesas</strong> con QR (te{" "}
+                    {remainingTables === 1 ? "queda 1 disponible" : `quedan ${remainingTables} disponibles`}).
+                  </>
+                )}
+              </p>
+            </div>
+
+            <Link
+              href="/settings#planes"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 14px",
+                borderRadius: "8px",
+                fontSize: "12.5px",
+                fontWeight: 600,
+                textDecoration: "none",
+                background: "#15803D",
+                color: "#FFFFFF",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Mesas y QRs ilimitados ($9.900/mes) <ArrowUpRight size={14} />
+            </Link>
+          </div>
+        )}
+
         <form onSubmit={handleCreateTable} className={styles.addForm}>
           <div style={{ flex: 2, minWidth: "220px" }}>
             <Input
               value={addName}
               onChange={(e) => setAddName(e.target.value)}
-              placeholder="Nombre (ej. Mesa 9, Terraza 3, VIP)"
+              placeholder={
+                isAtTableLimit
+                  ? `Límite de ${maxTables} mesas alcanzado en el plan ${planLabel}`
+                  : "Nombre (ej. Mesa 9, Terraza 3, VIP)"
+              }
+              disabled={isAtTableLimit}
               required
             />
           </div>
@@ -239,10 +413,19 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
               onChange={(e) => setAddCapacity(e.target.value)}
               placeholder="Capacidad"
               min="1"
+              disabled={isAtTableLimit}
             />
           </div>
-          <Button type="submit" variant="primary" loading={isCreating}>
-            Crear Mesa
+          <Button type="submit" variant="primary" loading={isCreating} disabled={isAtTableLimit}>
+            {isAtTableLimit ? (
+              <>
+                <Lock size={15} /> Límite alcanzado ({currentTablesCount}/{maxTables})
+              </>
+            ) : (
+              <>
+                Crear Mesa{hasTableLimit ? ` (${currentTablesCount}/${maxTables})` : ""}
+              </>
+            )}
           </Button>
         </form>
       </div>
@@ -250,7 +433,10 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
       {/* ── Section Header & Bulk Action Controls ────────────────── */}
       <div className={styles.sectionHeader} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
         <h2 className={styles.sectionTitle}>
-          Mesas del Local <span className={styles.countBadge}>{tables.length}</span>
+          Mesas del Local{" "}
+          <span className={styles.countBadge}>
+            {hasTableLimit ? `${tables.length} / ${maxTables}` : tables.length}
+          </span>
         </h2>
 
         {tables.length > 0 && (
@@ -299,10 +485,8 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
       {/* ── Tables Grid with Checkboxes ───────────────────────────── */}
       <div className={styles.tablesGrid}>
         {tables.map((table) => {
-          const isOccupied = table.activeOrderCount > 0;
+          const isOccupied = !isCartaDigitalOnly && table.activeOrderCount > 0;
           const isSelected = selectedTableIds.includes(table.id);
-          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-          const tableUrl = `${baseUrl}/${tenantSlug}?tableId=${encodeURIComponent(table.id)}`;
 
           return (
             <div
@@ -328,7 +512,13 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
                         : styles["status--free"]
                     }`}
                   >
-                    {!table.isActive ? "INACTIVA" : isOccupied ? "OCUPADA" : "LIBRE"}
+                    {!table.isActive
+                      ? "INACTIVA"
+                      : isCartaDigitalOnly
+                      ? "QR ACTIVO"
+                      : isOccupied
+                      ? "OCUPADA"
+                      : "LIBRE"}
                   </span>
                 </div>
 
@@ -341,7 +531,11 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
               <h3 className={styles.tableName}>{table.name}</h3>
 
               {/* Traceability or Status Body */}
-              {isOccupied ? (
+              {isCartaDigitalOnly ? (
+                <div className={styles.freeHintBox}>
+                  <span>Código QR de Carta Digital listo para imprimir</span>
+                </div>
+              ) : isOccupied ? (
                 <div className={styles.traceabilityBox}>
                   <span className={styles.traceTitle}>Trazabilidad de consumo:</span>
                   <span className={styles.traceSub}>{table.activeOrderCount} pedido(s) en curso</span>
@@ -361,7 +555,7 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
                   className={styles.qrActionBtn}
                   onClick={() => setSelectedTableForQr(table)}
                 >
-                  <QrCode size={16} /> Ver y Descargar QR
+                  <QrCode size={16} /> Ver / Imprimir QR
                 </button>
 
                 {/* Edit Table Button */}
@@ -406,9 +600,14 @@ export function TableManagerClient({ tables, tenantSlug, tenantName }: Props) {
             </div>
 
             <div className={styles.qrModalActions}>
-              <Button variant="primary" size="lg" fullWidth onClick={handleDownloadQr}>
-                <Download size={18} /> Descargar QR (PNG)
-              </Button>
+              <div style={{ display: "flex", gap: "10px", width: "100%" }}>
+                <Button variant="primary" size="lg" fullWidth onClick={handlePrintQr}>
+                  <Printer size={18} /> Imprimir QR
+                </Button>
+                <Button variant="outline" size="lg" fullWidth onClick={handleDownloadQr}>
+                  <Download size={18} /> Descargar PNG
+                </Button>
+              </div>
               
               <div style={{ display: "flex", gap: "10px", width: "100%" }}>
                 <Button variant="outline" fullWidth onClick={handleCopyLink}>

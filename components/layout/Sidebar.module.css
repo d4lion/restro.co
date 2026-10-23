@@ -100,6 +100,12 @@
   color: #475569;
 }
 
+.plan--carta {
+  background: #F0FDF4;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
 .plan--ia {
   background: #F0FDFA;
   color: #0F766E;
@@ -148,6 +154,15 @@
 .navItem:hover {
   background: #F8FAFC;
   color: #0F172A;
+}
+
+.navItem--locked {
+  color: #94A3B8;
+}
+
+.navItem--locked:hover {
+  background: #F8FAFC;
+  color: #475569;
 }
 
 .navItem--active {
@@ -211,6 +226,21 @@
 
 .navBadge {
   margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Lock badge for gated modules ───────────────────────────── */
+.lockedBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #F1F5F9;
+  color: #64748B;
+  border: 1px solid #E2E8F0;
 }
 
 /* ── Building badge ─────────────────────────────────────────── */

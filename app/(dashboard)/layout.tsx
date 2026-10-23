@@ -52,7 +52,7 @@ export default async function DashboardLayout({
 
       {/* ── Mobile bottom navigation (hidden on desktop via CSS) */}
       <div className={styles.mobileNav}>
-        <MobileDashboardNav />
+        <MobileDashboardNav plan={tenant.subscription?.plan?.key ?? "STARTER"} />
       </div>
 
       {/* Realtime Order Notification Slide-in Toasts */}
