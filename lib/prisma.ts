@@ -26,11 +26,17 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.pool = pool;
 
 const adapter = new PrismaPg(pool);
 
+const hasLatestSchemaModels =
+  globalForPrisma.prisma &&
+  "reusableModifierGroup" in (globalForPrisma.prisma as unknown as Record<string, unknown>);
+
 export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    adapter,
-    log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
+  hasLatestSchemaModels && globalForPrisma.prisma
+    ? globalForPrisma.prisma
+    : new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+      });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+

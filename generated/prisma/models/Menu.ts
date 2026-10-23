@@ -234,6 +234,7 @@ export type MenuWhereInput = {
   sortOrder?: Prisma.IntFilter<"Menu"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   categories?: Prisma.CategoryListRelationFilter
+  reusableModifierGroups?: Prisma.ReusableModifierGroupListRelationFilter
 }
 
 export type MenuOrderByWithRelationInput = {
@@ -246,6 +247,7 @@ export type MenuOrderByWithRelationInput = {
   sortOrder?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupOrderByRelationAggregateInput
 }
 
 export type MenuWhereUniqueInput = Prisma.AtLeast<{
@@ -261,6 +263,7 @@ export type MenuWhereUniqueInput = Prisma.AtLeast<{
   sortOrder?: Prisma.IntFilter<"Menu"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   categories?: Prisma.CategoryListRelationFilter
+  reusableModifierGroups?: Prisma.ReusableModifierGroupListRelationFilter
 }, "id">
 
 export type MenuOrderByWithAggregationInput = {
@@ -300,6 +303,7 @@ export type MenuCreateInput = {
   sortOrder?: number
   tenant: Prisma.TenantCreateNestedOneWithoutMenusInput
   categories?: Prisma.CategoryCreateNestedManyWithoutMenuInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupCreateNestedManyWithoutMenuInput
 }
 
 export type MenuUncheckedCreateInput = {
@@ -311,6 +315,7 @@ export type MenuUncheckedCreateInput = {
   isActive?: boolean
   sortOrder?: number
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutMenuInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUncheckedCreateNestedManyWithoutMenuInput
 }
 
 export type MenuUpdateInput = {
@@ -322,6 +327,7 @@ export type MenuUpdateInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutMenusNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutMenuNestedInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUpdateManyWithoutMenuNestedInput
 }
 
 export type MenuUncheckedUpdateInput = {
@@ -333,6 +339,7 @@ export type MenuUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutMenuNestedInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUncheckedUpdateManyWithoutMenuNestedInput
 }
 
 export type MenuCreateManyInput = {
@@ -473,6 +480,20 @@ export type MenuUpdateOneRequiredWithoutCategoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MenuUpdateToOneWithWhereWithoutCategoriesInput, Prisma.MenuUpdateWithoutCategoriesInput>, Prisma.MenuUncheckedUpdateWithoutCategoriesInput>
 }
 
+export type MenuCreateNestedOneWithoutReusableModifierGroupsInput = {
+  create?: Prisma.XOR<Prisma.MenuCreateWithoutReusableModifierGroupsInput, Prisma.MenuUncheckedCreateWithoutReusableModifierGroupsInput>
+  connectOrCreate?: Prisma.MenuCreateOrConnectWithoutReusableModifierGroupsInput
+  connect?: Prisma.MenuWhereUniqueInput
+}
+
+export type MenuUpdateOneRequiredWithoutReusableModifierGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.MenuCreateWithoutReusableModifierGroupsInput, Prisma.MenuUncheckedCreateWithoutReusableModifierGroupsInput>
+  connectOrCreate?: Prisma.MenuCreateOrConnectWithoutReusableModifierGroupsInput
+  upsert?: Prisma.MenuUpsertWithoutReusableModifierGroupsInput
+  connect?: Prisma.MenuWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MenuUpdateToOneWithWhereWithoutReusableModifierGroupsInput, Prisma.MenuUpdateWithoutReusableModifierGroupsInput>, Prisma.MenuUncheckedUpdateWithoutReusableModifierGroupsInput>
+}
+
 export type MenuCreateWithoutTenantInput = {
   id?: string
   createdAt?: Date | string
@@ -481,6 +502,7 @@ export type MenuCreateWithoutTenantInput = {
   isActive?: boolean
   sortOrder?: number
   categories?: Prisma.CategoryCreateNestedManyWithoutMenuInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupCreateNestedManyWithoutMenuInput
 }
 
 export type MenuUncheckedCreateWithoutTenantInput = {
@@ -491,6 +513,7 @@ export type MenuUncheckedCreateWithoutTenantInput = {
   isActive?: boolean
   sortOrder?: number
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutMenuInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUncheckedCreateNestedManyWithoutMenuInput
 }
 
 export type MenuCreateOrConnectWithoutTenantInput = {
@@ -540,6 +563,7 @@ export type MenuCreateWithoutCategoriesInput = {
   isActive?: boolean
   sortOrder?: number
   tenant: Prisma.TenantCreateNestedOneWithoutMenusInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupCreateNestedManyWithoutMenuInput
 }
 
 export type MenuUncheckedCreateWithoutCategoriesInput = {
@@ -550,6 +574,7 @@ export type MenuUncheckedCreateWithoutCategoriesInput = {
   name?: string
   isActive?: boolean
   sortOrder?: number
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUncheckedCreateNestedManyWithoutMenuInput
 }
 
 export type MenuCreateOrConnectWithoutCategoriesInput = {
@@ -576,6 +601,7 @@ export type MenuUpdateWithoutCategoriesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutMenusNestedInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUpdateManyWithoutMenuNestedInput
 }
 
 export type MenuUncheckedUpdateWithoutCategoriesInput = {
@@ -586,6 +612,67 @@ export type MenuUncheckedUpdateWithoutCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUncheckedUpdateManyWithoutMenuNestedInput
+}
+
+export type MenuCreateWithoutReusableModifierGroupsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name?: string
+  isActive?: boolean
+  sortOrder?: number
+  tenant: Prisma.TenantCreateNestedOneWithoutMenusInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutMenuInput
+}
+
+export type MenuUncheckedCreateWithoutReusableModifierGroupsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenantId: string
+  name?: string
+  isActive?: boolean
+  sortOrder?: number
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutMenuInput
+}
+
+export type MenuCreateOrConnectWithoutReusableModifierGroupsInput = {
+  where: Prisma.MenuWhereUniqueInput
+  create: Prisma.XOR<Prisma.MenuCreateWithoutReusableModifierGroupsInput, Prisma.MenuUncheckedCreateWithoutReusableModifierGroupsInput>
+}
+
+export type MenuUpsertWithoutReusableModifierGroupsInput = {
+  update: Prisma.XOR<Prisma.MenuUpdateWithoutReusableModifierGroupsInput, Prisma.MenuUncheckedUpdateWithoutReusableModifierGroupsInput>
+  create: Prisma.XOR<Prisma.MenuCreateWithoutReusableModifierGroupsInput, Prisma.MenuUncheckedCreateWithoutReusableModifierGroupsInput>
+  where?: Prisma.MenuWhereInput
+}
+
+export type MenuUpdateToOneWithWhereWithoutReusableModifierGroupsInput = {
+  where?: Prisma.MenuWhereInput
+  data: Prisma.XOR<Prisma.MenuUpdateWithoutReusableModifierGroupsInput, Prisma.MenuUncheckedUpdateWithoutReusableModifierGroupsInput>
+}
+
+export type MenuUpdateWithoutReusableModifierGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMenusNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutMenuNestedInput
+}
+
+export type MenuUncheckedUpdateWithoutReusableModifierGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutMenuNestedInput
 }
 
 export type MenuCreateManyTenantInput = {
@@ -605,6 +692,7 @@ export type MenuUpdateWithoutTenantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   categories?: Prisma.CategoryUpdateManyWithoutMenuNestedInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUpdateManyWithoutMenuNestedInput
 }
 
 export type MenuUncheckedUpdateWithoutTenantInput = {
@@ -615,6 +703,7 @@ export type MenuUncheckedUpdateWithoutTenantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutMenuNestedInput
+  reusableModifierGroups?: Prisma.ReusableModifierGroupUncheckedUpdateManyWithoutMenuNestedInput
 }
 
 export type MenuUncheckedUpdateManyWithoutTenantInput = {
@@ -633,10 +722,12 @@ export type MenuUncheckedUpdateManyWithoutTenantInput = {
 
 export type MenuCountOutputType = {
   categories: number
+  reusableModifierGroups: number
 }
 
 export type MenuCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | MenuCountOutputTypeCountCategoriesArgs
+  reusableModifierGroups?: boolean | MenuCountOutputTypeCountReusableModifierGroupsArgs
 }
 
 /**
@@ -656,6 +747,13 @@ export type MenuCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types
   where?: Prisma.CategoryWhereInput
 }
 
+/**
+ * MenuCountOutputType without action
+ */
+export type MenuCountOutputTypeCountReusableModifierGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReusableModifierGroupWhereInput
+}
+
 
 export type MenuSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -667,6 +765,7 @@ export type MenuSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sortOrder?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   categories?: boolean | Prisma.Menu$categoriesArgs<ExtArgs>
+  reusableModifierGroups?: boolean | Prisma.Menu$reusableModifierGroupsArgs<ExtArgs>
   _count?: boolean | Prisma.MenuCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["menu"]>
 
@@ -706,6 +805,7 @@ export type MenuOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type MenuInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   categories?: boolean | Prisma.Menu$categoriesArgs<ExtArgs>
+  reusableModifierGroups?: boolean | Prisma.Menu$reusableModifierGroupsArgs<ExtArgs>
   _count?: boolean | Prisma.MenuCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MenuIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -720,6 +820,7 @@ export type $MenuPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
     categories: Prisma.$CategoryPayload<ExtArgs>[]
+    reusableModifierGroups: Prisma.$ReusableModifierGroupPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1125,6 +1226,7 @@ export interface Prisma__MenuClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   categories<T extends Prisma.Menu$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Menu$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reusableModifierGroups<T extends Prisma.Menu$reusableModifierGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Menu$reusableModifierGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReusableModifierGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1583,6 +1685,30 @@ export type Menu$categoriesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.CategoryScalarFieldEnum | Prisma.CategoryScalarFieldEnum[]
+}
+
+/**
+ * Menu.reusableModifierGroups
+ */
+export type Menu$reusableModifierGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReusableModifierGroup
+   */
+  select?: Prisma.ReusableModifierGroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReusableModifierGroup
+   */
+  omit?: Prisma.ReusableModifierGroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReusableModifierGroupInclude<ExtArgs> | null
+  where?: Prisma.ReusableModifierGroupWhereInput
+  orderBy?: Prisma.ReusableModifierGroupOrderByWithRelationInput | Prisma.ReusableModifierGroupOrderByWithRelationInput[]
+  cursor?: Prisma.ReusableModifierGroupWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReusableModifierGroupScalarFieldEnum | Prisma.ReusableModifierGroupScalarFieldEnum[]
 }
 
 /**

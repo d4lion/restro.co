@@ -26,9 +26,9 @@ model Plan {
   updatedAt DateTime @updatedAt
 
   // Identity
-  key         String  @unique // "STARTER" | "RESTRO_IA" | "BUSINESS"
-  label       String // "Starter", "Restro IA", "Business"
-  tag         String // "GRATIS", "PRO", "ENTERPRISE"
+  key         String  @unique // "STARTER" | "CARTA_DIGITAL" | "RESTRO_IA" | "BUSINESS"
+  label       String // "Starter", "Carta Digital", "Restro IA", "Business"
+  tag         String // "GRATIS", "ESENCIAL", "PRO", "ENTERPRISE"
   description String?
 
   // Pricing (COP — integer, e.g. 49900 = $49.900)
@@ -175,7 +175,8 @@ model Menu {
   isActive  Boolean @default(true)
   sortOrder Int     @default(0)
 
-  categories Category[]
+  categories             Category[]
+  reusableModifierGroups ReusableModifierGroup[]
 }
 
 model Category {
@@ -245,6 +246,37 @@ model MenuItemModifierOption {
   group   MenuItemModifierGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   name        String // e.g. "Papas a la Francesa"
+  priceExtra  Float   @default(0) // Extra cost (COP)
+  isAvailable Boolean @default(true)
+  sortOrder   Int     @default(0)
+}
+
+model ReusableModifierGroup {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menuId String
+  menu   Menu   @relation(fields: [menuId], references: [id], onDelete: Cascade)
+
+  name          String // e.g. "Bebidas", "Elige 1 Acompañamiento"
+  isRequired    Boolean @default(false)
+  minSelections Int     @default(0)
+  maxSelections Int     @default(1)
+  sortOrder     Int     @default(0)
+
+  options ReusableModifierOption[]
+}
+
+model ReusableModifierOption {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groupId String
+  group   ReusableModifierGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  name        String // e.g. "Coca-Cola 400ml"
   priceExtra  Float   @default(0) // Extra cost (COP)
   isAvailable Boolean @default(true)
   sortOrder   Int     @default(0)
@@ -427,10 +459,15 @@ model AnalyticsEvent {
   tenantId String
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  event     String // "menu_view" | "item_view" | "order_started" | "order_completed" | etc.
-  data      String? // JSON payload
+  event     String // "menu_view" | "item_view" | "item_dwell" | "item_share" | "scroll_depth" | "product_impression" | "category_click" | "search_query" | "cart_add" | "order_completed" | etc.
+  data      String? // JSON payload (structured telemetry metadata)
   sessionId String? // Anonymous session identifier
   userAgent String?
+
+  @@index([tenantId, createdAt])
+  @@index([tenantId, event])
+  @@index([sessionId])
+  @@index([createdAt])
 }
 
 // ─── SUBSCRIPTION ─────────────────────────────────────────────────────────────

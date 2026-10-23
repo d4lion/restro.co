@@ -60,6 +60,8 @@ export const ModelName = {
   MenuItem: 'MenuItem',
   MenuItemModifierGroup: 'MenuItemModifierGroup',
   MenuItemModifierOption: 'MenuItemModifierOption',
+  ReusableModifierGroup: 'ReusableModifierGroup',
+  ReusableModifierOption: 'ReusableModifierOption',
   Table: 'Table',
   Order: 'Order',
   OrderItem: 'OrderItem',
@@ -260,6 +262,35 @@ export const MenuItemModifierOptionScalarFieldEnum = {
 } as const
 
 export type MenuItemModifierOptionScalarFieldEnum = (typeof MenuItemModifierOptionScalarFieldEnum)[keyof typeof MenuItemModifierOptionScalarFieldEnum]
+
+
+export const ReusableModifierGroupScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  menuId: 'menuId',
+  name: 'name',
+  isRequired: 'isRequired',
+  minSelections: 'minSelections',
+  maxSelections: 'maxSelections',
+  sortOrder: 'sortOrder'
+} as const
+
+export type ReusableModifierGroupScalarFieldEnum = (typeof ReusableModifierGroupScalarFieldEnum)[keyof typeof ReusableModifierGroupScalarFieldEnum]
+
+
+export const ReusableModifierOptionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  groupId: 'groupId',
+  name: 'name',
+  priceExtra: 'priceExtra',
+  isAvailable: 'isAvailable',
+  sortOrder: 'sortOrder'
+} as const
+
+export type ReusableModifierOptionScalarFieldEnum = (typeof ReusableModifierOptionScalarFieldEnum)[keyof typeof ReusableModifierOptionScalarFieldEnum]
 
 
 export const TableScalarFieldEnum = {

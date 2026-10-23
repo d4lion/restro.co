@@ -87,6 +87,16 @@ export type MenuItemModifierGroup = Prisma.MenuItemModifierGroupModel
  */
 export type MenuItemModifierOption = Prisma.MenuItemModifierOptionModel
 /**
+ * Model ReusableModifierGroup
+ * 
+ */
+export type ReusableModifierGroup = Prisma.ReusableModifierGroupModel
+/**
+ * Model ReusableModifierOption
+ * 
+ */
+export type ReusableModifierOption = Prisma.ReusableModifierOptionModel
+/**
  * Model Table
  * 
  */

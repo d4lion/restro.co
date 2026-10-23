@@ -406,6 +406,8 @@ export const ModelName = {
   MenuItem: 'MenuItem',
   MenuItemModifierGroup: 'MenuItemModifierGroup',
   MenuItemModifierOption: 'MenuItemModifierOption',
+  ReusableModifierGroup: 'ReusableModifierGroup',
+  ReusableModifierOption: 'ReusableModifierOption',
   Table: 'Table',
   Order: 'Order',
   OrderItem: 'OrderItem',
@@ -431,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "plan" | "tenant" | "user" | "businessHour" | "menu" | "category" | "menuItem" | "menuItemModifierGroup" | "menuItemModifierOption" | "table" | "order" | "orderItem" | "orderStatusHistory" | "orderTelemetry" | "staffMember" | "analyticsEvent" | "subscription" | "billingEvent" | "tenantFeatureOverride"
+    modelProps: "plan" | "tenant" | "user" | "businessHour" | "menu" | "category" | "menuItem" | "menuItemModifierGroup" | "menuItemModifierOption" | "reusableModifierGroup" | "reusableModifierOption" | "table" | "order" | "orderItem" | "orderStatusHistory" | "orderTelemetry" | "staffMember" | "analyticsEvent" | "subscription" | "billingEvent" | "tenantFeatureOverride"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1098,6 +1100,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MenuItemModifierOptionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MenuItemModifierOptionCountAggregateOutputType> | number
+        }
+      }
+    }
+    ReusableModifierGroup: {
+      payload: Prisma.$ReusableModifierGroupPayload<ExtArgs>
+      fields: Prisma.ReusableModifierGroupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReusableModifierGroupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReusableModifierGroupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>
+        }
+        findFirst: {
+          args: Prisma.ReusableModifierGroupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReusableModifierGroupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>
+        }
+        findMany: {
+          args: Prisma.ReusableModifierGroupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>[]
+        }
+        create: {
+          args: Prisma.ReusableModifierGroupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>
+        }
+        createMany: {
+          args: Prisma.ReusableModifierGroupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReusableModifierGroupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>[]
+        }
+        delete: {
+          args: Prisma.ReusableModifierGroupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>
+        }
+        update: {
+          args: Prisma.ReusableModifierGroupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReusableModifierGroupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReusableModifierGroupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReusableModifierGroupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReusableModifierGroupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierGroupPayload>
+        }
+        aggregate: {
+          args: Prisma.ReusableModifierGroupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReusableModifierGroup>
+        }
+        groupBy: {
+          args: Prisma.ReusableModifierGroupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReusableModifierGroupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReusableModifierGroupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReusableModifierGroupCountAggregateOutputType> | number
+        }
+      }
+    }
+    ReusableModifierOption: {
+      payload: Prisma.$ReusableModifierOptionPayload<ExtArgs>
+      fields: Prisma.ReusableModifierOptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReusableModifierOptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReusableModifierOptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>
+        }
+        findFirst: {
+          args: Prisma.ReusableModifierOptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReusableModifierOptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>
+        }
+        findMany: {
+          args: Prisma.ReusableModifierOptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>[]
+        }
+        create: {
+          args: Prisma.ReusableModifierOptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>
+        }
+        createMany: {
+          args: Prisma.ReusableModifierOptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReusableModifierOptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>[]
+        }
+        delete: {
+          args: Prisma.ReusableModifierOptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>
+        }
+        update: {
+          args: Prisma.ReusableModifierOptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReusableModifierOptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReusableModifierOptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReusableModifierOptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReusableModifierOptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReusableModifierOptionPayload>
+        }
+        aggregate: {
+          args: Prisma.ReusableModifierOptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReusableModifierOption>
+        }
+        groupBy: {
+          args: Prisma.ReusableModifierOptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReusableModifierOptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReusableModifierOptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReusableModifierOptionCountAggregateOutputType> | number
         }
       }
     }
@@ -2054,6 +2204,35 @@ export const MenuItemModifierOptionScalarFieldEnum = {
 export type MenuItemModifierOptionScalarFieldEnum = (typeof MenuItemModifierOptionScalarFieldEnum)[keyof typeof MenuItemModifierOptionScalarFieldEnum]
 
 
+export const ReusableModifierGroupScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  menuId: 'menuId',
+  name: 'name',
+  isRequired: 'isRequired',
+  minSelections: 'minSelections',
+  maxSelections: 'maxSelections',
+  sortOrder: 'sortOrder'
+} as const
+
+export type ReusableModifierGroupScalarFieldEnum = (typeof ReusableModifierGroupScalarFieldEnum)[keyof typeof ReusableModifierGroupScalarFieldEnum]
+
+
+export const ReusableModifierOptionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  groupId: 'groupId',
+  name: 'name',
+  priceExtra: 'priceExtra',
+  isAvailable: 'isAvailable',
+  sortOrder: 'sortOrder'
+} as const
+
+export type ReusableModifierOptionScalarFieldEnum = (typeof ReusableModifierOptionScalarFieldEnum)[keyof typeof ReusableModifierOptionScalarFieldEnum]
+
+
 export const TableScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -2481,6 +2660,8 @@ export type GlobalOmitConfig = {
   menuItem?: Prisma.MenuItemOmit
   menuItemModifierGroup?: Prisma.MenuItemModifierGroupOmit
   menuItemModifierOption?: Prisma.MenuItemModifierOptionOmit
+  reusableModifierGroup?: Prisma.ReusableModifierGroupOmit
+  reusableModifierOption?: Prisma.ReusableModifierOptionOmit
   table?: Prisma.TableOmit
   order?: Prisma.OrderOmit
   orderItem?: Prisma.OrderItemOmit

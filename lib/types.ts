@@ -1,7 +1,7 @@
 // ─── PLAN TYPES ───────────────────────────────────────────────────────────────
 
 /** Keys used in the Plan.key column */
-export type PlanKey = "STARTER" | "RESTRO_IA" | "BUSINESS";
+export type PlanKey = "STARTER" | "CARTA_DIGITAL" | "RESTRO_IA" | "BUSINESS";
 
 /** Shape of a Plan record from the database */
 export interface PlanRecord {
@@ -80,10 +80,10 @@ export function getPlanLimits(plan: PlanRecord): PlanLimits {
 export const PLAN_LIMITS = {
   STARTER: {
     maxTables: 5,
-    maxMenuItems: 20,
+    maxMenuItems: 5,
     maxStaff: 1,
     maxMenus: 1,
-    analyticsDays: 7,
+    analyticsDays: 0,
     hasImages: true,
     hasAI: false,
     hasInventory: false,
@@ -98,8 +98,28 @@ export const PLAN_LIMITS = {
     label: "Starter",
     tag: "GRATIS",
   },
+  CARTA_DIGITAL: {
+    maxTables: Infinity,
+    maxMenuItems: Infinity,
+    maxStaff: 1,
+    maxMenus: 1,
+    analyticsDays: 0,
+    hasImages: true,
+    hasAI: false,
+    hasInventory: false,
+    hasMultiLanguage: false,
+    hasExportPDF: false,
+    hasExportExcel: false,
+    hasCustomBranding: true,
+    hasWhatsApp: false,
+    hasPrioritySupport: false,
+    priceMonthly: 9900,
+    priceYearly: 95000,
+    label: "Carta Digital",
+    tag: "ESENCIAL",
+  },
   RESTRO_IA: {
-    maxTables: 30,
+    maxTables: Infinity,
     maxMenuItems: Infinity,
     maxStaff: 10,
     maxMenus: 5,
@@ -139,6 +159,38 @@ export const PLAN_LIMITS = {
     tag: "ENTERPRISE",
   },
 } as const;
+
+/**
+ * Determines whether a dashboard navigation module is locked for a given plan.
+ * Starter (Gratis, hasta 5 productos y 5 mesas) and Carta Digital ($9.900/mes, ilimitados)
+ * only include Carta Digital (/menu) and Mesas/QRs (/tables) for printing table QRs.
+ * Modules like Orders/KDS, Reservations, Inventory, Analytics, and WhatsApp are locked and show an upsell screen.
+ */
+export function isDashboardModuleLocked(
+  plan: PlanKey | string,
+  moduleHref: string,
+  limits?: Partial<PlanLimits>
+): boolean {
+  const normalizedHref = moduleHref.split("?")[0];
+
+  if (plan === "STARTER" || plan === "CARTA_DIGITAL") {
+    switch (normalizedHref) {
+      case "/orders":
+      case "/reservations":
+        return true;
+      case "/inventory":
+        return !limits?.hasInventory;
+      case "/analytics":
+        return !limits?.hasAI;
+      case "/whatsapp":
+        return !limits?.hasWhatsApp;
+      default:
+        return false;
+    }
+  }
+
+  return false;
+}
 
 
 // ─── ORDER TYPES ──────────────────────────────────────────────────────────────
