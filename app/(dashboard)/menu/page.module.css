@@ -151,15 +151,18 @@
 }
 
 .itemImage {
-  width: 48px;
+  width: 64px;
   height: 48px;
+  aspect-ratio: 4 / 3;
   border-radius: 8px;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .itemImagePlaceholder {
-  width: 48px;
+  width: 64px;
   height: 48px;
+  aspect-ratio: 4 / 3;
   border-radius: 8px;
   background: #f1f5f9;
   color: #94a3b8;
@@ -168,6 +171,7 @@
   justify-content: center;
   font-size: 12px;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .itemTexts {
@@ -308,3 +312,114 @@
   gap: 16px;
   color: #64748b;
 }
+
+.quotaBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+}
+
+.quotaBannerWarning {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.quotaBannerFull {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.quotaContent {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quotaTopRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.quotaTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.quotaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.quotaPillFull {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.quotaBarTrack {
+  width: 100%;
+  max-width: 380px;
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.quotaBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.quotaBarFillWarning {
+  background: #d97706;
+}
+
+.quotaBarFillFull {
+  background: #dc2626;
+}
+
+.quotaSubtext {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.quotaUpgradeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  background: #15803d;
+  color: #ffffff;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.quotaUpgradeLink:hover {
+  background: #166534;
+}
+

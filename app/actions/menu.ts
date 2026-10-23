@@ -3,6 +3,8 @@
 import { getSession } from "@/lib/session";
 import { menuRepository, RepoModifierGroup } from "@/lib/repositories/menu.repository";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
+import { planRepository } from "@/lib/repositories/plan.repository";
+import { PLAN_LIMITS } from "@/lib/types";
 import { revalidateMenuCache } from "@/lib/cache";
 import { revalidatePath } from "next/cache";
 
@@ -89,9 +91,26 @@ export async function addItemAction(data: {
   modifierGroups?: RepoModifierGroup[];
 }): Promise<MenuActionResult> {
   const session = await getSession();
+  if (!session) {
+    return { success: false, message: "Sesión expirada" };
+  }
   if (!data.categoryId || !data.name || isNaN(data.price)) {
     return { success: false, message: "Categoría, nombre y precio son obligatorios" };
   }
+
+  const planInfo = await planRepository.getPlanForTenant(session.tenantId);
+  const limits = planInfo?.limits ?? PLAN_LIMITS[session.plan ?? "STARTER"];
+
+  if (Number.isFinite(limits.maxMenuItems)) {
+    const currentItemsCount = await menuRepository.countMenuItemsByTenant(session.tenantId);
+    if (currentItemsCount >= limits.maxMenuItems) {
+      return {
+        success: false,
+        message: `Has alcanzado el límite de ${limits.maxMenuItems} productos de tu plan ${limits.label}. Mejora tu plan a Carta Digital ($9.900/mes) o superior para crear productos ilimitados.`,
+      };
+    }
+  }
+
   await menuRepository.createMenuItem(data.categoryId, {
     name: data.name.trim(),
     price: data.price,
@@ -99,9 +118,7 @@ export async function addItemAction(data: {
     imageUrl: data.imageUrl?.trim() || "",
     modifierGroups: data.modifierGroups,
   });
-  if (session?.tenantId) {
-    await triggerMenuRevalidation(session.tenantId);
-  }
+  await triggerMenuRevalidation(session.tenantId);
   revalidatePath("/menu");
   return { success: true, message: `Plato "${data.name}" creado` };
 }
@@ -258,3 +275,38 @@ export async function deleteModifierOptionAction(
   revalidatePath("/menu");
   return { success: true, message: "Opción eliminada" };
 }
+
+export async function saveReusableModifierGroupAction(
+  group: RepoModifierGroup
+): Promise<MenuActionResult> {
+  const session = await getSession();
+  if (!session) return { success: false, message: "Sesión expirada" };
+  if (!group.name?.trim()) {
+    return { success: false, message: "El nombre del grupo reutilizable es obligatorio" };
+  }
+
+  const menu = await menuRepository.getFullMenu(session.tenantId);
+  if (!menu) return { success: false, message: "Menú no encontrado" };
+
+  await menuRepository.upsertReusableModifierGroup(menu.id, group);
+  await triggerMenuRevalidation(session.tenantId);
+  revalidatePath("/menu");
+  return {
+    success: true,
+    message: `Grupo "${group.name.trim()}" guardado y actualizado en todos los platos`,
+  };
+}
+
+export async function deleteReusableModifierGroupAction(
+  groupId: string
+): Promise<MenuActionResult> {
+  const session = await getSession();
+  if (!session) return { success: false, message: "Sesión expirada" };
+  if (!groupId) return { success: false, message: "Grupo inválido" };
+
+  await menuRepository.deleteReusableModifierGroup(groupId);
+  await triggerMenuRevalidation(session.tenantId);
+  revalidatePath("/menu");
+  return { success: true, message: "Grupo reutilizable eliminado" };
+}
+

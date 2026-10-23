@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useState, useTransition, useMemo } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 import {
   Plus,
   Search,
   Pencil,
   Trash2,
-  Settings
+  Settings,
+  Lock,
+  ArrowUpRight,
+  Bookmark,
 } from "lucide-react";
 import {
   toggleAvailabilityAction,
@@ -17,14 +21,18 @@ import {
   addItemAction,
   updateItemAction,
   deleteItemAction,
+  saveReusableModifierGroupAction,
+  deleteReusableModifierGroupAction,
 } from "@/app/actions/menu";
 import { uploadImageAction } from "@/app/actions/storage";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import type { PlanKey } from "@/lib/types";
 import styles from "@/app/(dashboard)/menu/page.module.css";
 
 import { ItemFormModal, ItemFormData } from "./ItemFormModal";
 import { ManageCategoriesModal } from "./ManageCategoriesModal";
+import { ManageReusableGroupsModal } from "./ManageReusableGroupsModal";
 
 export interface ModifierOptionData {
   id: string;
@@ -36,9 +44,11 @@ export interface ModifierOptionData {
 export interface ModifierGroupData {
   id: string;
   name: string;
+  previousName?: string;
   isRequired: boolean;
   minSelections: number;
   maxSelections: number;
+  saveAsReusable?: boolean;
   options: ModifierOptionData[];
 }
 
@@ -62,16 +72,26 @@ interface Props {
   initialMenu: {
     id: string;
     tenantId: string;
+    reusableModifierGroups?: ModifierGroupData[];
     categories: CategoryData[];
   } | null;
+  plan?: PlanKey;
+  planLabel?: string;
+  maxMenuItems?: number | null;
 }
 
-export function MenuPageClient({ initialMenu }: Props) {
+export function MenuPageClient({
+  initialMenu,
+  plan = "STARTER",
+  planLabel = "Starter",
+  maxMenuItems = null,
+}: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("All");
   
   // Modals state
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isReusableModalOpen, setIsReusableModalOpen] = useState(false);
   const [itemFormState, setItemFormState] = useState<{ isOpen: boolean; data?: ItemFormData }>({ isOpen: false });
   
   const [isPending, startTransition] = useTransition();
@@ -88,7 +108,48 @@ export function MenuPageClient({ initialMenu }: Props) {
     return flatItems;
   }, [initialMenu]);
 
+  // Combine saved reusable modifier groups with any unique modifier groups already created on dishes
+  const reusableGroups = useMemo(() => {
+    const map = new Map<string, ModifierGroupData>();
+    (initialMenu?.reusableModifierGroups ?? []).forEach((g) => {
+      const key = g.name.trim().toLowerCase();
+      if (key) map.set(key, g);
+    });
+    allItems.forEach((item) => {
+      (item.modifierGroups ?? []).forEach((g) => {
+        const key = g.name.trim().toLowerCase();
+        if (key && !map.has(key) && g.options.length > 0) {
+          map.set(key, {
+            ...g,
+            id: `derived-${g.id}`,
+          });
+        }
+      });
+    });
+    return Array.from(map.values());
+  }, [initialMenu, allItems]);
+
+  const usageCountByGroupName = useMemo(() => {
+    const counts: Record<string, number> = {};
+    allItems.forEach((item) => {
+      (item.modifierGroups ?? []).forEach((g) => {
+        const key = g.name.trim().toLowerCase();
+        if (key) {
+          counts[key] = (counts[key] || 0) + 1;
+        }
+      });
+    });
+    return counts;
+  }, [allItems]);
+
   const categories = initialMenu?.categories || [];
+
+  const hasItemLimit = typeof maxMenuItems === "number" && maxMenuItems > 0;
+  const currentItemsCount = allItems.length;
+  const isAtItemLimit = hasItemLimit && currentItemsCount >= maxMenuItems;
+  const isNearItemLimit = hasItemLimit && !isAtItemLimit && currentItemsCount >= maxMenuItems - 1;
+  const remainingItems = hasItemLimit ? Math.max(0, maxMenuItems - currentItemsCount) : null;
+  const quotaPercentage = hasItemLimit ? Math.min(100, Math.round((currentItemsCount / maxMenuItems) * 100)) : 0;
 
   // Filter items
   const filteredItems = useMemo(() => {
@@ -194,10 +255,69 @@ export function MenuPageClient({ initialMenu }: Props) {
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>Digital Menu Management</h1>
-          <p className={styles.subtitle}>Current Menu: Principal (Active)</p>
+          <h1 className={styles.title}>Gestión de Carta Digital</h1>
+          <p className={styles.subtitle}>Administra las categorías, platos, fotos y precios de tu carta pública.</p>
         </div>
       </div>
+
+      {/* Quota Banner — ONLY rendered when the current plan has a finite product limit (e.g. Starter = 5) */}
+      {hasItemLimit && (
+        <div
+          className={`${styles.quotaBanner} ${
+            isAtItemLimit
+              ? styles.quotaBannerFull
+              : isNearItemLimit
+              ? styles.quotaBannerWarning
+              : ""
+          }`}
+        >
+          <div className={styles.quotaContent}>
+            <div className={styles.quotaTopRow}>
+              <span className={styles.quotaTitle}>
+                Límite de productos del Plan {planLabel}
+              </span>
+              <span
+                className={`${styles.quotaPill} ${
+                  isAtItemLimit ? styles.quotaPillFull : ""
+                }`}
+              >
+                {currentItemsCount} / {maxMenuItems} productos
+              </span>
+            </div>
+
+            <div className={styles.quotaBarTrack}>
+              <div
+                className={`${styles.quotaBarFill} ${
+                  isAtItemLimit
+                    ? styles.quotaBarFillFull
+                    : isNearItemLimit
+                    ? styles.quotaBarFillWarning
+                    : ""
+                }`}
+                style={{ width: `${quotaPercentage}%` }}
+              />
+            </div>
+
+            <p className={styles.quotaSubtext}>
+              {isAtItemLimit ? (
+                <>
+                  Has alcanzado el máximo de <strong>{maxMenuItems} productos</strong> permitidos en el plan{" "}
+                  <strong>{planLabel}</strong>. Mejora al plan <strong>Carta Digital ($9.900/mes)</strong> para agregar productos ilimitados.
+                </>
+              ) : (
+                <>
+                  Tu plan <strong>{planLabel}</strong> permite hasta <strong>{maxMenuItems} productos</strong> en tu carta digital (te{" "}
+                  {remainingItems === 1 ? "queda 1 cupo disponible" : `quedan ${remainingItems} cupos disponibles`}).
+                </>
+              )}
+            </p>
+          </div>
+
+          <Link href="/settings#planes" className={styles.quotaUpgradeLink}>
+            Desbloquear ilimitados ($9.900/mes) <ArrowUpRight size={15} />
+          </Link>
+        </div>
+      )}
 
       <div className={styles.filtersBar}>
         <div className={styles.searchWrapper}>
@@ -233,10 +353,42 @@ export function MenuPageClient({ initialMenu }: Props) {
           >
             <Settings size={14} /> Categorías
           </button>
+          <button 
+            className={styles.manageCatsBtn} 
+            onClick={() => setIsReusableModalOpen(true)}
+            title="Gestionar Acompañantes Reutilizables"
+          >
+            <Bookmark size={14} /> Acompañantes ({reusableGroups.length})
+          </button>
         </div>
 
-        <Button onClick={() => setItemFormState({ isOpen: true })}>
-          <Plus size={16} /> Agregar Plato
+        <Button
+          onClick={() => {
+            if (isAtItemLimit) {
+              toast.error(
+                `Has alcanzado el límite de ${maxMenuItems} productos del plan ${planLabel}. Mejora a Carta Digital ($9.900/mes) para productos ilimitados.`
+              );
+              return;
+            }
+            setItemFormState({ isOpen: true });
+          }}
+          disabled={isAtItemLimit}
+          title={
+            isAtItemLimit
+              ? `Límite de ${maxMenuItems} productos alcanzado en el plan ${planLabel}`
+              : "Agregar un nuevo plato a la carta"
+          }
+        >
+          {isAtItemLimit ? (
+            <>
+              <Lock size={16} /> Límite alcanzado ({currentItemsCount}/{maxMenuItems})
+            </>
+          ) : (
+            <>
+              <Plus size={16} /> Agregar Plato
+              {hasItemLimit ? ` (${currentItemsCount}/${maxMenuItems})` : ""}
+            </>
+          )}
         </Button>
       </div>
 
@@ -297,7 +449,30 @@ export function MenuPageClient({ initialMenu }: Props) {
                     <div className={styles.actionsBox}>
                       <button 
                         className={styles.actionBtn} 
-                        onClick={() => setItemFormState({ isOpen: true, data: { ...item, description: item.description || "", imageUrl: item.imageUrl || "", modifierGroups: item.modifierGroups || [] } })}
+                        onClick={() =>
+                          setItemFormState({
+                            isOpen: true,
+                            data: {
+                              ...item,
+                              description: item.description || "",
+                              imageUrl: item.imageUrl || "",
+                              modifierGroups: (item.modifierGroups || []).map((g) => {
+                                const isReusable = reusableGroups.some(
+                                  (r) =>
+                                    !r.id.startsWith("derived-") &&
+                                    r.name.trim().toLowerCase() ===
+                                      g.name.trim().toLowerCase()
+                                );
+                                return {
+                                  ...g,
+                                  previousName: g.name,
+                                  saveAsReusable:
+                                    isReusable || Boolean(g.saveAsReusable),
+                                };
+                              }),
+                            },
+                          })
+                        }
                         title="Editar"
                       >
                         <Pencil size={16} /> Editar
@@ -323,9 +498,17 @@ export function MenuPageClient({ initialMenu }: Props) {
           isOpen={true}
           onClose={() => setItemFormState({ isOpen: false })}
           categories={categories}
+          reusableGroups={reusableGroups}
           initialData={itemFormState.data}
           onSave={handleSaveItem}
+          onSaveReusableGroup={(group) => saveReusableModifierGroupAction(group)}
+          onDeleteReusableGroup={(groupId) => deleteReusableModifierGroupAction(groupId)}
           onUploadImage={handleUploadImage}
+          quotaNotice={
+            hasItemLimit
+              ? `Cupo del Plan ${planLabel}: Estás creando el producto #${currentItemsCount + 1} de ${maxMenuItems} permitidos.`
+              : null
+          }
         />
       )}
 
@@ -337,6 +520,17 @@ export function MenuPageClient({ initialMenu }: Props) {
           onAddCategory={handleAddCategory}
           onUpdateCategory={handleUpdateCategory}
           onDeleteCategory={handleDeleteCategory}
+        />
+      )}
+
+      {isReusableModalOpen && (
+        <ManageReusableGroupsModal
+          isOpen={true}
+          onClose={() => setIsReusableModalOpen(false)}
+          reusableGroups={reusableGroups}
+          usageCountByGroupName={usageCountByGroupName}
+          onSaveReusableGroup={(group) => saveReusableModifierGroupAction(group)}
+          onDeleteReusableGroup={(groupId) => deleteReusableModifierGroupAction(groupId)}
         />
       )}
     </div>
