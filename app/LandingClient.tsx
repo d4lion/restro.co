@@ -5,7 +5,20 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { Check, ArrowRight, Sparkles, QrCode, MonitorCheck, BrainCircuit, MessageSquare, TrendingUp } from "lucide-react";
+import {
+  Check,
+  ArrowRight,
+  Sparkles,
+  QrCode,
+  MonitorCheck,
+  BrainCircuit,
+  MessageSquare,
+  TrendingUp,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck,
+  AlertTriangle,
+} from "lucide-react";
 import styles from "./page.module.css";
 import Image from "next/image";
 
@@ -42,6 +55,17 @@ const faqs = [
 
 export default function LandingClient() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const pricingScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollPricing = (direction: "left" | "right") => {
+    if (pricingScrollRef.current) {
+      const scrollAmount = 320;
+      pricingScrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
   
   useGSAP(() => {
     // 1. Hero Animations
@@ -357,7 +381,7 @@ export default function LandingClient() {
             <li><a href="#caracteristicas" className={styles.navLink}>Características</a></li>
             <li><a href="#precios" className={styles.navLink}>Precios</a></li>
             <li><a href="#faq" className={styles.navLink}>FAQ</a></li>
-            <li><Link href="/don-carlos" className={styles.navLink}>Demo</Link></li>
+            <li><Link href="/restaurant/don-carlos" target="_blank" className={styles.navLink}>Demo</Link></li>
           </ul>
           <div className={styles.navActions}>
             <Link href="/login" className={styles.btnGhost}>Iniciar sesión</Link>
@@ -370,26 +394,45 @@ export default function LandingClient() {
       <header className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={styles.heroBadge}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#2563EB" /><path d="M3 6l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            Diseñado para restaurantes · Colombia
+            <ShieldCheck size={14} color="#2563EB" />
+            Carta Digital QR · Pedidos en Mesa y Cocina KDS · Colombia
           </div>
           
           <h1 className={styles.heroTitle}>
-            <span className="hero-title-line">No adivines como va tu</span>
-            <span className="hero-title-line"><span className={styles.heroTitleAccent}>negocio</span></span>
+            <span className="hero-title-line">Tu Carta Digital QR y Pedidos</span>
+            <span className="hero-title-line"><span className={styles.heroTitleAccent}>Sin comisiones ni papel</span></span>
           </h1>
           
           <p className={styles.heroSub}>
-            Centraliza tus pedidos, ventas y datos en un solo lugar. Mira tus métricas, descubre oportunidades y toma mejores decisiones con ayuda de inteligencia artificial.
+            Reemplaza las cartas de papel por un menú digital interactivo que tus clientes abren al instante en su móvil. Recibe pedidos en mesa, por WhatsApp y directo a tu pantalla de cocina con analítica en tiempo real.
           </p>
           
           <div className={styles.heroCTA}>
             <Link href="/register" className={styles.btnPrimaryLg}>
               Empezar gratis <ArrowRight size={18} />
             </Link>
-            <a href="#caracteristicas" className={styles.btnOutlineLg}>
-              Conocer Restro
-            </a>
+            <Link href="/restaurant/don-carlos" target="_blank" className={styles.btnOutlineLg}>
+              Ver Carta Demo en Vivo
+            </Link>
+          </div>
+
+          <div className={styles.heroTrustBadges}>
+            <div className={styles.heroTrustItem}>
+              <Check size={15} className={styles.heroTrustIcon} />
+              <span>Activación en 10 minutos</span>
+            </div>
+            <div className={styles.heroTrustItem}>
+              <Check size={15} className={styles.heroTrustIcon} />
+              <span>Sin tarjeta requerida</span>
+            </div>
+            <div className={styles.heroTrustItem}>
+              <Check size={15} className={styles.heroTrustIcon} />
+              <span>Sin descargas de apps</span>
+            </div>
+            <div className={styles.heroTrustItem}>
+              <Check size={15} className={styles.heroTrustIcon} />
+              <span>0% comisiones por venta</span>
+            </div>
           </div>
 
           <div className={styles.heroSocialProof}>
@@ -505,6 +548,73 @@ export default function LandingClient() {
         </div>
       </section>
 
+      {/* ── PROBLEM VS SOLUTION COMPARISON ── */}
+      <section className={styles.comparisonSection}>
+        <div className="reveal-up">
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionLabel}>El Reto de tu Restaurante</span>
+            <h2 className={styles.sectionTitle}>¿Por qué los restaurantes cambian a Restro?</h2>
+            <p className={styles.sectionSub}>
+              Compara la fricción del modelo tradicional frente a la agilidad de operar con una carta digital y cocina conectadas.
+            </p>
+          </div>
+        </div>
+
+        <div className={`${styles.comparisonGrid} stagger-grid`}>
+          {/* Tarjeta Tradicional */}
+          <div className={styles.comparisonCardOld}>
+            <div className={styles.comparisonHeaderOld}>
+              <div className={styles.comparisonIconOld}><AlertTriangle size={20} /></div>
+              <h3>El modelo tradicional en papel</h3>
+            </div>
+            <ul className={styles.comparisonList}>
+              <li>
+                <span className={styles.comparisonCross}>✕</span>
+                <div><strong>Cartas de papel rotas o sucias:</strong> Costosas de reimprimir cada vez que cambias un precio o agregas un plato.</div>
+              </li>
+              <li>
+                <span className={styles.comparisonCross}>✕</span>
+                <div><strong>Meseros saturados y demoras:</strong> Clientes esperando minutos solo para recibir la carta física y hacer su pedido.</div>
+              </li>
+              <li>
+                <span className={styles.comparisonCross}>✕</span>
+                <div><strong>Comandas ilegibles en cocina:</strong> Papeles perdidos, errores de preparación y platos devueltos.</div>
+              </li>
+              <li>
+                <span className={styles.comparisonCross}>✕</span>
+                <div><strong>Comisiones abusivas del 20% al 30%:</strong> Plataformas de delivery que se quedan con tu margen de ganancia.</div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Tarjeta Con Restro */}
+          <div className={styles.comparisonCardNew}>
+            <div className={styles.comparisonHeaderNew}>
+              <div className={styles.comparisonIconNew}><Sparkles size={20} /></div>
+              <h3>Con Restro en tu restaurante</h3>
+            </div>
+            <ul className={styles.comparisonList}>
+              <li>
+                <span className={styles.comparisonCheck}><Check size={16} strokeWidth={3} /></span>
+                <div><strong>Menú QR interactivo mobile-first:</strong> Actualiza precios, fotos y productos al instante desde cualquier dispositivo.</div>
+              </li>
+              <li>
+                <span className={styles.comparisonCheck}><Check size={16} strokeWidth={3} /></span>
+                <div><strong>Toma de pedidos ágil:</strong> El cliente escanea su mesa, arma su pedido y lo envía al mesero o directo a WhatsApp.</div>
+              </li>
+              <li>
+                <span className={styles.comparisonCheck}><Check size={16} strokeWidth={3} /></span>
+                <div><strong>Cocina Digital (KDS) en tiempo real:</strong> Comandas claras en pantalla con alerta sonora y control de tiempos.</div>
+              </li>
+              <li>
+                <span className={styles.comparisonCheck}><Check size={16} strokeWidth={3} /></span>
+                <div><strong>100% de tus ventas para ti:</strong> Sin comisiones por pedido ni intermediarios. Tu negocio, tus ganancias.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* ── PRODUCT DEEP DIVE 1: MENU ── */}
       <section className={styles.productSection} id="product-menu-section">
         <div className={`${styles.productRow} reveal-up`}>
@@ -520,7 +630,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Crear mi carta gratis</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-menu">
-            <Image src="/images/mockup-menu-dark.png" alt="Carta Digital" width={800} height={500} className={styles.productMockupMobileOnly} />
+            <Image src="/images/backgrounds/landing/mockup-menu-dark.png" alt="Carta Digital" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -540,7 +650,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Probar KDS gratis</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-kds">
-            <Image src="/images/mockup-kds.png" alt="KDS" width={800} height={500} className={styles.productMockupMobileOnly} />
+            <Image src="/images/backgrounds/landing/mockup-kds.png" alt="KDS" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -560,7 +670,7 @@ export default function LandingClient() {
             <div><Link href="/register" className={styles.btnPrimaryLg}>Activar Restro IA</Link></div>
           </div>
           <div className={styles.productMockupWrap} id="mockup-slot-ia">
-            <Image src="/images/mockup-analytics-dark.png" alt="IA Analytics" width={800} height={500} className={styles.productMockupMobileOnly} />
+            <Image src="/images/backgrounds/landing/mockup-analytics-dark.png" alt="IA Analytics" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -623,78 +733,133 @@ export default function LandingClient() {
       {/* ── PRICING ── */}
       <section className={styles.pricingSection} id="precios">
         <div className="reveal-up">
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionLabel}>Precios</span>
-            <h2 className={styles.sectionTitle}>Planes transparentes</h2>
-            <p className={styles.sectionSub}>Sin cargos ocultos, sin permanencia mínima. Empieza gratis y escala cuando tu restaurante lo necesite.</p>
+          <div className={styles.pricingHeaderRow}>
+            <div className={styles.sectionHeader} style={{ marginBottom: 0, textAlign: "left" }}>
+              <span className={styles.sectionLabel}>Precios Transparentes</span>
+              <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>Planes hechos a la medida de tu restaurante</h2>
+              <p className={styles.sectionSub} style={{ margin: 0, maxWidth: "600px" }}>
+                Sin contratos de permanencia, sin comisiones por pedido y sin cargos ocultos. Empieza gratis hoy.
+              </p>
+            </div>
+
+            {/* Slider Navigation Buttons */}
+            <div className={styles.pricingControls}>
+              <button
+                type="button"
+                onClick={() => scrollPricing("left")}
+                className={styles.pricingNavBtn}
+                aria-label="Ver plan anterior"
+                title="Ver plan anterior"
+              >
+                <ChevronLeft size={22} />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollPricing("right")}
+                className={styles.pricingNavBtn}
+                aria-label="Ver siguiente plan"
+                title="Ver siguiente plan"
+              >
+                <ChevronRight size={22} />
+              </button>
+            </div>
           </div>
         </div>
         
-        <div className={`${styles.pricingGrid} stagger-grid`}>
-          <article className={styles.planCard}>
-            <h3 className={styles.planName}>Starter</h3>
-            <p className={styles.planDesc}>Para restaurantes que están comenzando su digitalización</p>
-            <div className={styles.planPriceWrap}>
-              <span className={styles.planPrice}>Gratis</span><br/>
-              <span className={styles.planPricePeriod}>Para siempre</span>
-            </div>
-            <hr className={styles.planDivider}/>
-            <ul className={styles.planFeatureList}>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Carta digital QR personalizada</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 productos en carta</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 mesas con QR</li>
-            </ul>
-            <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Empezar gratis</Link>
-          </article>
+        {/* Horizontal Single-Row Scroll Wrapper */}
+        <div className={styles.pricingScrollWrapper} ref={pricingScrollRef}>
+          <div className={`${styles.pricingGrid} stagger-grid`}>
+            
+            {/* PLAN 1: Starter */}
+            <article className={styles.planCard}>
+              <div className={styles.planBadgeSubtle}>Sin costo</div>
+              <h3 className={styles.planName}>Starter</h3>
+              <p className={styles.planDesc}>Para cafeterías y locales pequeños que quieren digitalizar su carta sin costo</p>
+              <div className={styles.planPriceWrap}>
+                <span className={styles.planPrice}>$0</span><br/>
+                <span className={styles.planPricePeriod}>Gratis para siempre</span>
+              </div>
+              <hr className={styles.planDivider}/>
+              <ul className={styles.planFeatureList}>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Carta digital QR personalizada</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 productos en catálogo</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 mesas con código QR</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Pedidos por WhatsApp opcional</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Cero comisiones por venta</li>
+              </ul>
+              <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Empezar gratis</Link>
+            </article>
 
-          <article className={styles.planCard}>
-            <h3 className={styles.planName}>Carta Digital</h3>
-            <p className={styles.planDesc}>Todo el apartado de carta digital y QRs por mesa sin límites</p>
-            <div className={styles.planPriceWrap}>
-              <span className={styles.planPrice}>$9.900</span><br/>
-              <span className={styles.planPricePeriod}>COP / mes</span>
-            </div>
-            <hr className={styles.planDivider}/>
-            <ul className={styles.planFeatureList}>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Productos ilimitados en carta</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Códigos QR por mesa ilimitados</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Página pública de carta con tu marca</li>
-            </ul>
-            <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Activar Carta Digital</Link>
-          </article>
+            {/* PLAN 2: Carta Digital */}
+            <article className={styles.planCard}>
+              <div className={styles.planBadgeSubtle} style={{ background: "#DCFCE7", color: "#15803D" }}>Más accesible</div>
+              <h3 className={styles.planName}>Carta Digital</h3>
+              <p className={styles.planDesc}>Productos y mesas QR ilimitados con pedido en mesa para pasar al mesero</p>
+              <div className={styles.planPriceWrap}>
+                <span className={styles.planPrice}>$9.900</span><br/>
+                <span className={styles.planPricePeriod}>COP / mes</span>
+              </div>
+              <hr className={styles.planDivider}/>
+              <ul className={styles.planFeatureList}>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Productos y categorías ilimitados</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Códigos QR por mesa ilimitados</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Carrito en mesa con QR para mesero</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Pedidos directos a tu WhatsApp</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Logo, portada y enlace propio de tu marca</li>
+              </ul>
+              <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Elegir Carta Digital</Link>
+            </article>
 
-          <article className={`${styles.planCard} ${styles.planCardFeatured}`}>
-            <span className={styles.planBadge}>RECOMENDADO</span>
-            <h3 className={styles.planName} style={{display:'flex', alignItems:'center', gap:'8px'}}>Restro IA <Sparkles size={18} color="#7C3AED"/></h3>
-            <p className={styles.planDesc}>Para restaurantes que quieren crecer con operación digital e IA</p>
-            <div className={styles.planPriceWrap}>
-              <span className={`${styles.planPrice} ${styles.planPriceFeatured}`}>$49.900</span><br/>
-              <span className={styles.planPricePeriod}>COP / mes</span>
-            </div>
-            <hr className={styles.planDivider}/>
-            <ul className={styles.planFeatureList}>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Productos y mesas con QR ilimitados</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> KDS — pantalla de cocina en vivo</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Analítica y predicciones con IA</li>
-            </ul>
-            <Link href="/register" className={`${styles.planCTA} ${styles.planCTAPrimary}`}>Comenzar Restro IA</Link>
-          </article>
+            {/* PLAN 3: Restro IA (Featured) */}
+            <article className={`${styles.planCard} ${styles.planCardFeatured}`}>
+              <span className={styles.planBadge}>MÁS POPULAR</span>
+              <h3 className={styles.planName} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                Restro IA <Sparkles size={18} color="#2563EB"/>
+              </h3>
+              <p className={styles.planDesc}>El sistema operativo completo: comandas a cocina en tiempo real y analítica con IA</p>
+              <div className={styles.planPriceWrap}>
+                <span className={`${styles.planPrice} ${styles.planPriceFeatured}`}>$49.900</span><br/>
+                <span className={styles.planPricePeriod}>COP / mes</span>
+              </div>
+              <hr className={styles.planDivider}/>
+              <ul className={styles.planFeatureList}>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Todo lo de Carta Digital</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Pantalla KDS en cocina en vivo</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Alertas sonoras de nuevas comandas</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Analítica predictiva con IA</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Detección de horas pico y platos estrella</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 10 cuentas de personal</li>
+              </ul>
+              <Link href="/register" className={`${styles.planCTA} ${styles.planCTAPrimary}`}>Comenzar con Restro IA</Link>
+            </article>
 
-          <article className={styles.planCard}>
-            <h3 className={styles.planName}>Business</h3>
-            <p className={styles.planDesc}>Para operaciones de alto volumen y múltiples canales</p>
-            <div className={styles.planPriceWrap}>
-              <span className={styles.planPrice}>$99.900</span><br/>
-              <span className={styles.planPricePeriod}>COP / mes</span>
-            </div>
-            <hr className={styles.planDivider}/>
-            <ul className={styles.planFeatureList}>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Todo lo de Restro IA</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Mesas y staff ilimitados</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Canal WhatsApp Business &amp; Excel/PDF</li>
-            </ul>
-            <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Activar Business</Link>
-          </article>
+            {/* PLAN 4: Business */}
+            <article className={styles.planCard}>
+              <div className={styles.planBadgeSubtle} style={{ background: "#EFF6FF", color: "#1D4ED8" }}>Operación Total</div>
+              <h3 className={styles.planName}>Business</h3>
+              <p className={styles.planDesc}>Para restaurantes consolidados que requieren inventario, reservas y múltiples sedes</p>
+              <div className={styles.planPriceWrap}>
+                <span className={styles.planPrice}>$99.900</span><br/>
+                <span className={styles.planPricePeriod}>COP / mes</span>
+              </div>
+              <hr className={styles.planDivider}/>
+              <ul className={styles.planFeatureList}>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Todo lo de Restro IA</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Personal, mesas y productos 100% ilimitados</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Control de inventario e insumos</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Gestión integral de reservas</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Exportación de datos en Excel y PDF</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Soporte VIP prioritario</li>
+              </ul>
+              <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Elegir Business</Link>
+            </article>
+
+          </div>
+        </div>
+
+        {/* Scroll hint on mobile */}
+        <div className={styles.pricingScrollHint}>
+          <span>Desliza horizontalmente para comparar todos los planes</span>
         </div>
       </section>
 
@@ -751,7 +916,7 @@ export default function LandingClient() {
             <ul className={styles.footerLinks}>
               <li><a href="#caracteristicas" className={styles.footerLink}>Características</a></li>
               <li><a href="#precios" className={styles.footerLink}>Precios</a></li>
-              <li><Link href="/don-carlos" className={styles.footerLink}>Demo</Link></li>
+              <li><Link href="/restaurant/don-carlos" target="_blank" className={styles.footerLink}>Demo</Link></li>
               <li><a href="#faq" className={styles.footerLink}>FAQ</a></li>
             </ul>
           </div>
@@ -774,7 +939,7 @@ export default function LandingClient() {
 
         <div className={styles.footerBottom}>
           <p className={styles.footerCopy}>
-            © {new Date().getFullYear()} Restro · Un producto de <a href="https://adamind.co" style={{color:'#94A3B8'}}>Adamind</a> · Colombia 🇨🇴
+            © {new Date().getFullYear()} Restro · Un producto de <a href="https://adamind.co" style={{color:'#94A3B8'}}>Adamind</a> · Colombia
           </p>
           <ul className={styles.footerCopyLinks}>
             <li><a href="/privacy" className={styles.footerCopyLink}>Privacidad</a></li>
