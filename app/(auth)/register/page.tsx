@@ -2,10 +2,10 @@
 
 import { useActionState, useState, useEffect } from "react";
 import Link from "next/link";
-import { registerAction } from "@/app/actions/auth";
+import { registerAction, checkRestaurantAvailabilityAction } from "@/app/actions/auth";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { Check, MailCheck, Eye, EyeOff, Sparkles } from "lucide-react";
+import { Check, MailCheck, Eye, EyeOff, Sparkles, Globe, AlertCircle, Loader2 } from "lucide-react";
 import { CountryPhoneInput } from "@/components/ui/CountryPhoneInput";
 import styles from "./register.module.css";
 
@@ -19,6 +19,10 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [slug, setSlug] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(true);
+
+  // Live availability state for restaurant name & slug
+  const [slugStatus, setSlugStatus] = useState<"idle" | "checking" | "available" | "taken">("idle");
+  const [slugTakenMessage, setSlugTakenMessage] = useState<string | undefined>(undefined);
 
   // Field touched states (onBlur tracking)
   const [restaurantNameTouched, setRestaurantNameTouched] = useState(false);
@@ -46,17 +50,61 @@ export default function RegisterPage() {
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9\s-]/g, "")
       .trim()
-      .replace(/\s+/g, "-");
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
     setSlug(autoSlug);
+
+    if (!val.trim() || !autoSlug) {
+      setSlugStatus("idle");
+      setSlugTakenMessage(undefined);
+    } else {
+      setSlugStatus("checking");
+    }
   };
+
+  // Debounced check against database for name & slug availability
+  useEffect(() => {
+    const trimmed = restaurantName.trim();
+    if (!trimmed || !slug) {
+      return;
+    }
+
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const res = await checkRestaurantAvailabilityAction(trimmed, slug);
+      if (cancelled) return;
+      if (res.available) {
+        setSlugStatus("available");
+        setSlugTakenMessage(undefined);
+      } else {
+        setSlugStatus("taken");
+        setSlugTakenMessage(res.message || "Este nombre ya está tomado.");
+      }
+    }, 350);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [restaurantName, slug]);
 
   // Client Validation Logic
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   
   const getRestaurantNameError = () => {
-    if (!restaurantNameTouched && !state?.errors?.restaurantName) return undefined;
+    if (slugStatus === "taken") {
+      return slugTakenMessage || "Este nombre de negocio ya está tomado.";
+    }
+    if (state?.errors?.restaurantName?.[0]) {
+      return state.errors.restaurantName[0];
+    }
+    if (state?.errors?.slug?.[0]) {
+      return state.errors.slug[0];
+    }
+    if (!restaurantNameTouched) return undefined;
     if (!restaurantName.trim()) return "El nombre de tu negocio es requerido.";
-    return state?.errors?.restaurantName?.[0];
+    return undefined;
   };
 
   const getEmailError = () => {
@@ -87,7 +135,7 @@ export default function RegisterPage() {
     setPasswordTouched(true);
     setConfirmPasswordTouched(true);
 
-    const hasNameError = !restaurantName.trim();
+    const hasNameError = !restaurantName.trim() || slugStatus === "taken";
     const hasEmailError = !email.trim() || !emailRegex.test(email);
     const hasPasswordError = !password || password.length < 6;
     const hasConfirmPasswordError = confirmPassword !== password;
@@ -158,19 +206,63 @@ export default function RegisterPage() {
                   <input type="hidden" name="name" value={restaurantName || "Administrador"} />
                   <input type="hidden" name="slug" value={slug || "tu-restaurante"} />
 
-                  {/* Nombre de tu negocio */}
-                  <Input
-                    label="Nombre de tu negocio"
-                    type="text"
-                    name="restaurantName"
-                    id="register-restaurant-name"
-                    value={restaurantName}
-                    onChange={handleRestaurantNameChange}
-                    onBlur={() => setRestaurantNameTouched(true)}
-                    placeholder="Ej. Hamburguesas Don Carlos"
-                    required
-                    error={getRestaurantNameError()}
-                  />
+                  {/* Nombre de tu negocio + Vista previa del Slug y Disponibilidad */}
+                  <div className={styles.nameSlugGroup}>
+                    <Input
+                      label="Nombre de tu negocio"
+                      type="text"
+                      name="restaurantName"
+                      id="register-restaurant-name"
+                      value={restaurantName}
+                      onChange={handleRestaurantNameChange}
+                      onBlur={() => setRestaurantNameTouched(true)}
+                      placeholder="Ej. Hamburguesas Don Carlos"
+                      required
+                      error={getRestaurantNameError()}
+                    />
+
+                    {/* Vista previa en tiempo real de cómo quedará el slug */}
+                    <div
+                      className={`${styles.slugPreviewBox} ${
+                        slugStatus === "available"
+                          ? styles["slugPreviewBox--available"]
+                          : slugStatus === "taken"
+                          ? styles["slugPreviewBox--taken"]
+                          : ""
+                      }`}
+                    >
+                      <span className={styles.slugUrlText}>
+                        <Globe size={14} style={{ flexShrink: 0 }} />
+                        <span>
+                          restro.adamind.cloud/restaurant/
+                          <strong className={styles.slugHighlight}>
+                            {slug || "tu-negocio"}
+                          </strong>
+                        </span>
+                      </span>
+
+                      {slug && slugStatus === "checking" && (
+                        <span className={`${styles.slugStatusBadge} ${styles["slugStatus--checking"]}`}>
+                          <Loader2 size={12} className="spin" />
+                          Verificando...
+                        </span>
+                      )}
+
+                      {slug && slugStatus === "available" && (
+                        <span className={`${styles.slugStatusBadge} ${styles["slugStatus--available"]}`}>
+                          <Check size={12} strokeWidth={3} />
+                          Disponible
+                        </span>
+                      )}
+
+                      {slug && slugStatus === "taken" && (
+                        <span className={`${styles.slugStatusBadge} ${styles["slugStatus--taken"]}`}>
+                          <AlertCircle size={12} strokeWidth={2.5} />
+                          No disponible
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
                   {/* Correo electrónico */}
                   <Input
@@ -293,7 +385,7 @@ export default function RegisterPage() {
                     loading={pending || (state?.success ?? false)}
                     id="register-submit-btn"
                     className={styles.submitBtn}
-                    disabled={!acceptedTerms}
+                    disabled={!acceptedTerms || slugStatus === "taken"}
                   >
                     {state?.success ? "Creando cuenta..." : "Crear cuenta"}
                   </Button>

@@ -3,6 +3,11 @@
 import { prisma } from "@/lib/prisma";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
 import { createClient } from "@/lib/supabase/server";
+import { deleteSession, revalidateUserSession } from "@/lib/session";
+import { isDatabaseUnavailableError } from "@/lib/db-errors";
+
+const DB_UNAVAILABLE_MESSAGE =
+  "No pudimos conectarnos con nuestros servidores. Por favor intenta de nuevo en unos minutos.";
 
 export type AuthActionResult = ({ errors?: Record<string, string[]>; message?: string; success?: boolean; redirectUrl?: string }) | undefined;
 
@@ -10,7 +15,7 @@ export async function loginAction(
   _prev: AuthActionResult,
   formData: FormData
 ): Promise<AuthActionResult> {
-  const email = formData.get("email") as string;
+  const email = (formData.get("email") as string)?.trim().toLowerCase();
   const password = formData.get("password") as string;
 
   if (!email || !password) {
@@ -18,16 +23,85 @@ export async function loginAction(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
+  if (error || !data.user) {
     return { errors: { email: ["Credenciales incorrectas. Verifica tu email y contraseña."] } };
   }
 
+  revalidateUserSession(data.user.id);
+
   return { success: true, redirectUrl: "/overview" };
+}
+
+export type RestaurantAvailabilityResult = {
+  available: boolean;
+  isNameTaken: boolean;
+  isSlugTaken: boolean;
+  slug: string;
+  message?: string;
+};
+
+function normalizeSlug(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+export async function checkRestaurantAvailabilityAction(
+  restaurantName: string,
+  customSlug?: string
+): Promise<RestaurantAvailabilityResult> {
+  const trimmedName = (restaurantName ?? "").trim();
+  const slug = normalizeSlug(customSlug?.trim() ? customSlug : trimmedName);
+
+  if (!trimmedName || !slug) {
+    return {
+      available: false,
+      isNameTaken: false,
+      isSlugTaken: false,
+      slug: "",
+    };
+  }
+
+  try {
+    const { isNameTaken, isSlugTaken, available } =
+      await tenantRepository.checkNameAndSlugAvailability(trimmedName, slug);
+
+    let message = "Nombre y enlace disponibles";
+    if (isNameTaken && isSlugTaken) {
+      message = "Este nombre de negocio y su enlace ya están registrados.";
+    } else if (isNameTaken) {
+      message = "Este nombre de negocio ya está tomado.";
+    } else if (isSlugTaken) {
+      message = `El enlace "/restaurant/${slug}" ya está tomado. Prueba otro nombre.`;
+    }
+
+    return {
+      available,
+      isNameTaken,
+      isSlugTaken,
+      slug,
+      message,
+    };
+  } catch (err) {
+    console.error("checkRestaurantAvailabilityAction failed:", err);
+    return {
+      available: true,
+      isNameTaken: false,
+      isSlugTaken: false,
+      slug,
+    };
+  }
 }
 
 export async function registerAction(
@@ -38,7 +112,8 @@ export async function registerAction(
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const restaurantName = formData.get("restaurantName") as string;
-  const slug = formData.get("slug") as string;
+  const rawSlug = formData.get("slug") as string;
+  const slug = normalizeSlug(rawSlug || restaurantName || "");
   const country = (formData.get("country") as string) || "CO";
   const whatsapp = formData.get("whatsapp") as string;
   const monthlyOrders = (formData.get("monthlyOrders") as string) || "none";
@@ -53,22 +128,39 @@ export async function registerAction(
 
   if (Object.keys(errors).length > 0) return { errors };
 
-  // Check slug in Prisma
-  const slugAvailable = await tenantRepository.isSlugAvailable(slug);
-  if (!slugAvailable) {
-    return { errors: { slug: ["Este slug ya está en uso. Prueba otro."] } };
-  }
+  try {
+    // Check restaurant name & slug availability in Prisma
+    const { available, isNameTaken } = await tenantRepository.checkNameAndSlugAvailability(
+      restaurantName.trim(),
+      slug
+    );
+    if (!available) {
+      const takenMsg = isNameTaken
+        ? `El nombre "${restaurantName.trim()}" ya está tomado. Prueba agregando tu ciudad o sede.`
+        : `El enlace "/restaurant/${slug}" ya está en uso. Prueba con otro nombre.`;
+      return {
+        errors: {
+          restaurantName: [takenMsg],
+          slug: [takenMsg],
+        },
+      };
+    }
 
-  // Check email in Prisma
-  const existing = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
-  if (existing) {
-    return { errors: { email: ["Ya existe una cuenta con este email"] } };
+    // Check email in Prisma
+    const existing = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+    if (existing) {
+      return { errors: { email: ["Ya existe una cuenta con este email"] } };
+    }
+  } catch (dbError) {
+    console.error("registerAction: pre-signup DB check failed:", dbError);
+    if (isDatabaseUnavailableError(dbError)) return { message: DB_UNAVAILABLE_MESSAGE };
+    return { message: "Ocurrió un error inesperado. Intenta de nuevo." };
   }
 
   const supabase = await createClient();
   
   // Ensure any previous session from another tenant is signed out
-  await supabase.auth.signOut();
+  await deleteSession();
   
   // Create user in Supabase Auth
   const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -116,6 +208,7 @@ export async function registerAction(
     };
   } catch (dbError) {
     console.error("Failed to create tenant in DB after Supabase signup:", dbError);
+    if (isDatabaseUnavailableError(dbError)) return { message: DB_UNAVAILABLE_MESSAGE };
     return { message: "Error creando el restaurante en la base de datos." };
   }
 }

@@ -17,8 +17,9 @@ La base fundamental para operar múltiples restaurantes de forma aislada.
 
 ### 2. Planes y Suscripciones (Billing)
 El motor de monetización del SaaS. Controla a qué tiene acceso cada restaurante.
-- [x] Modelado de **Planes** (Starter, Restro IA, Business).
-- [x] **Límites de Uso por Plan:** Máximo de mesas (`maxTables`), máximo de ítems en el menú (`maxMenuItems`), máximo de personal (`maxStaff`), y retención de analíticas (`analyticsDays`).
+- [x] Modelado de **Planes** (`STARTER` Gratis, `CARTA_DIGITAL` $9.900/mes, `RESTRO_IA` $49.900/mes, `BUSINESS` $99.900/mes).
+  - **Carta Digital ($9.900/mes):** Productos ilimitados, generación e impresión de códigos QR por mesa y página pública de carta digital (módulos de Pedidos/KDS, Reservas, Inventario, Analítica y WhatsApp bloqueados con pantalla de *upsell*).
+- [x] **Límites de Uso por Plan (validados en servidor):** Máximo de mesas (`maxTables`), máximo de ítems en el menú (`maxMenuItems`), máximo de personal (`maxStaff`), y retención de analíticas (`analyticsDays`).
 - [x] **Feature Flags de Planes:** 
   - `hasAI` (Restro IA).
   - `hasInventory` (Gestión de inventarios).
@@ -28,7 +29,7 @@ El motor de monetización del SaaS. Controla a qué tiene acceso cada restaurant
   - `hasWhatsApp` (Lista de espera y notificaciones).
   - `hasPrioritySupport`.
 - [x] **Tenant Feature Overrides:** Posibilidad de darle a un restaurante específico acceso a funciones premium sin cambiar de plan (ej. Promociones manuales).
-- [ ] Panel de Suscripción en el Dashboard (ver plan actual, actualizar plan).
+- [x] Panel de Suscripción en el Dashboard (`/settings#planes` — ver plan actual, cambiar de plan).
 - [ ] Gestión de Periodos de Prueba (Trials) y expiraciones.
 - [ ] Integración de pagos con **Wompi** (Customer ID, Suscripciones, Webhooks para eventos `PAYMENT_SUCCESS`, etc.).
 

@@ -116,17 +116,24 @@ const softwareSchema = {
     },
     {
       "@type": "Offer",
-      name: "Business",
-      price: "49900",
+      name: "Carta Digital",
+      price: "9900",
       priceCurrency: "COP",
-      description: "Gestión completa de mesas, pedidos y KDS de cocina",
+      description: "Productos ilimitados y códigos QR por mesa para imprimir",
     },
     {
       "@type": "Offer",
       name: "Restro IA",
+      price: "49900",
+      priceCurrency: "COP",
+      description: "Gestión completa de mesas, pedidos, KDS de cocina e IA",
+    },
+    {
+      "@type": "Offer",
+      name: "Business",
       price: "99900",
       priceCurrency: "COP",
-      description: "Todo Business más analítica con inteligencia artificial",
+      description: "Mesas ilimitadas, WhatsApp Business y reportes avanzados",
     },
   ],
   creator: {

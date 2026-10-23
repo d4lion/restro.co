@@ -641,43 +641,59 @@ export default function LandingClient() {
             <hr className={styles.planDivider}/>
             <ul className={styles.planFeatureList}>
               <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Carta digital QR personalizada</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 30 platos en carta</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 productos en carta</li>
               <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 mesas con QR</li>
             </ul>
             <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Empezar gratis</Link>
           </article>
 
+          <article className={styles.planCard}>
+            <h3 className={styles.planName}>Carta Digital</h3>
+            <p className={styles.planDesc}>Todo el apartado de carta digital y QRs por mesa sin límites</p>
+            <div className={styles.planPriceWrap}>
+              <span className={styles.planPrice}>$9.900</span><br/>
+              <span className={styles.planPricePeriod}>COP / mes</span>
+            </div>
+            <hr className={styles.planDivider}/>
+            <ul className={styles.planFeatureList}>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Productos ilimitados en carta</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Códigos QR por mesa ilimitados</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Página pública de carta con tu marca</li>
+            </ul>
+            <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Activar Carta Digital</Link>
+          </article>
+
           <article className={`${styles.planCard} ${styles.planCardFeatured}`}>
             <span className={styles.planBadge}>RECOMENDADO</span>
-            <h3 className={styles.planName}>Business</h3>
-            <p className={styles.planDesc}>Para restaurantes que quieren crecer con operación digital completa</p>
+            <h3 className={styles.planName} style={{display:'flex', alignItems:'center', gap:'8px'}}>Restro IA <Sparkles size={18} color="#7C3AED"/></h3>
+            <p className={styles.planDesc}>Para restaurantes que quieren crecer con operación digital e IA</p>
             <div className={styles.planPriceWrap}>
               <span className={`${styles.planPrice} ${styles.planPriceFeatured}`}>$49.900</span><br/>
               <span className={styles.planPricePeriod}>COP / mes</span>
             </div>
             <hr className={styles.planDivider}/>
             <ul className={styles.planFeatureList}>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Platos ilimitados</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 30 mesas con QR</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> KDS — pantalla de cocina</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Productos y mesas con QR ilimitados</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> KDS — pantalla de cocina en vivo</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Analítica y predicciones con IA</li>
             </ul>
-            <Link href="/register" className={`${styles.planCTA} ${styles.planCTAPrimary}`}>Comenzar Business</Link>
+            <Link href="/register" className={`${styles.planCTA} ${styles.planCTAPrimary}`}>Comenzar Restro IA</Link>
           </article>
 
           <article className={styles.planCard}>
-            <h3 className={styles.planName} style={{display:'flex', alignItems:'center', gap:'8px'}}>Restro IA <Sparkles size={18} color="#7C3AED"/></h3>
-            <p className={styles.planDesc}>Para restaurantes que quieren decisiones basadas en IA</p>
+            <h3 className={styles.planName}>Business</h3>
+            <p className={styles.planDesc}>Para operaciones de alto volumen y múltiples canales</p>
             <div className={styles.planPriceWrap}>
               <span className={styles.planPrice}>$99.900</span><br/>
               <span className={styles.planPricePeriod}>COP / mes</span>
             </div>
             <hr className={styles.planDivider}/>
             <ul className={styles.planFeatureList}>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Todo lo de Business</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Mesas ilimitadas</li>
-              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Analítica avanzada con IA</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Todo lo de Restro IA</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Mesas y staff ilimitados</li>
+              <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Canal WhatsApp Business &amp; Excel/PDF</li>
             </ul>
-            <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Activar Restro IA</Link>
+            <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Activar Business</Link>
           </article>
         </div>
       </section>
