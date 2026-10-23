@@ -35,7 +35,7 @@ export function NotificationSettingsCard() {
       const audio = new Audio("/sounds/kds-notification.mp3");
       audio.volume = 0.85;
       audio.play().then(() => {
-        toast.info("🔔 Sonido de campana probado con éxito");
+        toast.info("Sonido de campana probado con éxito");
       }).catch((e) => {
         toast.error("El navegador bloqueó la reproducción automática de audio. Haz clic de nuevo.");
       });

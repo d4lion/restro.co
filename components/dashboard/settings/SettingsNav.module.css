@@ -1,0 +1,60 @@
+.navWrapper {
+  width: 100%;
+  border-bottom: 1px solid #E2E8F0;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.navWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.navList {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0 10px 0;
+  min-width: max-content;
+}
+
+.tabLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  transition: all 160ms ease;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.tabLink:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+  border-color: #CBD5E1;
+}
+
+.tabLinkActive {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #2563EB;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.tabLinkActive:hover {
+  background: #1D4ED8;
+  color: #FFFFFF;
+  border-color: #1D4ED8;
+}
+
+.icon {
+  flex-shrink: 0;
+}
