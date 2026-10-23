@@ -113,12 +113,12 @@
 
 /* ── HERO ── */
 .hero {
-  min-height: 90vh;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 140px 32px 80px;
+  padding: 110px 24px 36px;
   text-align: center;
   position: relative;
   background-color: #FFFFFF;
@@ -161,18 +161,18 @@
   font-weight: 600;
   color: #2563EB;
   letter-spacing: 0.5px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(37,99,235,0.05);
 }
 
 .heroTitle {
   font-family: var(--font-bebas), 'Inter', sans-serif;
-  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-size: clamp(2.75rem, 6.5vw, 5.5rem);
   font-weight: 800;
-  line-height: 0.95;
+  line-height: 0.98;
   text-transform: uppercase;
   color: #0F172A;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   letter-spacing: 1px;
   text-shadow: 0 0 40px rgba(255, 255, 255, 1), 0 0 15px rgba(255, 255, 255, 1);
 }
@@ -188,11 +188,11 @@
 }
 
 .heroSub {
-  font-size: 20px;
-  line-height: 1.6;
+  font-size: 18px;
+  line-height: 1.55;
   color: #475569;
-  max-width: 650px;
-  margin-bottom: 48px;
+  max-width: 620px;
+  margin-bottom: 28px;
   font-weight: 400;
 }
 
@@ -202,16 +202,21 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
-.heroTrustBadges {
+.heroTrustStrip {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 40px;
+  padding: 8px 18px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  max-width: fit-content;
+  margin: 0 auto;
 }
 
 .heroTrustItem {
@@ -228,32 +233,49 @@
   flex-shrink: 0;
 }
 
+.heroTrustDot {
+  color: #CBD5E1;
+  font-size: 13px;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  .heroTrustStrip {
+    border-radius: 12px;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+  .heroTrustDot {
+    display: none;
+  }
+}
+
 .btnPrimaryLg {
-  height: 56px;
-  padding: 0 32px;
+  height: 52px;
+  padding: 0 28px;
   border-radius: 999px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #FFFFFF;
   background: #2563EB;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(37,99,235,0.3);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.25);
 }
 .btnPrimaryLg:hover {
   background: #1D4ED8;
   transform: translateY(-2px);
-  box-shadow: 0 15px 40px rgba(37,99,235,0.4);
+  box-shadow: 0 12px 30px rgba(37,99,235,0.35);
 }
 
 .btnOutlineLg {
-  height: 56px;
-  padding: 0 32px;
+  height: 52px;
+  padding: 0 28px;
   border-radius: 999px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #0F172A;
   background: #FFFFFF;
@@ -261,44 +283,12 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   transition: all 0.3s ease;
 }
 .btnOutlineLg:hover {
   background: #F8FAFC;
   border-color: #94A3B8;
-}
-
-.heroSocialProof {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.heroAvatars {
-  display: flex;
-  align-items: center;
-}
-
-.heroAvatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 9999px;
-  border: 2px solid #FFFFFF;
-  margin-left: -10px;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-}
-.heroAvatar:first-child { margin-left: 0; }
-
-.heroSocialText {
-  font-size: 14px;
-  color: #64748B;
 }
 
 /* ── MOCKUP HERO SHOWCASE (LULO BANK STYLE 3D FLOATING SCROLL) ── */

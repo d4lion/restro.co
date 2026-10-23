@@ -177,7 +177,7 @@ export default function RegisterPage() {
                 <div className={styles.cardHeader}>
                   <h1 className={styles.title}>Regístrate en Restro y recibe pedidos en minutos</h1>
                   <p className={styles.subtitle}>
-                    Más de <span className={styles.subtitleHighlight}>+120 negocios gastronómicos</span> ya venden con Restro.
+                    Comienza gratis hoy, sin tarjeta de crédito ni comisiones por pedido.
                   </p>
                 </div>
 

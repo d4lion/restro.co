@@ -400,55 +400,47 @@ export default function LandingClient() {
         <div className={styles.heroContent}>
           <div className={styles.heroBadge}>
             <ShieldCheck size={14} color="#2563EB" />
-            Carta Digital QR · Pedidos en Mesa y Cocina KDS · Colombia
+            Carta Digital QR y Pedidos para Colombia
           </div>
           
           <h1 className={styles.heroTitle}>
-            <span className="hero-title-line">Tu Carta Digital QR y Pedidos</span>
-            <span className="hero-title-line"><span className={styles.heroTitleAccent}>Sin comisiones ni papel</span></span>
+            <span className="hero-title-line">Tu Menú Digital QR</span>
+            <span className="hero-title-line"><span className={styles.heroTitleAccent}>Sin comisiones por venta</span></span>
           </h1>
           
           <p className={styles.heroSub}>
-            Reemplaza las cartas de papel por un menú digital interactivo que tus clientes abren al instante en su móvil. Recibe pedidos en mesa, por WhatsApp y directo a tu pantalla de cocina con analítica en tiempo real.
+            Digitaliza tu carta en minutos. Tus clientes escanean el código QR en la mesa, ven fotos de cada plato y ordenan al instante sin descargar aplicaciones.
           </p>
           
           <div className={styles.heroCTA}>
             <Link href="/register" className={styles.btnPrimaryLg}>
-              Empezar gratis <ArrowRight size={18} />
+              Crear mi carta gratis <ArrowRight size={18} />
             </Link>
             <Link href="/restaurant/don-carlos" target="_blank" className={styles.btnOutlineLg}>
-              Ver Carta Demo en Vivo
+              Ver demo en vivo
             </Link>
           </div>
 
-          <div className={styles.heroTrustBadges}>
+          <div className={styles.heroTrustStrip}>
             <div className={styles.heroTrustItem}>
-              <Check size={15} className={styles.heroTrustIcon} />
-              <span>Activación en 10 minutos</span>
+              <Check size={14} className={styles.heroTrustIcon} />
+              <span>Plan gratis para siempre</span>
             </div>
+            <span className={styles.heroTrustDot}>•</span>
             <div className={styles.heroTrustItem}>
-              <Check size={15} className={styles.heroTrustIcon} />
-              <span>Sin tarjeta requerida</span>
+              <Check size={14} className={styles.heroTrustIcon} />
+              <span>0% comisiones por pedido</span>
             </div>
+            <span className={styles.heroTrustDot}>•</span>
             <div className={styles.heroTrustItem}>
-              <Check size={15} className={styles.heroTrustIcon} />
-              <span>Sin descargas de apps</span>
+              <Check size={14} className={styles.heroTrustIcon} />
+              <span>Sin tarjeta ni contratos</span>
             </div>
+            <span className={styles.heroTrustDot}>•</span>
             <div className={styles.heroTrustItem}>
-              <Check size={15} className={styles.heroTrustIcon} />
-              <span>0% comisiones por venta</span>
+              <Check size={14} className={styles.heroTrustIcon} />
+              <span>Listo en 10 minutos</span>
             </div>
-          </div>
-
-          <div className={styles.heroSocialProof}>
-            <div className={styles.heroAvatars}>
-              {[{bg: "#2563EB", l: "L"}, {bg: "#0D9488", l: "M"}, {bg: "#7C3AED", l: "C"}, {bg: "#D97706", l: "P"}, {bg: "#DC2626", l: "S"}].map((a, i) => (
-                <div key={i} className={styles.heroAvatar} style={{ background: a.bg }}>{a.l}</div>
-              ))}
-            </div>
-            <p className={styles.heroSocialText}>
-              <strong>+120 restaurantes</strong> ya digitalizaron su carta con Restro
-            </p>
           </div>
         </div>
       </header>
@@ -544,9 +536,9 @@ export default function LandingClient() {
       {/* ── LOGO BAR ── */}
       <section className={styles.logoBar}>
         <div className={styles.logoBarInner}>
-          <p className={styles.logoBarLabel}>Usado por restaurantes en toda Colombia</p>
+          <p className={styles.logoBarLabel}>Diseñado para todo tipo de negocio gastronómico en Colombia</p>
           <div className={styles.logoBarItems}>
-            {["Don Carlos", "La Parrilla", "Sabor Bogotano", "Tacos & Co.", "El Rincón", "Mar & Tierra"].map((name) => (
+            {["Restaurantes & Cafés", "Gastrobares & Pubs", "Pizzerías & Hamburguesas", "Panaderías & Pastelerías", "Comidas Rápidas", "Food Trucks"].map((name) => (
               <span key={name} className={styles.logoBarItem}>{name}</span>
             ))}
           </div>
@@ -728,10 +720,10 @@ export default function LandingClient() {
       {/* ── STATS BAR ── */}
       <section className={styles.statsSection}>
         <div className={`${styles.statsInner} stagger-grid`}>
-          <div className={styles.statItem}><span className={styles.statNumber}>+120</span><span className={styles.statLabel}>Restaurantes activos</span></div>
-          <div className={styles.statItem}><span className={`${styles.statNumber} ${styles.statAccent}`}>10</span><span className={styles.statLabel}>Minutos para activar</span></div>
-          <div className={styles.statItem}><span className={styles.statNumber}>30%</span><span className={styles.statLabel}>Más ventas con fotos</span></div>
-          <div className={styles.statItem}><span className={styles.statNumber}>0</span><span className={styles.statLabel}>Errores de pedido</span></div>
+          <div className={styles.statItem}><span className={styles.statNumber}>0%</span><span className={styles.statLabel}>Comisiones por pedido</span></div>
+          <div className={styles.statItem}><span className={`${styles.statNumber} ${styles.statAccent}`}>10 min</span><span className={styles.statLabel}>Para activar tu carta</span></div>
+          <div className={styles.statItem}><span className={styles.statNumber}>&lt; 1s</span><span className={styles.statLabel}>Carga rápida en celular</span></div>
+          <div className={styles.statItem}><span className={styles.statNumber}>100%</span><span className={styles.statLabel}>Control de tu negocio</span></div>
         </div>
       </section>
 
@@ -895,10 +887,10 @@ export default function LandingClient() {
       <section className={styles.ctaSection}>
         <div className={`${styles.ctaInner} reveal-up`}>
           <h2 className={styles.ctaTitle}>Digitaliza tu restaurante hoy mismo</h2>
-          <p className={styles.ctaSub}>Únete a los +120 restaurantes colombianos que ya tienen su carta digital activa. Empieza gratis, sin tarjeta de crédito.</p>
+          <p className={styles.ctaSub}>Publica tu menú interactivo, imprime tus códigos QR y recibe pedidos directos hoy mismo. Empieza gratis, sin tarjeta de crédito.</p>
           <div className={styles.heroCTA}>
             <Link href="/register" className={styles.btnPrimaryLgWhite}>Crear cuenta gratis <ArrowRight size={18}/></Link>
-            <Link href="/don-carlos" className={styles.btnOutlineLgWhite}>Ver demo</Link>
+            <Link href="/restaurant/don-carlos" target="_blank" className={styles.btnOutlineLgWhite}>Ver demo en vivo</Link>
           </div>
         </div>
       </section>
