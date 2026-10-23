@@ -365,6 +365,11 @@ export default function LandingClient() {
         );
     });
 
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+
+    return () => clearTimeout(refreshTimer);
   }, { scope: containerRef });
 
   return (
@@ -494,19 +499,19 @@ export default function LandingClient() {
           <div className={styles.luloStackWrapper}>
             <div className={styles.luloStackContainer} id="lulo-stack-container">
               
-              {/* Card 1 (Top/Front): Main Analytics Dashboard */}
+              {/* Card 1 (Top/Front): Menu Digital QR -> Lands on #product-menu-section */}
               <div className={`${styles.luloCard} ${styles.luloCard1}`} id="lulo-card-1">
-                <Image src="/images/backgrounds/landing/mockup-analytics-dark.png" alt="Dashboard Restro" width={800} height={500} className={styles.luloCardImg} priority />
+                <Image src="/images/backgrounds/landing/mockup-menu-dark.png" alt="Carta Digital QR" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopLeft}`}>
-                  <span className={styles.badgeIcon}><TrendingUp size={18} color="#2563EB" /></span>
+                  <span className={styles.badgeIcon}><QrCode size={18} color="#2563EB" /></span>
                   <div>
-                    <strong>+35% en Ventas</strong>
-                    <small>Optimización con IA</small>
+                    <strong>Carta Digital QR</strong>
+                    <small>Menú interactivo en mesa</small>
                   </div>
                 </div>
               </div>
 
-              {/* Card 2 (Middle): KDS Kitchen Screen */}
+              {/* Card 2 (Middle): KDS Kitchen Screen -> Lands on #product-kds-section */}
               <div className={`${styles.luloCard} ${styles.luloCard2}`} id="lulo-card-2">
                 <Image src="/images/backgrounds/landing/mockup-kds.png" alt="KDS Cocina" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeBottomRight}`}>
@@ -518,14 +523,14 @@ export default function LandingClient() {
                 </div>
               </div>
 
-              {/* Card 3 (Back/Bottom): Menu Digital QR */}
+              {/* Card 3 (Back/Bottom): Main Analytics Dashboard -> Lands on #product-ia-section */}
               <div className={`${styles.luloCard} ${styles.luloCard3}`} id="lulo-card-3">
-                <Image src="/images/backgrounds/landing/mockup-menu-dark.png" alt="Carta Digital QR" width={800} height={500} className={styles.luloCardImg} priority />
+                <Image src="/images/backgrounds/landing/mockup-analytics-dark.png" alt="Dashboard Restro IA" width={800} height={500} className={styles.luloCardImg} priority />
                 <div className={`${styles.floatingBadge} ${styles.badgeTopRight}`}>
                   <span className={styles.badgeIcon}><Sparkles size={18} color="#7C3AED" /></span>
                   <div>
                     <strong>Restro IA Activo</strong>
-                    <small>Patrones en tiempo real</small>
+                    <small>Patrones y ventas en tiempo real</small>
                   </div>
                 </div>
               </div>
@@ -544,6 +549,66 @@ export default function LandingClient() {
             {["Don Carlos", "La Parrilla", "Sabor Bogotano", "Tacos & Co.", "El Rincón", "Mar & Tierra"].map((name) => (
               <span key={name} className={styles.logoBarItem}>{name}</span>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT DEEP DIVE 1: MENU ── */}
+      <section className={styles.productSection} id="product-menu-section">
+        <div className={`${styles.productRow} reveal-up`}>
+          <div className={styles.productText} id="text-menu">
+            <span className={styles.sectionLabel}>Carta Digital QR</span>
+            <h2 className={styles.sectionTitle}>Tu menú siempre actualizado</h2>
+            <p className={styles.sectionSub}>Olvídate de las cartas de papel. Gestiona categorías, platos, precios e imágenes en tiempo real desde tu panel.</p>
+            <ul className={styles.productFeatureList}>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Carga imágenes para aumentar ventas hasta un 30%</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Actualiza precios y disponibilidad en segundos</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Personaliza con el logo y colores de tu marca</li>
+            </ul>
+            <div><Link href="/register" className={styles.btnPrimaryLg}>Crear mi carta gratis</Link></div>
+          </div>
+          <div className={styles.productMockupWrap} id="mockup-slot-menu">
+            <Image src="/images/backgrounds/landing/mockup-menu-dark.png" alt="Carta Digital" width={800} height={500} className={styles.productMockupMobileOnly} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT DEEP DIVE 2: KDS ── */}
+      <section className={`${styles.productSection} ${styles.productSectionAlt}`} id="product-kds-section">
+        <div className={`${styles.productRow} ${styles.productRowReverse} reveal-up`}>
+          <div className={styles.productText} id="text-kds">
+            <span className={styles.sectionLabel}>KDS — Cocina Digital</span>
+            <h2 className={styles.sectionTitle}>Comandas directo a cocina</h2>
+            <p className={styles.sectionSub}>Elimina errores y demoras. Cada comanda llega instantáneamente con detalles a tu equipo de cocina.</p>
+            <ul className={styles.productFeatureList}>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Vista en tiempo real de todos los pedidos activos</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Estados: Nuevo → En preparación → Listo</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Soporte para domicilio, llevar y en mesa</li>
+            </ul>
+            <div><Link href="/register" className={styles.btnPrimaryLg}>Probar KDS gratis</Link></div>
+          </div>
+          <div className={styles.productMockupWrap} id="mockup-slot-kds">
+            <Image src="/images/backgrounds/landing/mockup-kds.png" alt="KDS" width={800} height={500} className={styles.productMockupMobileOnly} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT DEEP DIVE 3: IA ── */}
+      <section className={styles.productSection} id="product-ia-section">
+        <div className={`${styles.productRow} reveal-up`}>
+          <div className={styles.productText} id="text-ia">
+            <span className={styles.sectionLabel}>Restro IA</span>
+            <h2 className={styles.sectionTitle}>Crece con Inteligencia</h2>
+            <p className={styles.sectionSub}>Deja que los datos trabajen por ti. Restro IA analiza tus ventas y operaciones para entregarte insights accionables.</p>
+            <ul className={styles.productFeatureList}>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Predicción de horas pico para optimizar tu staff</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Identificación automática de platos más rentables</li>
+              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Sugerencias de combos para aumentar el ticket</li>
+            </ul>
+            <div><Link href="/register" className={styles.btnPrimaryLg}>Activar Restro IA</Link></div>
+          </div>
+          <div className={styles.productMockupWrap} id="mockup-slot-ia">
+            <Image src="/images/backgrounds/landing/mockup-analytics-dark.png" alt="IA Analytics" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
@@ -611,66 +676,6 @@ export default function LandingClient() {
                 <div><strong>100% de tus ventas para ti:</strong> Sin comisiones por pedido ni intermediarios. Tu negocio, tus ganancias.</div>
               </li>
             </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRODUCT DEEP DIVE 1: MENU ── */}
-      <section className={styles.productSection} id="product-menu-section">
-        <div className={`${styles.productRow} reveal-up`}>
-          <div className={styles.productText} id="text-menu">
-            <span className={styles.sectionLabel}>Carta Digital QR</span>
-            <h2 className={styles.sectionTitle}>Tu menú siempre actualizado</h2>
-            <p className={styles.sectionSub}>Olvídate de las cartas de papel. Gestiona categorías, platos, precios e imágenes en tiempo real desde tu panel.</p>
-            <ul className={styles.productFeatureList}>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Carga imágenes para aumentar ventas hasta un 30%</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Actualiza precios y disponibilidad en segundos</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Personaliza con el logo y colores de tu marca</li>
-            </ul>
-            <div><Link href="/register" className={styles.btnPrimaryLg}>Crear mi carta gratis</Link></div>
-          </div>
-          <div className={styles.productMockupWrap} id="mockup-slot-menu">
-            <Image src="/images/backgrounds/landing/mockup-menu-dark.png" alt="Carta Digital" width={800} height={500} className={styles.productMockupMobileOnly} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRODUCT DEEP DIVE 2: KDS ── */}
-      <section className={`${styles.productSection} ${styles.productSectionAlt}`} id="product-kds-section">
-        <div className={`${styles.productRow} ${styles.productRowReverse} reveal-up`}>
-          <div className={styles.productText} id="text-kds">
-            <span className={styles.sectionLabel}>KDS — Cocina Digital</span>
-            <h2 className={styles.sectionTitle}>Comandas directo a cocina</h2>
-            <p className={styles.sectionSub}>Elimina errores y demoras. Cada comanda llega instantáneamente con detalles a tu equipo de cocina.</p>
-            <ul className={styles.productFeatureList}>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Vista en tiempo real de todos los pedidos activos</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Estados: Nuevo → En preparación → Listo</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Soporte para domicilio, llevar y en mesa</li>
-            </ul>
-            <div><Link href="/register" className={styles.btnPrimaryLg}>Probar KDS gratis</Link></div>
-          </div>
-          <div className={styles.productMockupWrap} id="mockup-slot-kds">
-            <Image src="/images/backgrounds/landing/mockup-kds.png" alt="KDS" width={800} height={500} className={styles.productMockupMobileOnly} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRODUCT DEEP DIVE 3: IA ── */}
-      <section className={styles.productSection} id="product-ia-section">
-        <div className={`${styles.productRow} reveal-up`}>
-          <div className={styles.productText} id="text-ia">
-            <span className={styles.sectionLabel}>Restro IA</span>
-            <h2 className={styles.sectionTitle}>Crece con Inteligencia</h2>
-            <p className={styles.sectionSub}>Deja que los datos trabajen por ti. Restro IA analiza tus ventas y operaciones para entregarte insights accionables.</p>
-            <ul className={styles.productFeatureList}>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Predicción de horas pico para optimizar tu staff</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Identificación automática de platos más rentables</li>
-              <li className={styles.productFeatureItem}><span className={styles.productFeatureCheck}><Check size={14} strokeWidth={3}/></span> Sugerencias de combos para aumentar el ticket</li>
-            </ul>
-            <div><Link href="/register" className={styles.btnPrimaryLg}>Activar Restro IA</Link></div>
-          </div>
-          <div className={styles.productMockupWrap} id="mockup-slot-ia">
-            <Image src="/images/backgrounds/landing/mockup-analytics-dark.png" alt="IA Analytics" width={800} height={500} className={styles.productMockupMobileOnly} />
           </div>
         </div>
       </section>
