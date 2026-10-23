@@ -144,3 +144,162 @@
 }
 
 .insightItem em { color: #0F766E; font-style: normal; font-weight: 500; }
+
+/* ── Behavioral Telemetry Sections ─────────────────────────── */
+.cardFullWidth {
+  grid-column: 1 / -1;
+}
+
+.cardSubtext {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+.funnelList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.funnelRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.funnelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #334155;
+}
+
+.funnelHeader strong {
+  color: #0F172A;
+  font-weight: 600;
+}
+
+.progressBarTrack {
+  width: 100%;
+  height: 8px;
+  background: #F1F5F9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #2563EB;
+  border-radius: 999px;
+  transition: width 300ms ease;
+}
+
+.progressBarFillTeal {
+  height: 100%;
+  background: #0D9488;
+  border-radius: 999px;
+  transition: width 300ms ease;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.telemetryTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.telemetryTable th {
+  text-align: left;
+  font-weight: 600;
+  color: #64748B;
+  padding: 10px 12px;
+  border-bottom: 1px solid #E2E8F0;
+  white-space: nowrap;
+}
+
+.telemetryTable td {
+  padding: 12px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #1E293B;
+  vertical-align: middle;
+}
+
+.telemetryTable tr:last-child td {
+  border-bottom: none;
+}
+
+.dishNameCell {
+  font-weight: 600;
+  color: #0F172A;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dishCategorySub {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
+}
+
+.frictionBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.okBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.emptyTelemetryBox {
+  padding: 24px;
+  text-align: center;
+  background: #F8FAFC;
+  border: 1px dashed #CBD5E1;
+  border-radius: 8px;
+  color: #64748B;
+  font-size: 13px;
+}
+
+.tagPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #334155;
+}
+
+.tagPillZero {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  color: #991B1B;
+}
+
