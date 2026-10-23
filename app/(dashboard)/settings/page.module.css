@@ -14,6 +14,37 @@
   flex-wrap: wrap;
 }
 
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.publicMenuButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1.5px solid #BFDBFE;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  min-height: 44px;
+  transition: all 150ms ease;
+}
+
+.publicMenuButton:hover {
+  background: #DBEAFE;
+  color: #1E40AF;
+  border-color: #93C5FD;
+}
+
 .title {
   font-family: 'Inter', sans-serif;
   font-size: 28px;
@@ -28,6 +59,12 @@
   font-size: 14px;
   line-height: 1.5;
   max-width: 560px;
+}
+
+.subpageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 /* ── Card ─────────────────────────────────────────────────── */

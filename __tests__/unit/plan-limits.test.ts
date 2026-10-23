@@ -132,6 +132,10 @@ describe("isDashboardModuleLocked", () => {
       expect(isDashboardModuleLocked(plan, "/menu")).toBe(false);
       expect(isDashboardModuleLocked(plan, "/tables")).toBe(false);
       expect(isDashboardModuleLocked(plan, "/settings")).toBe(false);
+      expect(isDashboardModuleLocked(plan, "/settings/orders")).toBe(false);
+      expect(isDashboardModuleLocked(plan, "/settings/hours")).toBe(false);
+      expect(isDashboardModuleLocked(plan, "/settings/notifications")).toBe(false);
+      expect(isDashboardModuleLocked(plan, "/settings/plan")).toBe(false);
 
       expect(isDashboardModuleLocked(plan, "/orders")).toBe(true);
       expect(isDashboardModuleLocked(plan, "/reservations")).toBe(true);
@@ -142,7 +146,21 @@ describe("isDashboardModuleLocked", () => {
   });
 
   it("unlocks all modules for RESTRO_IA and BUSINESS", () => {
-    for (const route of ["/overview", "/menu", "/tables", "/orders", "/reservations", "/inventory", "/analytics", "/whatsapp", "/settings"]) {
+    for (const route of [
+      "/overview",
+      "/menu",
+      "/tables",
+      "/orders",
+      "/reservations",
+      "/inventory",
+      "/analytics",
+      "/whatsapp",
+      "/settings",
+      "/settings/orders",
+      "/settings/hours",
+      "/settings/notifications",
+      "/settings/plan",
+    ]) {
       expect(isDashboardModuleLocked("RESTRO_IA", route)).toBe(false);
       expect(isDashboardModuleLocked("BUSINESS", route)).toBe(false);
     }
