@@ -1,9 +1,12 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { tenantRepository } from "@/lib/repositories/tenant.repository";
+import { planRepository } from "@/lib/repositories/plan.repository";
+import { getPlanLimits, PLAN_LIMITS, type PlanKey, type PlanRecord } from "@/lib/types";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileDashboardNav } from "@/components/layout/MobileDashboardNav";
 import { OrderNotificationListener } from "@/components/notifications/OrderNotificationListener";
+import { SubscriptionGraceBanner } from "@/components/dashboard/SubscriptionGraceBanner";
 import { Toaster } from "sonner";
 import styles from "./layout.module.css";
 
@@ -15,8 +18,14 @@ export default async function DashboardLayout({
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const tenant = await tenantRepository.findById(session.tenantId);
+  const [tenant, planInfo] = await Promise.all([
+    tenantRepository.findById(session.tenantId),
+    planRepository.getPlanForTenant(session.tenantId),
+  ]);
   if (!tenant) redirect("/login");
+
+  const planKey = (planInfo?.plan?.key ?? tenant.subscription?.plan?.key ?? session.plan ?? "STARTER") as PlanKey;
+  const limits = planInfo?.limits ?? (tenant.subscription?.plan ? getPlanLimits(tenant.subscription.plan as unknown as PlanRecord) : PLAN_LIMITS[planKey]);
 
   return (
     <div className={styles.shell}>
@@ -25,7 +34,8 @@ export default async function DashboardLayout({
         <Sidebar
           restaurantName={tenant.name}
           restaurantSlug={tenant.slug}
-          plan={tenant.subscription?.plan?.key ?? "STARTER"}
+          plan={planKey}
+          limits={limits}
         />
       </div>
 
@@ -47,12 +57,15 @@ export default async function DashboardLayout({
           </span>
         </div>
 
-        <div className={styles.content}>{children}</div>
+        <div className={styles.content}>
+          <SubscriptionGraceBanner subscription={tenant.subscription} />
+          {children}
+        </div>
       </main>
 
       {/* ── Mobile bottom navigation (hidden on desktop via CSS) */}
       <div className={styles.mobileNav}>
-        <MobileDashboardNav plan={tenant.subscription?.plan?.key ?? "STARTER"} />
+        <MobileDashboardNav plan={planKey} limits={limits} />
       </div>
 
       {/* Realtime Order Notification Slide-in Toasts */}

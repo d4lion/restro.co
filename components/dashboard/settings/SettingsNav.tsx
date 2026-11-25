@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Store, ShoppingBag, Clock, Bell, CreditCard } from "lucide-react";
+import { Store, ShoppingBag, Clock, Bell, CreditCard, LifeBuoy } from "lucide-react";
 import styles from "./SettingsNav.module.css";
 
 export const SETTINGS_TABS = [
@@ -35,6 +35,12 @@ export const SETTINGS_TABS = [
     href: "/settings/plan",
     label: "Mi Plan y Pagos",
     icon: CreditCard,
+    exact: false,
+  },
+  {
+    href: "/settings/support",
+    label: "Soporte & Novedades",
+    icon: LifeBuoy,
     exact: false,
   },
 ];
