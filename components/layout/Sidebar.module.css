@@ -271,6 +271,21 @@
   text-transform: uppercase;
 }
 
+/* ── Admin badge ────────────────────────────────────────────── */
+.adminBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid #DBEAFE;
+}
+
 /* ── Footer ─────────────────────────────────────────────────── */
 .footer {
   padding: 12px 12px 4px;

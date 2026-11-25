@@ -27,7 +27,7 @@ export default async function TablesPage() {
   const plan = (planInfo?.plan.key ?? tenant.subscription?.plan?.key ?? "STARTER") as PlanKey;
   const limits = planInfo?.limits ?? PLAN_LIMITS[plan];
   const maxTables = Number.isFinite(limits.maxTables) ? limits.maxTables : null;
-  const isCartaDigitalOnly = plan === "CARTA_DIGITAL" || plan === "STARTER";
+  const isCartaDigitalOnly = (plan === "CARTA_DIGITAL" || plan === "STARTER") && !limits.hasOrders;
 
   const deliveryTakeoutOrders = activeOrders.filter(
     (o) => o.type === "TAKEOUT" || o.type === "DELIVERY"

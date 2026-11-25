@@ -11,7 +11,7 @@ import {
   Settings,
   Lock,
 } from "lucide-react";
-import { isDashboardModuleLocked, type PlanKey } from "@/lib/types";
+import { isDashboardModuleLocked, type PlanKey, type PlanLimits } from "@/lib/types";
 import styles from "@/app/(dashboard)/layout.module.css";
 
 const navItems = [
@@ -22,7 +22,13 @@ const navItems = [
   { href: "/settings",  label: "Config",   icon: Settings },
 ];
 
-export function MobileDashboardNav({ plan = "STARTER" }: { plan?: string }) {
+export function MobileDashboardNav({
+  plan = "STARTER",
+  limits,
+}: {
+  plan?: string;
+  limits?: Partial<PlanLimits>;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [pendingPath, setPendingPath] = useState<string | null>(null);
@@ -50,7 +56,7 @@ export function MobileDashboardNav({ plan = "STARTER" }: { plan?: string }) {
             (href !== "/overview" && pendingPath.startsWith(href)));
 
         const isActive = isPending || (pendingPath === null && isCurrentRoute);
-        const isLocked = isDashboardModuleLocked(plan as PlanKey, href);
+        const isLocked = isDashboardModuleLocked(plan as PlanKey, href, limits);
 
         return (
           <Link

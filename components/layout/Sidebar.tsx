@@ -23,6 +23,7 @@ import {
   Clock,
   Bell,
   CreditCard,
+  LifeBuoy,
 } from "lucide-react";
 import {
   Tooltip,
@@ -30,7 +31,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/shadcn/tooltip";
-import { isDashboardModuleLocked, type PlanKey } from "@/lib/types";
+import { isDashboardModuleLocked, type PlanKey, type PlanLimits } from "@/lib/types";
 import styles from "./Sidebar.module.css";
 
 interface NavItem {
@@ -105,18 +106,21 @@ const settingsSubItems = [
   { href: "/settings/hours", label: "Horarios", icon: <Clock size={14} strokeWidth={1.8} />, exact: false },
   { href: "/settings/notifications", label: "Alertas y Sonidos", icon: <Bell size={14} strokeWidth={1.8} />, exact: false },
   { href: "/settings/plan", label: "Mi Plan", icon: <CreditCard size={14} strokeWidth={1.8} />, exact: false },
+  { href: "/settings/support", label: "Soporte & Novedades", icon: <LifeBuoy size={14} strokeWidth={1.8} />, exact: false },
 ];
 
 interface SidebarProps {
   restaurantName?: string;
   restaurantSlug?: string;
   plan?: string;
+  limits?: Partial<PlanLimits>;
 }
 
 export function Sidebar({
   restaurantName = "Mi Restaurante",
   restaurantSlug = "mi-restaurante",
   plan = "STARTER",
+  limits,
 }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -198,7 +202,7 @@ export function Sidebar({
                 (item.href !== "/overview" && pendingPath.startsWith(item.href)));
 
             const isActive = isPending || (pendingPath === null && isCurrentRoute);
-            const isLocked = isDashboardModuleLocked(plan as PlanKey, item.href);
+            const isLocked = isDashboardModuleLocked(plan as PlanKey, item.href, limits);
 
             const link = (
               <Link
@@ -286,30 +290,56 @@ export function Sidebar({
         {/* ── Footer ──────────────────────────────────────── */}
         <div className={styles.footer}>
           {!collapsed ? (
-            <Link
-              href={`/restaurant/${restaurantSlug}`}
-              target="_blank"
-              className={styles.viewMenu}
-            >
-              <ExternalLink size={14} strokeWidth={1.8} />
-              Ver carta pública
-            </Link>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href={`/restaurant/${restaurantSlug}`}
-                  target="_blank"
-                  className={styles.viewMenu}
-                  style={{ justifyContent: "center" }}
-                >
-                  <ExternalLink size={14} strokeWidth={1.8} />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={12}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%" }}>
+              <Link
+                href="/settings/support"
+                className={styles.viewMenu}
+              >
+                <LifeBuoy size={14} strokeWidth={1.8} />
+                Soporte & Ayuda
+              </Link>
+              <Link
+                href={`/restaurant/${restaurantSlug}`}
+                target="_blank"
+                className={styles.viewMenu}
+              >
+                <ExternalLink size={14} strokeWidth={1.8} />
                 Ver carta pública
-              </TooltipContent>
-            </Tooltip>
+              </Link>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/settings/support"
+                    className={styles.viewMenu}
+                    style={{ justifyContent: "center" }}
+                  >
+                    <LifeBuoy size={14} strokeWidth={1.8} />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={12}>
+                  Soporte & Ayuda
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={`/restaurant/${restaurantSlug}`}
+                    target="_blank"
+                    className={styles.viewMenu}
+                    style={{ justifyContent: "center" }}
+                  >
+                    <ExternalLink size={14} strokeWidth={1.8} />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={12}>
+                  Ver carta pública
+                </TooltipContent>
+              </Tooltip>
+            </div>
           )}
 
           <Tooltip>

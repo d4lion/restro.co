@@ -1,0 +1,52 @@
+/* SleekSpinner.module.css — Ultra-thin elegant circular spinner */
+
+.spinnerWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.spinnerSvg {
+  animation: smoothSpin 0.75s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes smoothSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.track {
+  opacity: 0.18;
+}
+
+.indicator {
+  transition: stroke-dashoffset 0.2s ease;
+}
+
+/* Colors */
+.color--primary {
+  color: #2563EB;
+}
+
+.color--neutral {
+  color: #64748B;
+}
+
+.color--dark {
+  color: #0F172A;
+}
+
+.color--white {
+  color: #FFFFFF;
+}
+
+.color--inherit {
+  color: currentColor;
+}

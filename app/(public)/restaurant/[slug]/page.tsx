@@ -111,8 +111,11 @@ export default async function PublicMenuPage({ params }: Props) {
     })) || [];
 
   const planKey = tenant.subscription?.plan?.key ?? "STARTER";
-  // Starter & Carta Digital never send orders to the kitchen (KDS): menu-only plans.
-  const isPlanMenuOnly = planKey === "STARTER" || planKey === "CARTA_DIGITAL";
+  const hasOrdersOverride = tenant.featureOverrides?.some(
+    (o) => o.feature === "hasOrders" && o.value === "true" && (!o.expiresAt || new Date(o.expiresAt) > new Date())
+  );
+  // Starter & Carta Digital are menu-only plans unless explicitly granted orders via override
+  const isPlanMenuOnly = (planKey === "STARTER" || planKey === "CARTA_DIGITAL") && !hasOrdersOverride;
   // WhatsApp ordering is active if allowed and the owner has not set "Solo Carta Visual".
   const whatsappOrderingEnabled =
     Boolean(tenant.allowWhatsAppOrdering) && !tenant.isMenuOnly;
