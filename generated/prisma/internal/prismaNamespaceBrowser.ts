@@ -71,7 +71,8 @@ export const ModelName = {
   AnalyticsEvent: 'AnalyticsEvent',
   Subscription: 'Subscription',
   BillingEvent: 'BillingEvent',
-  TenantFeatureOverride: 'TenantFeatureOverride'
+  TenantFeatureOverride: 'TenantFeatureOverride',
+  SupportTicket: 'SupportTicket'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -466,6 +467,24 @@ export const TenantFeatureOverrideScalarFieldEnum = {
 } as const
 
 export type TenantFeatureOverrideScalarFieldEnum = (typeof TenantFeatureOverrideScalarFieldEnum)[keyof typeof TenantFeatureOverrideScalarFieldEnum]
+
+
+export const SupportTicketScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  tenantId: 'tenantId',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  priority: 'priority',
+  category: 'category',
+  authorName: 'authorName',
+  notes: 'notes',
+  resolvedAt: 'resolvedAt'
+} as const
+
+export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -122,3 +122,8 @@ export type BillingEvent = Prisma.BillingEventModel
  * 
  */
 export type TenantFeatureOverride = Prisma.TenantFeatureOverrideModel
+/**
+ * Model SupportTicket
+ * 
+ */
+export type SupportTicket = Prisma.SupportTicketModel

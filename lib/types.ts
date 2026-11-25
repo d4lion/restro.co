@@ -36,6 +36,8 @@ export interface PlanLimits {
   maxStaff: number;
   maxMenus: number;
   analyticsDays: number;
+  hasOrders: boolean;
+  hasReservations: boolean;
   hasAI: boolean;
   hasInventory: boolean;
   hasMultiLanguage: boolean;
@@ -53,12 +55,15 @@ export interface PlanLimits {
 /** Convert a DB Plan record to runtime limits (-1 → Infinity) */
 export function getPlanLimits(plan: PlanRecord): PlanLimits {
   const unlimit = (v: number) => (v === -1 ? Infinity : v);
+  const isBasic = plan.key === "STARTER" || plan.key === "CARTA_DIGITAL";
   return {
     maxTables: unlimit(plan.maxTables),
     maxMenuItems: unlimit(plan.maxMenuItems),
     maxStaff: unlimit(plan.maxStaff),
     maxMenus: unlimit(plan.maxMenus),
     analyticsDays: plan.analyticsDays,
+    hasOrders: !isBasic,
+    hasReservations: !isBasic,
     hasAI: plan.hasAI,
     hasInventory: plan.hasInventory,
     hasMultiLanguage: plan.hasMultiLanguage,
@@ -85,6 +90,8 @@ export const PLAN_LIMITS = {
     maxMenus: 1,
     analyticsDays: 0,
     hasImages: true,
+    hasOrders: false,
+    hasReservations: false,
     hasAI: false,
     hasInventory: false,
     hasMultiLanguage: false,
@@ -105,6 +112,8 @@ export const PLAN_LIMITS = {
     maxMenus: 1,
     analyticsDays: 0,
     hasImages: true,
+    hasOrders: false,
+    hasReservations: false,
     hasAI: false,
     hasInventory: false,
     hasMultiLanguage: false,
@@ -125,6 +134,8 @@ export const PLAN_LIMITS = {
     maxMenus: 5,
     analyticsDays: 365,
     hasImages: true,
+    hasOrders: true,
+    hasReservations: true,
     hasAI: true,
     hasInventory: true,
     hasMultiLanguage: true,
@@ -145,6 +156,8 @@ export const PLAN_LIMITS = {
     maxMenus: Infinity,
     analyticsDays: 365,
     hasImages: true,
+    hasOrders: true,
+    hasReservations: true,
     hasAI: true,
     hasInventory: true,
     hasMultiLanguage: true,
@@ -162,9 +175,8 @@ export const PLAN_LIMITS = {
 
 /**
  * Determines whether a dashboard navigation module is locked for a given plan.
- * Starter (Gratis, hasta 5 productos y 5 mesas) and Carta Digital ($9.900/mes, ilimitados)
- * only include Carta Digital (/menu) and Mesas/QRs (/tables) for printing table QRs.
- * Modules like Orders/KDS, Reservations, Inventory, Analytics, and WhatsApp are locked and show an upsell screen.
+ * Starter and Carta Digital only include Carta Digital (/menu) and Mesas/QRs (/tables) by default.
+ * Modules like Orders/KDS, Reservations, Inventory, Analytics, and WhatsApp unlock when granted via limits/overrides.
  */
 export function isDashboardModuleLocked(
   plan: PlanKey | string,
@@ -176,8 +188,9 @@ export function isDashboardModuleLocked(
   if (plan === "STARTER" || plan === "CARTA_DIGITAL") {
     switch (normalizedHref) {
       case "/orders":
+        return limits?.hasOrders ? false : true;
       case "/reservations":
-        return true;
+        return limits?.hasReservations ? false : true;
       case "/inventory":
         return !limits?.hasInventory;
       case "/analytics":
@@ -218,6 +231,7 @@ export type OrderStatus = keyof typeof ORDER_STATUSES;
 // ─── STAFF ROLES ──────────────────────────────────────────────────────────────
 
 export const STAFF_ROLES = {
+  SUPERADMIN: { label: "Super Administrador", permissions: ["all", "platform_admin"] },
   OWNER: { label: "Propietario", permissions: ["all"] },
   MANAGER: { label: "Gerente", permissions: ["orders", "menu", "tables", "analytics"] },
   WAITER: { label: "Mesero", permissions: ["orders", "tables"] },
@@ -241,6 +255,7 @@ export const TABLE_STATUS_CONFIG = {
 
 export interface SessionPayload {
   userId: string;
+  email?: string;
   tenantId: string;
   role: StaffRole;
   plan: PlanKey;

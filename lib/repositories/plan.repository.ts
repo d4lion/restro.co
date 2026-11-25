@@ -51,6 +51,11 @@ export const planRepository = {
     const plan = tenant.subscription.plan as unknown as PlanRecord;
     const limits = getPlanLimits(plan);
 
+    // If tenant explicitly has ordering enabled in capabilities (!isMenuOnly), enable hasOrders by default
+    if (tenant.isMenuOnly === false) {
+      limits.hasOrders = true;
+    }
+
     // Apply feature overrides (non-expired only)
     const now = new Date();
     for (const override of tenant.featureOverrides) {

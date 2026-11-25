@@ -110,6 +110,7 @@ const getCachedPrismaUserSession = (userId: string, userEmail?: string, userName
 
       return {
         userId: prismaUser.id,
+        email: prismaUser.email,
         tenantId: prismaUser.tenantId,
         role: prismaUser.role as SessionPayload["role"],
         plan: planKey as SessionPayload["plan"],

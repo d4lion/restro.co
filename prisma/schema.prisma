@@ -123,6 +123,7 @@ model Tenant {
   users            User[]
   featureOverrides TenantFeatureOverride[]
   businessHours    BusinessHour[]
+  supportTickets   SupportTicket[]
 }
 
 // ─── USER ─────────────────────────────────────────────────────────────────────
@@ -550,3 +551,29 @@ model TenantFeatureOverride {
 
   @@unique([tenantId, feature])
 }
+
+// ─── SUPPORT TICKETS & NOVEDADES ─────────────────────────────────────────────
+
+model SupportTicket {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String
+  status      String   @default("OPEN") // OPEN | IN_PROGRESS | RESOLVED | CLOSED
+  priority    String   @default("MEDIUM") // LOW | MEDIUM | HIGH | URGENT
+  category    String   @default("GENERAL") // TECHNICAL | BILLING | FEATURE_REQUEST | ONBOARDING | GENERAL
+  authorName  String?
+  notes       String?
+  resolvedAt  DateTime?
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([priority])
+  @@index([createdAt])
+}
+
