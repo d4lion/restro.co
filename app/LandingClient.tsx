@@ -769,86 +769,78 @@ export default function LandingClient() {
             
             {/* PLAN 1: Starter */}
             <article className={styles.planCard}>
-              <div className={styles.planBadgeSubtle}>Sin costo</div>
+              <div className={styles.planBadgeSubtle}>Estoy comenzando</div>
               <h3 className={styles.planName}>Starter</h3>
-              <p className={styles.planDesc}>Para cafeterías y locales pequeños que quieren digitalizar su carta sin costo</p>
+              <p className={styles.planDesc}>Ideal si recién abres o quieres dejar el menú en papel sin invertir aún.</p>
               <div className={styles.planPriceWrap}>
                 <span className={styles.planPrice}>$0</span><br/>
                 <span className={styles.planPricePeriod}>Gratis para siempre</span>
               </div>
               <hr className={styles.planDivider}/>
               <ul className={styles.planFeatureList}>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Carta digital QR personalizada</li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 productos en catálogo</li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 mesas con código QR</li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Pedidos por WhatsApp opcional</li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Cero comisiones por venta</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Tu carta digital QR lista en minutos</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 5 productos y 5 mesas con QR</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Pedidos simples por WhatsApp (opcional)</li>
               </ul>
               <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Empezar gratis</Link>
             </article>
 
             {/* PLAN 2: Carta Digital */}
             <article className={styles.planCard}>
-              <div className={styles.planBadgeSubtle} style={{ background: "#DCFCE7", color: "#15803D" }}>Más accesible</div>
+              <div className={styles.planBadgeSubtle} style={{ background: "#DCFCE7", color: "#15803D" }}>Ya tengo clientes</div>
               <h3 className={styles.planName}>Carta Digital</h3>
-              <p className={styles.planDesc}>Productos y mesas QR ilimitados con pedido en mesa para pasar al mesero</p>
+              <p className={styles.planDesc}>Para negocios con carta amplia que quieren verse profesionales sin límites.</p>
               <div className={styles.planPriceWrap}>
                 <span className={styles.planPrice}>$9.900</span><br/>
                 <span className={styles.planPricePeriod}>COP / mes</span>
               </div>
               <hr className={styles.planDivider}/>
               <ul className={styles.planFeatureList}>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Productos y categorías ilimitados</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Códigos QR por mesa ilimitados</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Carrito en mesa con QR para mesero</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Pedidos directos a tu WhatsApp</li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Logo, portada y enlace propio de tu marca</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Productos, categorías y mesas QR ilimitadas</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Tu marca propia (logo, portada y enlace)</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Pedido en mesa para el mesero o a tu WhatsApp</li>
               </ul>
               <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Elegir Carta Digital</Link>
             </article>
 
             {/* PLAN 3: Restro IA (Featured) */}
             <article className={`${styles.planCard} ${styles.planCardFeatured}`}>
-              <span className={styles.planBadge}>MÁS POPULAR</span>
+              <span className={styles.planBadge}>NEGOCIO MEDIANO · RECOMENDADO</span>
               <h3 className={styles.planName} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 Restro IA <Sparkles size={18} color="#2563EB"/>
               </h3>
-              <p className={styles.planDesc}>El sistema operativo completo: comandas a cocina en tiempo real y analítica con IA</p>
+              <p className={styles.planDesc}>Para negocios en crecimiento que quieren agilizar cocina y aprender más sobre sus ventas.</p>
               <div className={styles.planPriceWrap}>
                 <span className={`${styles.planPrice} ${styles.planPriceFeatured}`}>$49.900</span><br/>
                 <span className={styles.planPricePeriod}>COP / mes</span>
               </div>
               <hr className={styles.planDivider}/>
               <ul className={styles.planFeatureList}>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Todo lo de Carta Digital</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Pantalla KDS en cocina en vivo</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Alertas sonoras de nuevas comandas</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Analítica predictiva con IA</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Detección de horas pico y platos estrella</li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Hasta 10 cuentas de personal</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Todo lo de Carta Digital sin límites</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Pantalla de cocina en vivo (KDS) y alertas</strong></li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Analítica real: platos más vistos, búsquedas y conversión</strong></li>
               </ul>
               <Link href="/register" className={`${styles.planCTA} ${styles.planCTAPrimary}`}>Comenzar con Restro IA</Link>
             </article>
 
-            {/* PLAN 4: Business */}
-            <article className={styles.planCard}>
-              <div className={styles.planBadgeSubtle} style={{ background: "#EFF6FF", color: "#1D4ED8" }}>Operación Total</div>
+            {/* PLAN 4: Business (Coming Soon) */}
+            <article className={styles.planCard} style={{ opacity: 0.88, background: "#F8FAFC" }}>
+              <div className={styles.planBadgeSubtle} style={{ background: "#0F172A", color: "#FFFFFF" }}>Próximamente</div>
               <h3 className={styles.planName}>Business</h3>
-              <p className={styles.planDesc}>Para restaurantes consolidados que requieren inventario, reservas y múltiples sedes</p>
+              <p className={styles.planDesc}>Para operaciones grandes o multi-sede que buscan inventario, reservas y automatización.</p>
               <div className={styles.planPriceWrap}>
-                <span className={styles.planPrice}>$99.900</span><br/>
-                <span className={styles.planPricePeriod}>COP / mes</span>
+                <span className={styles.planPrice} style={{ fontSize: "24px", color: "#475569" }}>Coming Soon</span><br/>
+                <span className={styles.planPricePeriod}>En desarrollo</span>
               </div>
               <hr className={styles.planDivider}/>
               <ul className={styles.planFeatureList}>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Todo lo de Restro IA</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Personal, mesas y productos 100% ilimitados</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Control de inventario e insumos</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> <strong>Gestión integral de reservas</strong></li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Exportación de datos en Excel y PDF</li>
-                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Soporte VIP prioritario</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Control de inventario y recetas</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> Gestión integral de reservas</li>
+                <li className={styles.planFeatureItem}><span className={styles.planCheck}><Check size={16} strokeWidth={3}/></span> WhatsApp Business automático y reportes Excel/PDF</li>
               </ul>
-              <Link href="/register" className={`${styles.planCTA} ${styles.planCTASecondary}`}>Elegir Business</Link>
+              <span className={`${styles.planCTA} ${styles.planCTASecondary}`} style={{ opacity: 0.65, cursor: "not-allowed" }}>
+                Próximamente
+              </span>
             </article>
 
           </div>

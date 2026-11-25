@@ -22,7 +22,11 @@ export default async function SettingsPlanPage() {
 
   return (
     <div className={styles.subpageContent}>
-      <SubscriptionPlansCard currentPlan={currentPlan} />
+      <SubscriptionPlansCard
+        currentPlan={currentPlan}
+        restaurantName={tenant.name}
+        tenantSlug={tenant.slug}
+      />
     </div>
   );
 }
