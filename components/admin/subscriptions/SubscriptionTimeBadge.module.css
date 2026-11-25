@@ -1,0 +1,115 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  width: fit-content;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  transition: all 0.15s ease;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.label {
+  display: inline-block;
+}
+
+/* Badge Color Variants according to design.md */
+.badge--success {
+  background: #F0FDF4;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.badge--warning {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+  animation: pulseWarning 2s infinite ease-in-out;
+}
+
+.badge--danger {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+  animation: pulseDanger 2s infinite ease-in-out;
+}
+
+.badge--info {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.badge--neutral {
+  background: #F8FAFC;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+}
+
+/* Progress bar */
+.progressTrack {
+  width: 100%;
+  height: 4px;
+  background-color: #E2E8F0;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.progressBar--success {
+  background-color: #16A34A;
+}
+
+.progressBar--warning {
+  background-color: #D97706;
+}
+
+.progressBar--danger {
+  background-color: #DC2626;
+}
+
+.progressBar--info {
+  background-color: #2563EB;
+}
+
+.progressBar--neutral {
+  background-color: #94A3B8;
+}
+
+@keyframes pulseWarning {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+  }
+}
+
+@keyframes pulseDanger {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  }
+}

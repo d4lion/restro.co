@@ -1,0 +1,190 @@
+/* AttentionQueue.module.css — Corporate Atlassian / Google Cloud attention queue */
+
+.container {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.headerTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerIcon {
+  color: #D97706;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+.countBadge {
+  background: #FEF3C7;
+  color: #B45309;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  border: 1px solid #FDE68A;
+  font-variant-numeric: tabular-nums;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  divide-y: 1px solid #F1F5F9;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #F1F5F9;
+  flex-wrap: wrap;
+  gap: 12px;
+  transition: background 0.15s ease;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item:hover {
+  background: #F8FAFC;
+}
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 240px;
+  flex: 1;
+}
+
+.urgencyDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.urgencyDot--danger {
+  background: #DC2626;
+  box-shadow: 0 0 0 3px #FEE2E2;
+}
+
+.urgencyDot--warning {
+  background: #D97706;
+  box-shadow: 0 0 0 3px #FEF3C7;
+}
+
+.urgencyDot--info {
+  background: #2563EB;
+  box-shadow: 0 0 0 3px #DBEAFE;
+}
+
+.tenantInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tenantNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tenantName {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #0F172A;
+}
+
+.planTag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+}
+
+.reasonText {
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
+.itemCenter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+}
+
+.timeRemaining {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.timeRemaining--danger {
+  color: #DC2626;
+}
+
+.timeRemaining--warning {
+  color: #D97706;
+}
+
+.timeRemaining--neutral {
+  color: #64748B;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Empty state */
+.emptyCard {
+  padding: 24px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #15803D;
+  background: #F0FDF4;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}

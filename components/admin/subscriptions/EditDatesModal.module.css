@@ -1,0 +1,111 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tenantInfoBanner {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tenantName {
+  font-weight: 600;
+  color: #0F172A;
+  font-size: 0.9375rem;
+}
+
+.tenantPlan {
+  font-size: 0.8125rem;
+  color: #475569;
+}
+
+.tenantPlan strong {
+  color: #2563EB;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.select {
+  height: 40px;
+  padding: 0 12px;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  border: 1px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.select:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.calcRow {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calcTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1D4ED8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.calcButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.calcBtn {
+  background: #FFFFFF;
+  border: 1px solid #93C5FD;
+  color: #1E40AF;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.calcBtn:hover {
+  background: #DBEAFE;
+  border-color: #2563EB;
+}
+
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}

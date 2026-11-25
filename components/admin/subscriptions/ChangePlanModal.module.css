@@ -1,0 +1,158 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tenantInfoBanner {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tenantName {
+  font-weight: 600;
+  color: #0F172A;
+  font-size: 0.9375rem;
+}
+
+.tenantCurrent {
+  font-size: 0.8125rem;
+  color: #64748B;
+}
+
+.tenantCurrent strong {
+  color: #2563EB;
+}
+
+.plansList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.planCard {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.planCard:hover {
+  border-color: #94A3B8;
+  background: #F8FAFC;
+}
+
+.planCard--selected {
+  border-color: #2563EB !important;
+  background: #EFF6FF !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.planCard--current {
+  border-left: 4px solid #64748B;
+}
+
+.planCard--highlight {
+  border-color: #A78BFA;
+}
+
+.planCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.planTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.planName {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.planTag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: #F1F5F9;
+  color: #475569;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.currentBadge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: #E2E8F0;
+  color: #334155;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.planPrice {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #1D4ED8;
+}
+
+.planDesc {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.checkbox {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: #2563EB;
+}
+
+.checkboxRow strong {
+  display: block;
+  font-size: 0.8125rem;
+  color: #0F172A;
+}
+
+.checkboxRow p {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin: 2px 0 0 0;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}

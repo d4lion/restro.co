@@ -1,0 +1,294 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 80vh;
+}
+
+.tenantBanner {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bannerName {
+  font-weight: 600;
+  color: #0F172A;
+  font-size: 0.9375rem;
+}
+
+.bannerMeta {
+  font-size: 0.8125rem;
+  color: #64748B;
+  display: block;
+}
+
+.bannerMeta code {
+  background: #E2E8F0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.statusPill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.statusPill--active {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.statusPill--inactive {
+  background: #FEE2E2;
+  color: #B91C1C;
+}
+
+/* Tabs */
+.tabsHeader {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 8px;
+  overflow-x: auto;
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.tabBtn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.tabBtn--active {
+  background: #EFF6FF !important;
+  color: #1D4ED8 !important;
+  font-weight: 600;
+}
+
+.tabBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  max-height: 52vh;
+  padding-right: 4px;
+}
+
+.tabDesc {
+  font-size: 0.875rem;
+  color: #475569;
+  margin: 0;
+}
+
+.infoAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.8125rem;
+  color: #1E40AF;
+  line-height: 1.4;
+}
+
+/* Features list */
+.featuresList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.featureCard {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.15s ease;
+}
+
+.featureCard:hover {
+  border-color: #CBD5E1;
+}
+
+.featureCard--overridden {
+  background: #FDFEFA;
+  border-color: #0D9488;
+}
+
+.featureInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.featureTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.featureTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.overrideTag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: #CCFBF1;
+  color: #0F766E;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+.planDefaultTag {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  background: #F1F5F9;
+  color: #64748B;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.featureDesc {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.overrideReason {
+  font-size: 0.6875rem;
+  color: #0F766E;
+  margin: 2px 0 0 0;
+  font-style: italic;
+}
+
+.featureActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.numInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.numInput {
+  width: 70px;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 0.8125rem;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  outline: none;
+}
+
+.resetBtn {
+  background: transparent;
+  border: 1px solid #CBD5E1;
+  color: #64748B;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.resetBtn:hover {
+  background: #FEE2E2;
+  border-color: #EF4444;
+  color: #DC2626;
+}
+
+/* Capabilities toggles */
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.toggleRow strong {
+  font-size: 0.875rem;
+  color: #0F172A;
+}
+
+.toggleRow p {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin: 2px 0 0 0;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563EB;
+  cursor: pointer;
+}
+
+/* Status box */
+.statusBox {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.statusText strong {
+  font-size: 0.9375rem;
+  color: #92400E;
+}
+
+.statusText p {
+  font-size: 0.8125rem;
+  color: #B45309;
+  margin: 4px 0 0 0;
+}
+
+.footerClose {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+  border-top: 1px solid #E2E8F0;
+}

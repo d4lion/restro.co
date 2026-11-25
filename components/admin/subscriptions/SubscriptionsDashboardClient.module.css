@@ -1,0 +1,412 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.title {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Controls bar */
+.controlsBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94A3B8;
+}
+
+.searchInput {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px 0 38px;
+  font-size: 0.875rem;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.searchInput:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.filtersGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.selectFilter {
+  height: 40px;
+  padding: 0 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.selectFilter:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Status tabs */
+.statusTabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.tabPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.tabPill:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.tabPill--active {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+  border-color: #2563EB !important;
+  font-weight: 600;
+}
+
+/* Table card */
+.tableCard {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.tableScroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.table th {
+  background-color: #F8FAFC;
+  color: #64748B;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px;
+  border-bottom: 1px solid #E2E8F0;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background-color: #F8FAFC;
+}
+
+.row--inactive td {
+  background-color: #FFFDFD;
+  opacity: 0.75;
+}
+
+/* Restaurant Cell */
+.restaurantCell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 180px;
+}
+
+.restaurantNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.restaurantName {
+  font-weight: 600;
+  color: #0F172A;
+  font-size: 0.9375rem;
+}
+
+.suspendedTag {
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: #FEE2E2;
+  color: #B91C1C;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.restaurantSubRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
+.slugLink {
+  color: #2563EB;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: monospace;
+}
+
+.slugLink:hover {
+  text-decoration: underline;
+}
+
+.ownerEmail {
+  color: #64748B;
+}
+
+/* Plan Cell */
+.planCell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.planBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.plan--STARTER {
+  background: #F1F5F9;
+  color: #475569;
+}
+
+.plan--CARTA_DIGITAL {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.plan--RESTRO_IA {
+  background: #EDE9FE;
+  color: #6D28D9;
+}
+
+.plan--BUSINESS {
+  background: #FFEDD5;
+  color: #C2410C;
+}
+
+.planPriceText {
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
+.noSubText {
+  font-size: 0.8125rem;
+  color: #94A3B8;
+  font-style: italic;
+}
+
+/* Dates Cell */
+.datesCell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.8125rem;
+  min-width: 140px;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dateLabel {
+  font-size: 0.6875rem;
+  color: #94A3B8;
+  text-transform: uppercase;
+  font-weight: 600;
+  width: 40px;
+}
+
+.dateValue {
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+}
+
+.dateValue--end {
+  font-weight: 600;
+  color: #0F172A;
+}
+
+/* Overrides Cell */
+.overridesCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overrideCountBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #CCFBF1;
+  color: #0F766E;
+  padding: 3px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.defaultPlanBadge {
+  font-size: 0.75rem;
+  color: #64748B;
+  background: #F8FAFC;
+  padding: 3px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.usageText {
+  font-size: 0.6875rem;
+  color: #94A3B8;
+}
+
+/* Actions Cell */
+.actionsCell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.historyBtn {
+  background: transparent;
+  border: 1px solid #CBD5E1;
+  color: #64748B;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.historyBtn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+
+/* Empty State */
+.emptyState {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 56px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.emptyIcon {
+  color: #CBD5E1;
+}
+
+.emptyTitle {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0;
+}
+
+.emptySub {
+  font-size: 0.8125rem;
+  color: #64748B;
+  margin-bottom: 8px;
+}

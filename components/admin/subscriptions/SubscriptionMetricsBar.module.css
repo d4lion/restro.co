@@ -1,0 +1,139 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card--clickable {
+  cursor: pointer;
+}
+
+.card--clickable:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.card--selected {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+  background: #F8FAFC;
+}
+
+.card--highlight {
+  border-color: #F59E0B;
+  background: #FFFDF5;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cardLabel {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #64748B;
+  line-height: 1.3;
+}
+
+.iconWrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon--neutral {
+  background: #F1F5F9;
+  color: #475569;
+}
+
+.icon--success {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.icon--warning {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.icon--danger {
+  background: #FEE2E2;
+  color: #B91C1C;
+}
+
+.icon--info {
+  background: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.icon--accent {
+  background: #CCFBF1;
+  color: #0F766E;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.cardValue--money {
+  font-size: 1.35rem;
+  color: #0F766E;
+}
+
+.cardSub {
+  font-size: 0.75rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 14px 16px;
+  }
+
+  .cardValue {
+    font-size: 1.5rem;
+  }
+
+  .cardValue--money {
+    font-size: 1.15rem;
+  }
+}
