@@ -165,6 +165,19 @@ describe("isDashboardModuleLocked", () => {
       expect(isDashboardModuleLocked("BUSINESS", route)).toBe(false);
     }
   });
+
+  it("unlocks modules for CARTA_DIGITAL and STARTER when granted via feature limits overrides", () => {
+    // When admin overrides hasOrders, hasReservations, hasInventory, hasAI, or hasWhatsApp:
+    expect(isDashboardModuleLocked("CARTA_DIGITAL", "/orders", { hasOrders: true })).toBe(false);
+    expect(isDashboardModuleLocked("CARTA_DIGITAL", "/reservations", { hasReservations: true })).toBe(false);
+    expect(isDashboardModuleLocked("CARTA_DIGITAL", "/inventory", { hasInventory: true })).toBe(false);
+    expect(isDashboardModuleLocked("CARTA_DIGITAL", "/analytics", { hasAI: true })).toBe(false);
+    expect(isDashboardModuleLocked("CARTA_DIGITAL", "/whatsapp", { hasWhatsApp: true })).toBe(false);
+
+    // Still locked when overrides are false or not present
+    expect(isDashboardModuleLocked("CARTA_DIGITAL", "/orders", { hasOrders: false })).toBe(true);
+    expect(isDashboardModuleLocked("CARTA_DIGITAL", "/analytics", { hasAI: false })).toBe(true);
+  });
 });
 
 describe("COP currency input helpers", () => {
